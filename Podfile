@@ -11,11 +11,11 @@ target 'RKCooperDemo' do
   
   #pod 'RKRTC', :path => '../../../RKRTC'
   #pod 'RKRTC', :path => '../../../RKCore/RKRTCSDK'
-  pod 'RKRTC', :git => gitUrl("RKRTC"), :branch => '1.0.0_swift5.5.2'
+  pod 'RKRTC', :git => gitUrl("RKRTC"), :branch => '1.0.0_swiftx.x.x' # 维护最新的两个Swift版本，需要拉取对应版本的sdk，目前支持5.5.2、5.6.0
   
   #pod 'RKCooperationCore', :path => '../../../RKCore/RKCooperationCore'
   #pod 'RKCooperationCore', :path => '../../../RKCore/RKCoreSDK'
-  pod 'RKCooperationCore', :git => gitUrl("RKCooperationCore"), :branch => '2.0.0_swift5.5.2'
+  pod 'RKCooperationCore', :git => gitUrl("RKCooperationCore"), :branch => '2.0.0_swiftx.x.x' # 维护最新的两个Swift版本，需要拉取对应版本的sdk，目前支持5.5.2、5.6.0
   
   pod 'RKSassLog', :git => gitUrl("RKSassLog")
   pod 'RKIHandyJSON'
