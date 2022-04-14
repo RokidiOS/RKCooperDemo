@@ -9,6 +9,7 @@
 import UIKit
 import QMUIKit
 import DoraemonKit
+import RKIMCore
 
 enum deviceOrient {
     case all
