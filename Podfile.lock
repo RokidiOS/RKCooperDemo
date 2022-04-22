@@ -367,13 +367,12 @@ PODS:
     - RKSocket
     - WCDB.swift
   - RKIUtils (0.1.2)
-  - RKRTC (1.0.0):
+  - RKRTC (1.0.1):
     - Moya
     - RKIHandyJSON
     - RKILogger
     - RKIUtils
     - Starscream
-    - WebRTC-lib
   - RKSassLog (0.1.0):
     - Alamofire
   - RKSocket (0.1.0)
@@ -385,7 +384,6 @@ PODS:
     - SQLiteRepairKit (~> 1.2.0)
     - WCDBOptimizedSQLCipher (~> 1.2.0)
   - WCDBOptimizedSQLCipher (1.2.1)
-  - WebRTC-lib (94.0.0)
 
 DEPENDENCIES:
   - DoraemonKit
@@ -398,7 +396,7 @@ DEPENDENCIES:
   - RKIHandyJSON
   - RKILogger
   - RKIMCore (from `https://github.com/RokidiOS/RKIMCore`, branch `0.1.2_swift5.6.0`)
-  - RKRTC (from `https://github.com/RokidiOS/RKRTC`, branch `1.0.0_swift5.6.0`)
+  - RKRTC (from `https://github.com/RokidiOS/RKRTC`, branch `1.0.1_swift5.6.0`)
   - RKSassLog (from `https://github.com/RokidiOS/RKSassLog`)
   - RKSocket (from `https://github.com/RokidiOS/RKSocket`)
   - SnapKit
@@ -423,7 +421,6 @@ SPEC REPOS:
     - Starscream
     - WCDB.swift
     - WCDBOptimizedSQLCipher
-    - WebRTC-lib
 
 EXTERNAL SOURCES:
   RKCooperationCore:
@@ -433,7 +430,7 @@ EXTERNAL SOURCES:
     :branch: 0.1.2_swift5.6.0
     :git: https://github.com/RokidiOS/RKIMCore
   RKRTC:
-    :branch: 1.0.0_swift5.6.0
+    :branch: 1.0.1_swift5.6.0
     :git: https://github.com/RokidiOS/RKRTC
   RKSassLog:
     :git: https://github.com/RokidiOS/RKSassLog
@@ -442,13 +439,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   RKCooperationCore:
-    :commit: 3d91916d5d2a9e14e8e327edbfd32221fc171925
+    :commit: 1bca6a4a2f519b07a92c22164875786b2f3092b4
     :git: https://github.com/RokidiOS/RKCooperationCore
   RKIMCore:
     :commit: 26ddea703957446f4cdb9186b93e42f19cef83b1
     :git: https://github.com/RokidiOS/RKIMCore
   RKRTC:
-    :commit: c98c008a1a7684787c4d5637fbe971eee6f89307
+    :commit: 9b06ae6d8353beea88fb083131fa79ff6379fb64
     :git: https://github.com/RokidiOS/RKRTC
   RKSassLog:
     :commit: 5e19d1af0739f290e9f2ce451139a9f86feca28f
@@ -473,7 +470,7 @@ SPEC CHECKSUMS:
   RKILogger: acb89cf527cde1f6e21425438338f6d1e49873f4
   RKIMCore: 38a9583a6f0abfdd58e54e53c3a8050886bf52e2
   RKIUtils: 0170015917b7208cef4491421afe6cce74f2cb7c
-  RKRTC: 2ade2384fd623a3fe7cec1c1d0b331a9c176d96d
+  RKRTC: f6cd9cdb29a2c35d190d992c9a45fe6411af5418
   RKSassLog: be42c30c0227c12443c500b0e24ad7e3fb9ab479
   RKSocket: 325bffa5c1c87851fce39b656db0912975ff0909
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
@@ -481,8 +478,7 @@ SPEC CHECKSUMS:
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   WCDB.swift: 05d509d7a0e60fb6e11c34eb7e4027c0fab5849f
   WCDBOptimizedSQLCipher: baf44493b0c7a3d49e97bc5b64a3856f6428ddd1
-  WebRTC-lib: f76423cdaedf25145b59a1f691e0f371e9c262a5
 
-PODFILE CHECKSUM: 2ffffa8dd995ad341e1ee385b35ff3341a4ddb26
+PODFILE CHECKSUM: 35900024e3bdb68a9f5bbb1a9a1fa956c8d6184a
 
 COCOAPODS: 1.11.2
