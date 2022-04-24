@@ -39,6 +39,7 @@
 		8A47C4FA27E03D80005BF0CE /* CallAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4F927E03D80005BF0CE /* CallAlertView.swift */; };
 		8A944DA027E6D3ED00FA6060 /* FullVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A944D9F27E6D3ED00FA6060 /* FullVideoView.swift */; };
 		8A944E7B27E84F0F00FA6060 /* DoodleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A944E7A27E84F0F00FA6060 /* DoodleVC.swift */; };
+		8ADD0FA32809672800B0F7E0 /* ChannelConfigVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADD0FA22809672800B0F7E0 /* ChannelConfigVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -91,6 +92,7 @@
 		8A944DA627E6FABD00FA6060 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		8A944DA827E6FABD00FA6060 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8A944E7A27E84F0F00FA6060 /* DoodleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoodleVC.swift; sourceTree = "<group>"; };
+		8ADD0FA22809672800B0F7E0 /* ChannelConfigVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelConfigVC.swift; sourceTree = "<group>"; };
 		9D8BB637F5831069F47A90A4 /* Pods_RKCooperDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RKCooperDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3BF7C1C27D78E178C4E8A81 /* Pods-RKCooperDemo_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RKCooperDemo_Example.debug.xcconfig"; path = "Target Support Files/Pods-RKCooperDemo_Example/Pods-RKCooperDemo_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B0623B3227EC4050004E43A1 /* RKCooperDemoRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RKCooperDemoRelease.entitlements; path = RKCooperDemo/RKCooperDemoRelease.entitlements; sourceTree = "<group>"; };
@@ -223,6 +225,7 @@
 				8A47C4EB27DF3ADD005BF0CE /* CallPreVC.swift */,
 				8A47C4ED27E03A16005BF0CE /* MideaRoomVC.swift */,
 				8A944E7A27E84F0F00FA6060 /* DoodleVC.swift */,
+				8ADD0FA22809672800B0F7E0 /* ChannelConfigVC.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A47C4E327DF3834005BF0CE /* RKMeetingInfo.swift in Sources */,
+				8ADD0FA32809672800B0F7E0 /* ChannelConfigVC.swift in Sources */,
 				607FACD81AFB9204008FA782 /* LoginVC.swift in Sources */,
 				8A47C4DB27DF3789005BF0CE /* CallView.swift in Sources */,
 				8A47C4CC27DF1B79005BF0CE /* ContactModel.swift in Sources */,
@@ -607,13 +611,13 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22041421;
+				CURRENT_PROJECT_VERSION = 22042111;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RKCooperDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rokid.cooperation.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -633,13 +637,13 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22041421;
+				CURRENT_PROJECT_VERSION = 22042111;
 				DEVELOPMENT_TEAM = 3YUD9UBP45;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RKCooperDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.1.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rokid.cooperation.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";

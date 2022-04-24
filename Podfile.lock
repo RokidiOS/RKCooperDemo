@@ -14,7 +14,8 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
-  - Alamofire (5.5.0)
+  - Alamofire (5.6.1)
+  - Bugly (2.5.91)
   - DoraemonKit (3.1.2):
     - DoraemonKit/Core (= 3.1.2)
   - DoraemonKit/Core (3.1.2):
@@ -35,7 +36,7 @@ PODS:
     - GCDWebServer/Core
   - IQKeyboardManagerSwift (6.5.9)
   - Kingfisher (6.3.1)
-  - LookinServer (1.0.4)
+  - LookinServer (1.0.5)
   - Moya (15.0.0):
     - Moya/Core (= 15.0.0)
   - Moya/Core (15.0.0):
@@ -351,14 +352,14 @@ PODS:
     - QMUIKit/QMUILog
   - QMUIKit/QMUIResources (4.3.0)
   - QMUIKit/QMUIWeakObjectContainer (4.3.0)
-  - RKCooperationCore (2.0.0):
+  - RKCooperationCore (2.1.0):
     - Moya
     - RKIHandyJSON
     - RKILogger
     - RKIUtils
     - RKRTC
   - RKIHandyJSON (0.1.6)
-  - RKILogger (0.1.2)
+  - RKILogger (0.1.3)
   - RKIMCore (0.1.2):
     - Moya
     - RKIHandyJSON
@@ -367,7 +368,7 @@ PODS:
     - RKSocket
     - WCDB.swift
   - RKIUtils (0.1.2)
-  - RKRTC (1.0.1):
+  - RKRTC (1.1.0):
     - Moya
     - RKIHandyJSON
     - RKILogger
@@ -376,7 +377,7 @@ PODS:
   - RKSassLog (0.1.0):
     - Alamofire
   - RKSocket (0.1.0)
-  - SnapKit (5.0.1)
+  - SnapKit (5.6.0)
   - SQLiteRepairKit (1.2.2):
     - WCDBOptimizedSQLCipher (~> 1.2.0)
   - Starscream (4.0.4)
@@ -386,17 +387,18 @@ PODS:
   - WCDBOptimizedSQLCipher (1.2.1)
 
 DEPENDENCIES:
+  - Bugly
   - DoraemonKit
   - IQKeyboardManagerSwift
   - Kingfisher
   - LookinServer
   - Moya
   - QMUIKit
-  - RKCooperationCore (from `https://github.com/RokidiOS/RKCooperationCore`, branch `2.0.0_swift5.6.0`)
+  - RKCooperationCore (from `https://github.com/RokidiOS/RKCooperationCore`, branch `2.1.0_swift5.6.0`)
   - RKIHandyJSON
   - RKILogger
   - RKIMCore (from `https://github.com/RokidiOS/RKIMCore`, branch `0.1.2_swift5.6.0`)
-  - RKRTC (from `https://github.com/RokidiOS/RKRTC`, branch `1.0.1_swift5.6.0`)
+  - RKRTC (from `https://github.com/RokidiOS/RKRTC`, branch `1.1.0_swift5.6.0`)
   - RKSassLog (from `https://github.com/RokidiOS/RKSassLog`)
   - RKSocket (from `https://github.com/RokidiOS/RKSocket`)
   - SnapKit
@@ -405,6 +407,7 @@ SPEC REPOS:
   trunk:
     - AFNetworking
     - Alamofire
+    - Bugly
     - DoraemonKit
     - FMDB
     - GCDWebServer
@@ -424,13 +427,13 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   RKCooperationCore:
-    :branch: 2.0.0_swift5.6.0
+    :branch: 2.1.0_swift5.6.0
     :git: https://github.com/RokidiOS/RKCooperationCore
   RKIMCore:
     :branch: 0.1.2_swift5.6.0
     :git: https://github.com/RokidiOS/RKIMCore
   RKRTC:
-    :branch: 1.0.1_swift5.6.0
+    :branch: 1.1.0_swift5.6.0
     :git: https://github.com/RokidiOS/RKRTC
   RKSassLog:
     :git: https://github.com/RokidiOS/RKSassLog
@@ -439,13 +442,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   RKCooperationCore:
-    :commit: 1bca6a4a2f519b07a92c22164875786b2f3092b4
+    :commit: f52a4fd8b773e78fdec869b273602cc20db846bb
     :git: https://github.com/RokidiOS/RKCooperationCore
   RKIMCore:
     :commit: 26ddea703957446f4cdb9186b93e42f19cef83b1
     :git: https://github.com/RokidiOS/RKIMCore
   RKRTC:
-    :commit: 9b06ae6d8353beea88fb083131fa79ff6379fb64
+    :commit: 1c3383db4080725d554df6c6c6c300ca219158cc
     :git: https://github.com/RokidiOS/RKRTC
   RKSassLog:
     :commit: 5e19d1af0739f290e9f2ce451139a9f86feca28f
@@ -456,29 +459,30 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
-  Alamofire: 1c4fb5369c3fe93d2857c780d8bbe09f06f97e7c
+  Alamofire: 87bd8c952f9a4454320fce00d9cc3de57bcadaf5
+  Bugly: afe841bba2ea6de6d432a3c125240a5e75949c55
   DoraemonKit: 0a040ae24386654e2a2d2c8d029f5ff5837de3c3
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   IQKeyboardManagerSwift: 6e839c575c4aa1078d58a596e41244e77abe918f
   Kingfisher: 016c8b653a35add51dd34a3aba36b580041acc74
-  LookinServer: 743c1681771d0a8dcc38825325a080c3186404a5
+  LookinServer: 3d9a02529ed94a6a08154440c26f6d7f453bb1e7
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   QMUIKit: 67888be9aa0ee0b12b8a219fcea2eec900afd841
-  RKCooperationCore: ef2d1ce4a38ac38f8a00c2b07fcfb6d248d413bf
+  RKCooperationCore: f886f98ecc3260a07e5fc87d97d320d949cf91ba
   RKIHandyJSON: b3928e42af5d7d3b4cefb686079093d130e9066e
-  RKILogger: acb89cf527cde1f6e21425438338f6d1e49873f4
+  RKILogger: 334ef8694fb82e8de080fd7aef45c2bca01ef0ce
   RKIMCore: 38a9583a6f0abfdd58e54e53c3a8050886bf52e2
   RKIUtils: 0170015917b7208cef4491421afe6cce74f2cb7c
-  RKRTC: f6cd9cdb29a2c35d190d992c9a45fe6411af5418
+  RKRTC: cedda597683ed8ee838405b8a5d3894b87012390
   RKSassLog: be42c30c0227c12443c500b0e24ad7e3fb9ab479
   RKSocket: 325bffa5c1c87851fce39b656db0912975ff0909
-  SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   SQLiteRepairKit: 35aaae5a8838adb85f5b1eb4d796055be6060a4b
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   WCDB.swift: 05d509d7a0e60fb6e11c34eb7e4027c0fab5849f
   WCDBOptimizedSQLCipher: baf44493b0c7a3d49e97bc5b64a3856f6428ddd1
 
-PODFILE CHECKSUM: 35900024e3bdb68a9f5bbb1a9a1fa956c8d6184a
+PODFILE CHECKSUM: 08d909dd0be36b545515c1211c0fe514f0b5cd0d
 
 COCOAPODS: 1.11.2

@@ -21,7 +21,8 @@ class MideaRoomVC: UIViewController {
     var mediaSettingToolBar: MediaSettingToolBar!
     // 顶部导航视图
     var meetingRoomNavToolBar: MeetingRoomNavToolBar!
-    
+    // 录制控制按钮
+    let recordBtn = UIButton()
     public override var shouldAutorotate: Bool {
         return true
     }
@@ -39,10 +40,10 @@ class MideaRoomVC: UIViewController {
     fileprivate weak var timer: Timer?
     // 是否是屏幕共享
     private var isScreenShareing = false
-
+    
     ///全屏 视频视图
     var fullVideoView = FullVideoView()
-    let uploadAtreamInfoLabel = UILabel()
+    //    let uploadAtreamInfoLabel = UILabel()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -95,18 +96,20 @@ class MideaRoomVC: UIViewController {
         MeetingManager.shared.channel?.addShare(listener: self)
         RKMessageCenter.addChannelMsg(listener: self, channelId: MeetingManager.shared.channel?.channelId ?? "")
         MeetingManager.shared.channel?.addDevice(listener: self)
-        
-        uploadAtreamInfoLabel.font = .systemFont(ofSize: 10)
-        uploadAtreamInfoLabel.backgroundColor = UIColor.black.withAlphaComponent(0.3)
-        uploadAtreamInfoLabel.isUserInteractionEnabled = false
-        uploadAtreamInfoLabel.textColor = .white
-        view.addSubview(uploadAtreamInfoLabel)
+        MeetingManager.shared.channel?.addRemoteDevice(listener: self)
         view.addSubview(fullVideoView)
-        self.uploadAtreamInfoLabel.text = " | "
-        uploadAtreamInfoLabel.snp.makeConstraints { make in
-            make.left.top.right.equalTo(roomMemberCollectionView)
-            make.height.equalTo(20)
+        
+        view.addSubview(recordBtn)
+        recordBtn.setTitle("录制设置", for: .normal)
+        recordBtn.backgroundColor = .black
+        recordBtn.titleLabel?.font = .systemFont(ofSize: 12)
+        recordBtn.snp.makeConstraints { make in
+            make.left.top.equalTo(meetingRoomNavToolBar)
+            make.height.equalTo(30)
+            make.width.equalTo(60)
         }
+        recordBtn.setTitleColor(.white, for: .normal)
+        recordBtn.addTarget(self, action: #selector(showRecordFunctionMenu), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -161,16 +164,16 @@ class MideaRoomVC: UIViewController {
         }
         
         // 查询频道内是否有人在屏幕共享
-//        RKCooperationCore.shared.getShareScreenManager().shareScreenUserId(channelId: channel.channelId) { userIds in
-//            if userIds?.contains(RKUserManager.shared.userId) == true {
-//                self.isScreenShareing = true
-//            }
-//        }
+        //        RKCooperationCore.shared.getShareScreenManager().shareScreenUserId(channelId: channel.channelId) { userIds in
+        //            if userIds?.contains(RKUserManager.shared.userId) == true {
+        //                self.isScreenShareing = true
+        //            }
+        //        }
     }
     
     // MARK: - 更新房间成员状态
     @objc func updateMeetingPartp() {
-                
+        
         updateRoomName()
         
         guard isLeaveMeetingRoom == false else {
@@ -210,7 +213,7 @@ class MideaRoomVC: UIViewController {
         
         updateRoomName()
         self.roomMemberCollectionView.collectionView.reloadData()
-    
+        
     }
     
     // MARK: - 更新会议房间名字
@@ -281,6 +284,90 @@ class MideaRoomVC: UIViewController {
         meetingRoomNavToolBar.roomTimeLabel.text = String.formatTalkingTime(timeInterval)
     }
     
+    @objc func showRecordFunctionMenu() {
+        
+        guard let channelId = MeetingManager.shared.channel?.channelId else { return }
+        
+        let alertVC = QMUIAlertController(title: "录制设置", message: nil, preferredStyle: .actionSheet)
+        let beginAction = QMUIAlertAction(title: "开始录制", style: .default) { _, _ in
+            self.beginRecord(channelId)
+        }
+        let cancelAction = QMUIAlertAction(title: "关闭录制", style: .default) { _, _ in
+            RKCooperationCore.shared.getChannelManager().stopServerRecording(channelId: channelId, save: true)
+        }
+        let bitAndDelayAction = QMUIAlertAction(title: "设置码率、延迟", style: .default) { _, _ in
+            self.showBitAndDelayAlert()
+        }
+        
+        alertVC.addAction(beginAction)
+        alertVC.addAction(cancelAction)
+        alertVC.addAction(bitAndDelayAction)
+        alertVC.showWith(animated: true)
+    }
+    
+    private func beginRecord(_ channelId: String) {
+        let recordBlock = { (isHight: Bool) in
+            RKCooperationCore.shared.getChannelManager().startServerRecording(channelId: channelId, bucket: "RokidiOS", fileName: String.uuid(), resolution: .RESOLUTION_720, subStream: isHight ? .high : .low) { _ in
+
+            } onFailed: { error in
+                QMUITips.showSucceed("开启录制失败\(String(describing: error))")
+            }
+        }
+
+        let alertVC = QMUIAlertController(title: "录制设置", message: nil, preferredStyle: .alert)
+        let recordHight = QMUIAlertAction(title: "录制大流", style: .default) { _, _ in
+            recordBlock(true)
+        }
+        let recordLow = QMUIAlertAction(title: "录制小流", style: .default) { aler, _ in
+            recordBlock(false)
+        }
+
+        alertVC.addAction(recordHight)
+        alertVC.addAction(recordLow)
+        
+        alertVC.showWith(animated: true)
+        
+    }
+    
+    private func showBitAndDelayAlert() {
+        let alertVC = QMUIAlertController(title: "设置码率和延迟", message: nil, preferredStyle: .alert)
+        alertVC.addTextField { tf in
+            tf.placeholder = "设置最大码率 kbps"
+            tf.maximumTextLength = 7
+            tf.keyboardType = .numberPad
+        }
+        alertVC.addTextField { tf in
+            tf.placeholder = "设置最大延迟 ms"
+            tf.maximumTextLength = 7
+            tf.keyboardType = .numberPad
+        }
+        let cancelAction = QMUIAlertAction(title: "取消", style: .default) { _, _ in
+            
+        }
+        let bitAndDelayAction = QMUIAlertAction(title: "确定", style: .default) { aler, _ in
+            guard let btText = aler.textFields![0].text, !btText.isEmpty else {
+                QMUITips.showError("码率不能为空哦")
+                return
+            }
+            guard let delayText = aler.textFields![1].text, !delayText.isEmpty else {
+                QMUITips.showError("延迟不能为空哦")
+                return
+            }
+            guard let btInt = Int32(btText), let delayInt = Int32(delayText) else {
+                QMUITips.showError("参数不合法")
+                return
+            }
+            if let channel = MeetingManager.shared.channel {
+                RKShareManager.shared.clearShare(channelId: channel.channelId)
+                channel.configVideoQuality(maxPublishBitrate: btInt, maxDelay: delayInt)
+            }
+        }
+
+        alertVC.addAction(bitAndDelayAction)
+        alertVC.addAction(cancelAction)
+        
+        alertVC.showWith(animated: true)
+    }
 }
 
 // MARK: 呼叫监听
@@ -430,6 +517,29 @@ extension MideaRoomVC: RKChannelListener {
     func onChannelShare(channelId: String?, shareType: RKShareType) {
         
     }
+    
+    func onRecordingSwitch(_ isOpen: Bool) {
+        if isOpen {
+            QMUITips.show(withText: "录制已打开")
+        } else {
+            QMUITips.show(withText: "录制已关闭")
+        }
+    }
+    
+    func onRecordingStateChanged(_ recordingStateData: RKIRecordingStateModel) {
+        if recordingStateData.recordingState == .recording {
+            QMUITips.show(withText: "文件录制中...")
+        } else if recordingStateData.recordingState == .uploading {
+            QMUITips.show(withText: "录制文件上传中...")
+        } else if recordingStateData.recordingState == .done {
+            QMUITips.showSucceed("录制已完成 :\(recordingStateData.url ?? "")",
+                                 detailText: "\(recordingStateData.startTime ?? "") | \(recordingStateData.endTime ?? "")")
+        } else if recordingStateData.recordingState == .error {
+            QMUITips.showError(recordingStateData.message)
+        }
+    }
+    
+    
 }
 
 // MARK: 远端设备信息改变监听
@@ -477,6 +587,27 @@ extension MideaRoomVC: RKRemoteDeviceListener {
         }
     }
     
+    func onRemoteVideoStatus(_ userId: String,
+                             rid: String?,
+                             width: Int32,
+                             height: Int32,
+                             fps: Int32,
+                             bitrate: Int32,
+                             packetsLost: Int32) {
+        DispatchQueue.main.async {
+            let rid = rid ?? ""
+            let qu = ""
+            let newSting = self.roomMemberCollectionView.updateCell(userId: userId, width: width, height: height, fps: fps, rid: rid, bitrate: bitrate, qualityLimitationReason: qu, packetsLost: packetsLost)
+            self.fullVideoView.showInfo(newSting)
+        }
+    }
+    
+    func onVideoStreamUnstable(userId: String, lossRate: Float) {
+        DispatchQueue.main.async {
+            self.roomMemberCollectionView.updateCell(userId: userId, lossRate: lossRate)
+        }
+    }
+    
 }
 
 // MARK:  共享消息监听
@@ -517,8 +648,13 @@ extension MideaRoomVC: RKShareListener {
     
     func onStartShareImageDoodle(userId: String, imgUrl: String) {
         
-        refreshMeetingStatus()
+        guard let channel = MeetingManager.shared.channel else {
+            return
+        }
         
+        // 进入截图
+        RKCooperationCore.shared.getShareDoodleManager().joinShareDoodle(channelId: channel.channelId, doodleImageUrl: imgUrl)
+        pushToDoodleVC()
     }
     
     func onStopShareImageDoodle(userId: String) {
@@ -609,7 +745,7 @@ extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
                 self.changeResolution()
             }
         }
-
+        
         let alertVC = alertSheet.add(title: "取消", style: .cancel) {}.finish()
         
         present(alertVC, animated: true, completion: nil)
@@ -643,7 +779,7 @@ extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
     
     // MARK: - 本端分辨率设置
     fileprivate func changeResolution() {
-        let placeholderAndTexts = [("width", "320"), ("height", "240"), ("fps", "15")]
+        let placeholderAndTexts = [("width", "1280"), ("height", "720"), ("fps", "30")]
         let alertVC = RKAlertController.alertInputViews(title: "请输入分辨率参数",
                                                         message: nil,
                                                         placeholderAndTexts: placeholderAndTexts) { text in
@@ -657,7 +793,7 @@ extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
         }
         self.present(alertVC, animated: true, completion: nil)
     }
-
+    
     private func startRecord() {
         guard let channel = MeetingManager.shared.channel else { return }
         if isScreenShareing  {
@@ -681,7 +817,7 @@ extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
 }
 
 extension MideaRoomVC: FullVideoViewDelegate {
- 
+    
     func fullVideoViewDidHidden(_ userId: String) {
         // 切换小流
         if userId != RKUserManager.shared.userId {
@@ -708,7 +844,7 @@ extension MideaRoomVC: FullVideoViewDelegate {
             }
         }
         
-     
+        
     }
 }
 
@@ -823,23 +959,27 @@ extension MideaRoomVC: RKChannelMsgListener {
 // MARK: - 设备信息状态监听
 extension MideaRoomVC : RKDeviceListener {
     
-    func uploadVideoStreamInfo(width: Int32, height: Int32, fps: Int32, rid: String) {
+    
+    // 本端视频参数回调
+    func onVideoPublishStatus(rid: String?,
+                              width: Int32,
+                              height: Int32,
+                              fps: Int32,
+                              bitrate: Int32,
+                              qualityLimitationReason: String?) {
         DispatchQueue.main.async {
-            if var infoArray: [String] = self.uploadAtreamInfoLabel.text?.split(separator: "|").compactMap({ item in
-                return "\(item)"
-            }) {
-                if infoArray.count == 2 {
-                    let perInfo = "宽度\(width) 高度\(height) fps \(fps) rid \(rid)  "
-                    if rid == "l" {
-                        infoArray[1] = perInfo
-                    } else {
-                        infoArray[0] = perInfo
-                    }
-                    self.uploadAtreamInfoLabel.text = infoArray.joined(separator: "|")
-                }
+            let rid = rid ?? ""
+            let qu = qualityLimitationReason ?? ""
+            let userId = ContactManager.shared.userInfo.userId
+            let newString = self.roomMemberCollectionView.updateCell(userId: userId, width: width, height: height, fps: fps, rid: rid, bitrate: bitrate, qualityLimitationReason: qu)
+            if self.fullVideoView.userId == userId {
+                self.fullVideoView.showInfo(newString)
             }
+            
         }
     }
+    
+    
     
     func onCameraUpdate() {
         
@@ -865,5 +1005,5 @@ extension MideaRoomVC : RKDeviceListener {
         
     }
     
-
+    
 }

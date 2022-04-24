@@ -13,6 +13,11 @@ protocol MeetingRoomCollectionViewDelegate: NSObjectProtocol {
     func didSelectItemAt(_ memberView: RKRoomMember, cell: MeetingRoomCollectionCell)
 }
 
+struct VideoInfo {
+    var hight: String = ""
+    var low: String = ""
+    var loss: String = ""
+}
 
 class MeetingRoomCollectionView: UIView {
     
@@ -21,6 +26,8 @@ class MeetingRoomCollectionView: UIView {
     weak var delegate: MeetingRoomCollectionViewDelegate?
     
     var meetingMembers = [RKRoomMember]()
+    // userid : (l,h, lossRate)
+    var videoInfos = [String: VideoInfo]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,7 +45,6 @@ class MeetingRoomCollectionView: UIView {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         
-        collectionView.register(MeetingRoomCollectionCell.self, forCellWithReuseIdentifier: NSStringFromClass(MeetingRoomCollectionCell.self))
         collectionView.backgroundColor = RKColor.BgColor
         collectionView.isPagingEnabled = true
         collectionView.delegate = self
@@ -49,6 +55,73 @@ class MeetingRoomCollectionView: UIView {
         collectionView.snp.makeConstraints { (make) in
             make.top.left.width.height.equalTo(self)
         }
+    }
+    
+    func updateCell(userId: String, lossRate: Float) {
+        var newInfoString = "lossRate: \(lossRate * 100)/100"
+        newInfoString = fillInfoData(userId: userId, newInfoString: newInfoString) { info in
+            info.loss = newInfoString
+        }
+        _ = collectionView.visibleCells.first { cell in
+            guard let cell = cell as? MeetingRoomCollectionCell else { return false }
+            if cell.info?.userId == userId {
+                cell.rtcInfoLabel.text = newInfoString
+                return true
+            }
+            return false
+        }
+    }
+    
+    
+    func updateCell(userId: String, width: Int32, height: Int32, fps: Int32, rid: String, bitrate: Int32, qualityLimitationReason: String?, packetsLost: Int32? = nil) -> String{
+        
+        var newInfoString = ""
+        
+        if rid.isEmpty == false {
+            newInfoString.append(" rid: \(rid) ")
+        }
+        
+        newInfoString.append("w: \(width) h: \(height) fps: \(fps) br: \(bitrate) Kbps")
+        
+        if let qualityLimitationReason = qualityLimitationReason {
+            newInfoString.append(" qR:\(qualityLimitationReason)")
+        }
+        
+        if let packetsLost = packetsLost {
+            newInfoString.append(" plost \(packetsLost)")
+        }
+        
+        newInfoString = fillInfoData(userId: userId, newInfoString: newInfoString) { info in
+            if rid == "l" {
+                info.low = newInfoString
+            } else {
+                info.hight = newInfoString
+            }
+        }
+        
+        _ = collectionView.visibleCells.first { cell in
+            guard let cell = cell as? MeetingRoomCollectionCell else { return false }
+            if cell.info?.userId == userId {
+                cell.rtcInfoLabel.text = newInfoString
+                return true
+            }
+            return false
+        }
+        return newInfoString
+    }
+    
+    private func fillInfoData(userId: String, newInfoString: String, tmBlock: @escaping (inout VideoInfo) -> Void) ->String {
+        if var info = videoInfos[userId] {
+            tmBlock(&info)
+            videoInfos[userId] = info
+            return info.low + "\n" + info.hight + "\n" + info.loss
+        } else {
+            var info = VideoInfo()
+            tmBlock(&info)
+            videoInfos[userId] = info
+            return info.low + "\n" + info.hight + "\n" + info.loss
+        }
+        
     }
 }
 
@@ -63,8 +136,14 @@ extension MeetingRoomCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NSStringFromClass(MeetingRoomCollectionCell.self), for: indexPath) as! MeetingRoomCollectionCell
+        let ide = NSStringFromClass(MeetingRoomCollectionCell.self) + "\(indexPath.row)"
+        collectionView.register(MeetingRoomCollectionCell.self, forCellWithReuseIdentifier: ide)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ide, for: indexPath) as! MeetingRoomCollectionCell
         let roomMember = meetingMembers[indexPath.row]
+        cell.info = roomMember
+        if let tuple = videoInfos[roomMember.userId] {
+            cell.rtcInfoLabel.text = tuple.low + tuple.hight + tuple.loss
+        }
         cell.userNameLabel.text = kcontactList.first(where: { model in
             model.userId == roomMember.userId
         })?.realName ?? "我"

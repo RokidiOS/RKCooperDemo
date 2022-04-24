@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>22042111</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
@@ -29,7 +29,7 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>需要使用相册</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>"需要访问相册"</string>
+	<string>&quot;需要访问相册&quot;</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
@@ -50,5 +50,11 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>Looking for local tcp and Bonjour service</key>
+	<array>
+		<string>aliveNotifySocket.udp</string>
+		<string>udpSocket.udp</string>
+		<string>asyncTCPSocket.tcp</string>
+	</array>
 </dict>
 </plist>

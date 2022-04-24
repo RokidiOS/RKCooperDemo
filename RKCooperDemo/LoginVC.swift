@@ -138,17 +138,17 @@ extension LoginVC {
     
     @objc private func loginAction() {
         let param = RKCooperationCoreParams()
-        let tempEnv = 3
+        let tempEnv = 2
         if tempEnv == 0 {
             param.saasUrl = "https://saas-ar-dev.rokid-inc.com"
             param.rtcUrl = "https://rtc-hyh.rokid-inc.com"
             param.wssUrl = "wss://rtc-hyh.rokid-inc.com:8886/socket"
             env = .develop
         } else if tempEnv == 1 {
-            param.saasUrl = "https://saas-ar-test.rokid.com"
+            param.saasUrl = "https://saas-ar-dev.rokid-inc.com"
             param.rtcUrl = "https://rtc-dev.rokid.com"
             param.wssUrl = "wss://rtc-wss-dev.rokid.com/socket"
-            env = .test
+            env = .develop
         } else if tempEnv == 2 {
             param.saasUrl = "https://saas-ar-test.rokid.com"
             param.rtcUrl = "https://rtc-test.rokid.com"
@@ -205,6 +205,7 @@ extension LoginVC {
     
     private func loginSucc() {
         let mainVC = ContactListVC()
+        mainVC.loadData()
         self.navigationController?.pushViewController(mainVC, animated: true)
     }
 }

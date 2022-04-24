@@ -8,13 +8,13 @@ target 'RKCooperDemo' do
   # pod 'RKRTC', :path => '../../../RKRTC'
   # pod 'RKRTC', :path => '../../../RKCore/RKRTCSDK'
   ## 维护最新的两个Swift版本，需要拉取对应版本的sdk，目前支持5.5.2、5.6.0
-  pod 'RKRTC', :git => "https://github.com/RokidiOS/RKRTC", :branch => '1.0.1_swiftx.x.x'
+  pod 'RKRTC', :git => "https://github.com/RokidiOS/RKRTC", :branch => '1.1.0_swiftx.x.x'
   
   ## 协作 sdk
   # pod 'RKCooperationCore', :path => '../../../RKCore/RKCooperationCore'
   # pod 'RKCooperationCore', :path => '../../../RKCore/RKCoreSDK'
   ## 维护最新的两个Swift版本，需要拉取对应版本的sdk，目前支持5.5.2、5.6.0
-  pod 'RKCooperationCore', :git => "https://github.com/RokidiOS/RKCooperationCore", :branch => '2.0.0_swiftx.x.x'
+  pod 'RKCooperationCore', :git => "https://github.com/RokidiOS/RKCooperationCore", :branch => '2.1.0_swiftx.x.x'
   
   ## IM sdk
   # pod 'RKIMCore', :path => '../../RKIMCore/Framework'
@@ -34,6 +34,7 @@ target 'RKCooperDemo' do
   pod 'LookinServer', :configurations => ['Debug']
   pod 'DoraemonKit'
   pod 'IQKeyboardManagerSwift'
+  pod 'Bugly'
   
 end
 

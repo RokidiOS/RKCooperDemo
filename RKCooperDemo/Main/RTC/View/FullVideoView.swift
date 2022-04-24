@@ -20,7 +20,7 @@ class FullVideoView: UIView {
     var lastVideoSuperView: UIView?
     var lastVieoView: UIView?
     var userId: String = ""
-    
+
     weak var delegate: FullVideoViewDelegate?
     
     init() {
@@ -35,10 +35,23 @@ class FullVideoView: UIView {
             make.right.equalTo(-30)
             make.centerY.equalToSuperview()
         }
+        
+        addSubview(infoLabel)
+        infoLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().offset(-100)
+            make.bottom.equalToSuperview().offset(-40)
+        }
+        
+    }
+    
+    public func showInfo(_ string: String) {
+        infoLabel.text = string
     }
     
     override func addSubview(_ view: UIView) {
         super.addSubview(view)
+        bringSubview(toFront: infoLabel)
         bringSubview(toFront: snapBtn)
     }
     
@@ -51,6 +64,16 @@ class FullVideoView: UIView {
         btn.setImage(UIImage(named: "ic_call_room_member_take_photo"), for: .normal)
         btn.addTarget(self, action: #selector(snapAction), for: .touchUpInside)
         return btn
+    }()
+    
+    private lazy var infoLabel: UILabel = {
+        infoLabel = UILabel()
+        infoLabel.font = .systemFont(ofSize: 13)
+        infoLabel.numberOfLines = 0
+        infoLabel.setContentHuggingPriority(.required
+                                            , for: .vertical)
+        infoLabel.textColor = .white
+        return infoLabel
     }()
     
     @objc private func hidenAction() {
