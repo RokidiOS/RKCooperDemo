@@ -4,7 +4,7 @@
 //
 //  Created by chzy on 2022/3/20.
 //  Copyright © 2022 CocoaPods. All rights reserved.
-//
+//  全屏视频流 view
 
 import UIKit
 import SnapKit
@@ -76,6 +76,7 @@ class FullVideoView: UIView {
         return infoLabel
     }()
     
+    // 缩小 隐藏操作
     @objc private func hidenAction() {
         guard let lastVideoSuperView = lastVideoSuperView else { return }
         guard let lastVieoView = lastVieoView else { return }
@@ -97,6 +98,7 @@ class FullVideoView: UIView {
 
     }
     
+    // 截屏操作
     @objc private func snapAction() {
         self.delegate?.screenSnapshot(self.userId)
     }

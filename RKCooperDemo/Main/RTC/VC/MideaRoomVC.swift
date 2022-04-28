@@ -38,12 +38,10 @@ class MideaRoomVC: UIViewController {
     
     fileprivate var meetingStartTime: Int64 = 0
     fileprivate weak var timer: Timer?
-    // 是否是屏幕共享
-    private var isScreenShareing = false
-    
     ///全屏 视频视图
     var fullVideoView = FullVideoView()
     //    let uploadAtreamInfoLabel = UILabel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -110,6 +108,21 @@ class MideaRoomVC: UIViewController {
         }
         recordBtn.setTitleColor(.white, for: .normal)
         recordBtn.addTarget(self, action: #selector(showRecordFunctionMenu), for: .touchUpInside)
+        
+        let otherSettingBtn = UIButton()
+        view.addSubview(otherSettingBtn)
+        otherSettingBtn.setTitle("其他设置", for: .normal)
+        otherSettingBtn.backgroundColor = .black
+        otherSettingBtn.titleLabel?.font = .systemFont(ofSize: 12)
+        otherSettingBtn.snp.makeConstraints { make in
+            make.right.equalTo(mediaSettingToolBar.snp.left).offset(-31)
+            make.top.equalTo(meetingRoomNavToolBar)
+            make.height.equalTo(30)
+            make.width.equalTo(60)
+        }
+        otherSettingBtn.setTitleColor(.white, for: .normal)
+        otherSettingBtn.addTarget(self, action: #selector(otherFunctionMenu), for: .touchUpInside)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -191,26 +204,28 @@ class MideaRoomVC: UIViewController {
             if let member = roomMemberCollectionView.meetingMembers.first(where: { $0.userId == part.userId }) {
                 member.participant = part
                 member.state = nil
-                if part.userId == RKUserManager.shared.userId, isScreenShareing == true {
-                    member.state = "屏幕共享中"
-                } else {
-                    member.state = nil
-                }
             } else {
                 let member = RKRoomMember()
                 member.userId = part.userId
                 member.userName = part.displayName ?? ""
                 member.participant = part
                 roomMemberCollectionView.meetingMembers.append(member)
-                if part.userId == RKUserManager.shared.userId, isScreenShareing == true {
-                    member.state = "屏幕共享中"
-                } else {
-                    member.state = nil
-                }
             }
             
         }
         
+        guard let channel = MeetingManager.shared.channel else { return }
+        if let shareInfo = channel.shareInfo, shareInfo.shareType != .close,
+           let member = roomMemberCollectionView.meetingMembers.first(where: { $0.userId == shareInfo.promoterUserId }) {
+            switch shareInfo.shareType {
+            case .doodle, .imageDoodle:
+                member.state = "电子白板中"
+            case .screen:
+                member.state = "屏幕共享中"
+            default: break
+            }
+        }
+       
         updateRoomName()
         self.roomMemberCollectionView.collectionView.reloadData()
         
@@ -295,25 +310,37 @@ class MideaRoomVC: UIViewController {
         let cancelAction = QMUIAlertAction(title: "关闭录制", style: .default) { _, _ in
             RKCooperationCore.shared.getChannelManager().stopServerRecording(channelId: channelId, save: true)
         }
-        let bitAndDelayAction = QMUIAlertAction(title: "设置码率、延迟", style: .default) { _, _ in
-            self.showBitAndDelayAlert()
-        }
         
         alertVC.addAction(beginAction)
         alertVC.addAction(cancelAction)
-        alertVC.addAction(bitAndDelayAction)
         alertVC.showWith(animated: true)
     }
+    
+    @objc func otherFunctionMenu() {
+        
+        let alertVC = QMUIAlertController(title: "其他设置", message: nil, preferredStyle: .actionSheet)
+        let bitAndDelayAction = QMUIAlertAction(title: "设置码率、延迟", style: .default) { _, _ in
+            self.showBitAndDelayAlert()
+        }
+        let refreshTokenAction = QMUIAlertAction(title: "刷新token", style: .default) { _, _ in
+            self.refreshToken()
+        }
+        
+        alertVC.addAction(bitAndDelayAction)
+        alertVC.addAction(refreshTokenAction)
+        alertVC.showWith(animated: true)
+    }
+
     
     private func beginRecord(_ channelId: String) {
         let recordBlock = { (isHight: Bool) in
             RKCooperationCore.shared.getChannelManager().startServerRecording(channelId: channelId, bucket: "RokidiOS", fileName: String.uuid(), resolution: .RESOLUTION_720, subStream: isHight ? .high : .low) { _ in
-
+                
             } onFailed: { error in
                 QMUITips.showSucceed("开启录制失败\(String(describing: error))")
             }
         }
-
+        
         let alertVC = QMUIAlertController(title: "录制设置", message: nil, preferredStyle: .alert)
         let recordHight = QMUIAlertAction(title: "录制大流", style: .default) { _, _ in
             recordBlock(true)
@@ -321,7 +348,7 @@ class MideaRoomVC: UIViewController {
         let recordLow = QMUIAlertAction(title: "录制小流", style: .default) { aler, _ in
             recordBlock(false)
         }
-
+        
         alertVC.addAction(recordHight)
         alertVC.addAction(recordLow)
         
@@ -358,15 +385,34 @@ class MideaRoomVC: UIViewController {
                 return
             }
             if let channel = MeetingManager.shared.channel {
-                RKShareManager.shared.clearShare(channelId: channel.channelId)
                 channel.configVideoQuality(maxPublishBitrate: btInt, maxDelay: delayInt)
             }
         }
-
+        
         alertVC.addAction(bitAndDelayAction)
         alertVC.addAction(cancelAction)
         
         alertVC.showWith(animated: true)
+    }
+    
+    #warning("验证刷新token，真实token刷新机制需要接入方实现！")
+    private func refreshToken() {
+        guard let refreshToken = ContactManager.shared.refreshToken else {
+            return
+        }
+        
+        RKAPIManager.shared.refreshToken(refreshToken) { data in
+            guard let data = data as? Dictionary<String, Any>,
+                  let accessToken = data["accessToken"] as? String,
+                  let refreshToken = data["refreshToken"] as? String else {
+                QMUITips.showError("刷新token失败！")
+                return
+            }
+            RKCooperationCore.shared.updateToken(accessToken)
+            ContactManager.shared.refreshToken = refreshToken
+        } onFailed: { error in
+            QMUITips.showError("\(error?.localizedDescription ?? "")")
+        }
     }
 }
 
@@ -463,25 +509,38 @@ extension MideaRoomVC: RKChannelListener {
     
     func onUserLeaveChannel(channelId: String?, userId: String?) {
         
-        guard let userId = userId,
-              let contact = ContactManager.shared.contactFrom(userId: userId) else {
+        guard let userId = userId else {
             return
         }
-        // 移除离开的成员
-        roomMemberCollectionView.meetingMembers.removeAll(where: { $0.userId == userId })
         
-        if let shareInfo = MeetingManager.shared.channel?.shareInfo {
-            if shareInfo.executorUserId == contact.userId {
-                MeetingManager.shared.channel?.shareInfo = nil
-                // 霸屏功能者离开了会议，返回房间
-                self.navigationController?.popToViewController(self, animated: false)
+        if userId == RKUserManager.shared.userId {
+            // 自己离开了频道，超时等等
+            QMUITips.show(withText: "已不在频道内！")
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+            // 自己是分享主角 需要关闭share事件
+            if let channel = MeetingManager.shared.channel {
+                RKShareManager.shared.clearShare(channelId: channel.channelId)
             }
+            MeetingManager.shared.leaveMeeting()
+        } else if let contact = ContactManager.shared.contactFrom(userId: userId) {
+            // 移除离开的成员
+            roomMemberCollectionView.meetingMembers.removeAll(where: { $0.userId == userId })
+            
+            if let shareInfo = MeetingManager.shared.channel?.shareInfo {
+                if shareInfo.executorUserId == contact.userId {
+                    MeetingManager.shared.channel?.shareInfo = nil
+                    if let channel = MeetingManager.shared.channel {
+                        RKShareManager.shared.clearShare(channelId: channel.channelId)
+                    }
+                    // 霸屏功能者离开了会议，返回房间
+                    self.navigationController?.popToViewController(self, animated: false)
+                }
+            }
+            
+            QMUITips.showInfo(contact.realName + "离开了会议")
+            
+            updateMeetingPartp()
         }
-        
-        QMUITips.showInfo(contact.realName + "离开了会议")
-        
-        updateMeetingPartp()
-        
     }
     
     func onUserKicked(channelId: String?, userIds: [String]) {
@@ -527,7 +586,7 @@ extension MideaRoomVC: RKChannelListener {
     }
     
     func onRecordingStateChanged(_ recordingStateData: RKIRecordingStateModel) {
-        if recordingStateData.recordingState == .recording {
+        if recordingStateData.recordingState == .uploading {
             QMUITips.show(withText: "文件录制中...")
         } else if recordingStateData.recordingState == .uploading {
             QMUITips.show(withText: "录制文件上传中...")
@@ -598,7 +657,9 @@ extension MideaRoomVC: RKRemoteDeviceListener {
             let rid = rid ?? ""
             let qu = ""
             let newSting = self.roomMemberCollectionView.updateCell(userId: userId, width: width, height: height, fps: fps, rid: rid, bitrate: bitrate, qualityLimitationReason: qu, packetsLost: packetsLost)
-            self.fullVideoView.showInfo(newSting)
+            if self.fullVideoView.userId == userId {
+                self.fullVideoView.showInfo(newSting)
+            }
         }
     }
     
@@ -630,7 +691,6 @@ extension MideaRoomVC: RKShareListener {
         guard let channel = MeetingManager.shared.channel else {
             return
         }
-        
         // 进入白板view
         RKCooperationCore.shared.getShareDoodleManager().joinShareDoodle(channelId: channel.channelId)
         pushToDoodleVC()
@@ -705,7 +765,7 @@ extension MideaRoomVC: RKShareListener {
     func onShareStop() {
         
         roomMemberCollectionView.meetingMembers.forEach { meetingMember in
-            
+            meetingMember.state = nil
         }
         
         roomMemberCollectionView.collectionView.reloadData()
@@ -737,6 +797,17 @@ extension MideaRoomVC: RKShareListener {
 extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
     
     func didSelectItemAt(_ memberView: RKRoomMember, cell: MeetingRoomCollectionCell) {
+        if memberView.state?.isEmpty == false, let shareType = MeetingManager.shared.channel?.shareInfo?.shareType {
+            if shareType == .doodle || shareType == .imageDoodle {
+                pushToDoodleVC()
+                return
+            }
+            // 自己的屏幕共享不能查看详情
+            if shareType == .screen, RKUserManager.shared.userId == memberView.userId {
+                return
+            }
+        }
+        
         let alertSheet = RKAlertController.alertSheet(title: "功能菜单").add(title: "查看详情", style: .default) {
             self.showFullVideo(memberView.userId, cell: cell)
         }
@@ -796,22 +867,29 @@ extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
     
     private func startRecord() {
         guard let channel = MeetingManager.shared.channel else { return }
-        if isScreenShareing  {
-            RKCooperationCore.shared.getShareScreenManager().stopShareScreen(channelId: channel.channelId)
-            isScreenShareing = false
-        } else {
+        
+        guard let shareInfo = channel.shareInfo else {
             RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
-            isScreenShareing = true
+            QMUITips.showSucceed("开启屏幕共享成功")
+            updateMeetingPartp()
+            return
         }
-        QMUITips.showSucceed(isScreenShareing ? "开启屏幕共享成功" : "关闭屏幕共享成功")
+        
+        if shareInfo.shareType == .screen, shareInfo.promoterUserId == RKUserManager.shared.userId {
+            RKCooperationCore.shared.getShareScreenManager().stopShareScreen(channelId: channel.channelId)
+            QMUITips.showSucceed("关闭屏幕共享成功")
+        } else if shareInfo.shareType == .close {
+            RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
+            QMUITips.showSucceed("开启屏幕共享成功")
+        } else {
+            QMUITips.showError("频道内已经存在其他共享了")
+        }
         
         updateMeetingPartp()
     }
     
     private func pushToDoodleVC() {
-        guard let channel = MeetingManager.shared.channel else { return }
         let doodleVC = DoodleVC()
-        doodleVC.channelId = channel.channelId
         navigationController?.pushViewController(doodleVC, animated: true)
     }
 }
@@ -861,10 +939,10 @@ extension MideaRoomVC: MediaSettingToolBarDelegate {
                 NSObject.cancelPreviousPerformRequests(withTarget: self)
                 
                 // 自己是分享主角 需要关闭share事件
-                if let channel = MeetingManager.shared.channel
-                {
+                if let channel = MeetingManager.shared.channel {
                     RKShareManager.shared.clearShare(channelId: channel.channelId)
                 }
+                
                 MeetingManager.shared.leaveMeeting()
             }
         case .audio:
@@ -902,6 +980,9 @@ extension MideaRoomVC: MediaSettingToolBarDelegate {
 // MARK: - 工具箱回调
 extension MideaRoomVC: AlertViewDelegate {
     func alertViewAction(_ action: AlertViewActionType) {
+        guard let channel = MeetingManager.shared.channel else {
+            return
+        }
         switch action {
         case .camera_switch:
             RKDevice.switchCamera()
@@ -929,9 +1010,6 @@ extension MideaRoomVC: AlertViewDelegate {
         case .tool_share:
             startRecord()
         case .tool_doodle:
-            guard let channel = MeetingManager.shared.channel else {
-                return
-            }
             RKCooperationCore.shared.getShareDoodleManager().startShareDoodle(channelId: channel.channelId)
         default:
             break

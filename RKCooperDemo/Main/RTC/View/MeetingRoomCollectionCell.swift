@@ -20,7 +20,7 @@ class MeetingRoomCollectionCell: UICollectionViewCell {
     var userNameLabel: UILabel!
     // 语音图标
     var voiceImageView: UIImageView!
-    
+    // 视频参数
     var rtcInfoLabel: UILabel!
     
     var info: RKRoomMember?

@@ -9,28 +9,16 @@
 import UIKit
 import Kingfisher
 
-enum CellState: Int {
-    case offline           = 0 // 离线
-    case offlineAvailable  = 1 // 离线可以发起呼叫
-    case online            = 2 // 在线
-    case selected          = 3 // 选中
-    case onlineBusy        = 4 // 在线正忙
-}
-
 class ContactCell: UITableViewCell {
     
     // 头像
     var avatarImageButton: UIButton!
     // 名字
     var nameLabel: UILabel!
-    // 状态
-    var statePointView: UIView!
-    var stateLabel: UILabel!
     // 右侧选择框
     var pickImageView: UIImageView!
     // 底部横线
     var lineView: UIView!
-    // 状态
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,16 +34,6 @@ class ContactCell: UITableViewCell {
         nameLabel.font = .systemFont(ofSize: 16)
         nameLabel.textColor = UIColor(hex: 0x000000)
         self.contentView.addSubview(nameLabel)
-        
-        statePointView = UIView()
-        statePointView.layer.cornerRadius = 2.5
-        statePointView.backgroundColor = UIColor(hex: 0x909090)
-        self.contentView.addSubview(statePointView)
-        
-        stateLabel = UILabel()
-        stateLabel.font = .systemFont(ofSize: 12)
-        stateLabel.textColor = UIColor(hex: 0x909090)
-        self.contentView.addSubview(stateLabel)
         
         pickImageView = UIImageView.init()
         let accImage = UIImage(named: "rk_checkbox_n")
@@ -76,19 +54,6 @@ class ContactCell: UITableViewCell {
             make.top.equalTo(13)
             make.left.equalTo(avatarImageButton.snp.right).offset(10)
             make.right.equalTo(pickImageView.snp.left).offset(-10)
-            make.height.equalTo(20)
-        }
-        
-        statePointView.snp.makeConstraints { (make) in
-            make.left.equalTo(nameLabel)
-            make.size.equalTo(5)
-            make.centerY.equalTo(stateLabel)
-        }
-        
-        stateLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(nameLabel.snp.bottom)
-            make.left.equalTo(statePointView.snp.right).offset(5)
-            make.width.equalTo(50)
             make.height.equalTo(20)
         }
         
@@ -119,15 +84,12 @@ class ContactCell: UITableViewCell {
     
     var showChoosed = false {
         didSet {
-            guard let model = model else { return }
             if showChoosed {
                 pickImageView.image = UIImage(named: "rk_checkbox_s")
             } else {
                 pickImageView.image = UIImage(named: "rk_checkbox_n")
             }
             pickImageView.isHidden = false
-//            !model.status
-         
         }
     }
     
@@ -153,7 +115,7 @@ class ContactCell: UITableViewCell {
                 nameLabel.text = nameStr
             }
             
-        
+            //头像设置
             if contactInfo.headUrl.count > 0 {
                 avatarImageButton.kf.setImage(with: URL(string: contactInfo.headUrl), for: .normal)
             } else {

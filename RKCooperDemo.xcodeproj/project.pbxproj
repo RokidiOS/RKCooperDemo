@@ -26,7 +26,6 @@
 		8A47C4DB27DF3789005BF0CE /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4D927DF3789005BF0CE /* CallView.swift */; };
 		8A47C4DE27DF37F3005BF0CE /* MeetingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4DD27DF37F3005BF0CE /* MeetingManager.swift */; };
 		8A47C4E327DF3834005BF0CE /* RKMeetingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E027DF3834005BF0CE /* RKMeetingInfo.swift */; };
-		8A47C4E427DF3834005BF0CE /* RKPhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E127DF3834005BF0CE /* RKPhotoModel.swift */; };
 		8A47C4E527DF3834005BF0CE /* RKRoomMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E227DF3834005BF0CE /* RKRoomMember.swift */; };
 		8A47C4EA27DF3944005BF0CE /* ContactManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E927DF3944005BF0CE /* ContactManager.swift */; };
 		8A47C4EC27DF3ADD005BF0CE /* CallPreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4EB27DF3ADD005BF0CE /* CallPreVC.swift */; };
@@ -77,7 +76,6 @@
 		8A47C4D927DF3789005BF0CE /* CallView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		8A47C4DD27DF37F3005BF0CE /* MeetingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingManager.swift; sourceTree = "<group>"; };
 		8A47C4E027DF3834005BF0CE /* RKMeetingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKMeetingInfo.swift; sourceTree = "<group>"; };
-		8A47C4E127DF3834005BF0CE /* RKPhotoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKPhotoModel.swift; sourceTree = "<group>"; };
 		8A47C4E227DF3834005BF0CE /* RKRoomMember.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKRoomMember.swift; sourceTree = "<group>"; };
 		8A47C4E927DF3944005BF0CE /* ContactManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactManager.swift; sourceTree = "<group>"; };
 		8A47C4EB27DF3ADD005BF0CE /* CallPreVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallPreVC.swift; sourceTree = "<group>"; };
@@ -259,7 +257,6 @@
 			isa = PBXGroup;
 			children = (
 				8A47C4E027DF3834005BF0CE /* RKMeetingInfo.swift */,
-				8A47C4E127DF3834005BF0CE /* RKPhotoModel.swift */,
 				8A47C4E227DF3834005BF0CE /* RKRoomMember.swift */,
 			);
 			path = Model;
@@ -367,6 +364,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-RKCooperDemo/Pods-RKCooperDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/DoraemonKit/DoraemonKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/GCDWebServer/GCDWebServer.framework",
@@ -392,6 +390,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoraemonKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GCDWebServer.framework",
@@ -465,7 +464,6 @@
 				8A161B8027E042EE009C0B58 /* RKMaskView.swift in Sources */,
 				8A47C4F827E03C09005BF0CE /* RKExt.swift in Sources */,
 				8A47C4F427E03AF2005BF0CE /* MeetingRoomCollectionCell.swift in Sources */,
-				8A47C4E427DF3834005BF0CE /* RKPhotoModel.swift in Sources */,
 				8A47C4C927DF16DC005BF0CE /* ContactCell.swift in Sources */,
 				8A47C4D527DF36C5005BF0CE /* ThemeDefine.swift in Sources */,
 				8A47C4F027E03AA2005BF0CE /* MeetingRoomCollectionView.swift in Sources */,
@@ -547,7 +545,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -594,7 +592,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -607,15 +605,16 @@
 			baseConfigurationReference = F971A9210B63411DCB0AE78B /* Pods-RKCooperDemo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22042111;
+				CURRENT_PROJECT_VERSION = 22042822;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RKCooperDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.1.0;
 				MODULE_NAME = ExampleApp;
@@ -633,15 +632,16 @@
 			baseConfigurationReference = CBA2127BFA85D124B4E0EEF5 /* Pods-RKCooperDemo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22042111;
+				CURRENT_PROJECT_VERSION = 22042822;
 				DEVELOPMENT_TEAM = 3YUD9UBP45;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RKCooperDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.1.0;
 				MODULE_NAME = ExampleApp;

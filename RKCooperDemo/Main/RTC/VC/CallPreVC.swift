@@ -117,6 +117,8 @@ class CallPreVC: UIViewController, RKCallListener {
         MeetingManager.shared.audioSwitch = true
         MeetingManager.shared.cameraSwitch = true
         MeetingManager.shared.trumpetSwitch = true
+        
+        RKCooperationCore.shared.getChannelManager().addChannel(listener: self)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -124,6 +126,7 @@ class CallPreVC: UIViewController, RKCallListener {
         navigationController?.navigationBar.isHidden = false
         NSObject.cancelPreviousPerformRequests(withTarget: self)
         RKCooperationCore.shared.removeCall(listener: self)
+        RKCooperationCore.shared.getChannelManager().removeChannel(listener: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -249,12 +252,62 @@ extension CallPreVC: CallViewDelegate {
         channelParam.isAudio = MeetingManager.shared.audioSwitch
         
         MeetingManager.shared.channel?.join(param: channelParam, onSuccess: { data in
-            self.enterRoomViewController()
             QMUITips.hideAllTips()
         }, onFailed: { error in
             QMUITips.hideAllTips()
             QMUITips.showError("\(String(describing: error))")
         })
+    }
+    
+}
+
+extension CallPreVC: RKChannelListener {
+    
+    func onJoinChannelResult(channelId: String, result: Bool, reason: RKCooperationCode) {
+        if result == true {
+            // 加入成功
+            self.enterRoomViewController()
+        }
+    }
+    
+    func onUserScreenShareStateChanged(screenUserId: String?) {
+        
+    }
+    
+    func onLeave(channelId: String?, reason: RKCooperationCode) {
+        
+    }
+    
+    func onKicked(channelId: String?, byUserId: String) {
+        
+    }
+    
+    func onDispose() {
+        
+    }
+    
+    func onChannelStateChanged(newState: RKChannelState, oldState: RKChannelState) {
+        
+    }
+    
+    func onCustomPropertyChanged(customProperty: String?) {
+        
+    }
+    
+    func onRecordStateChanged(recordState: RKRecordState) {
+        
+    }
+    
+    func onUserJoinChannel(channelId: String, userId: String) {
+        
+    }
+    
+    func onUserLeaveChannel(channelId: String?, userId: String?) {
+        
+    }
+    
+    func onChannelShare(channelId: String?, shareType: RKShareType) {
+        
     }
     
 }

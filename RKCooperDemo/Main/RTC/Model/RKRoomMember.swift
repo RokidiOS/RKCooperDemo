@@ -11,7 +11,7 @@ import RKCooperationCore
 
 class RKRoomMember {
         
-    var participant: RKChannelParticipant?
+    var participant: RKChannelParticipant? // 成员的频道信息
     
     var userId: String = ""
     

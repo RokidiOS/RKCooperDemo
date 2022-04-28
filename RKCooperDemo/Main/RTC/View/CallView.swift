@@ -3,7 +3,7 @@
 //  RokidSDK
 //
 //  Created by Rokid on 2021/7/14.
-//
+//  呼叫View
 
 import UIKit
 import RKIUtils
@@ -41,8 +41,10 @@ class CallView: UIView {
     
     var titleLabel = UILabel()
         
+    //功能按钮 背景view
     var callSettingContentView = UIView()
     
+    // 录制分辨率选项 背景View
     var cloudRecordBgView = UIView()
     
     var cloudRecordType:RKCloudRecordType = .middle {

@@ -3,16 +3,18 @@
 //  RokidSDK
 //
 //  Created by Rokid on 2021/7/19.
-//
+//  会议页面 宫格collectionView
 
 import UIKit
 import RKIUtils
+import RKCooperationCore
 
 protocol MeetingRoomCollectionViewDelegate: NSObjectProtocol {
     // MARK: - 点击单个视频回调
     func didSelectItemAt(_ memberView: RKRoomMember, cell: MeetingRoomCollectionCell)
 }
 
+// 视频信息 hight 大流信息； low 小流信息； loas丢包信息
 struct VideoInfo {
     var hight: String = ""
     var low: String = ""
@@ -26,6 +28,7 @@ class MeetingRoomCollectionView: UIView {
     weak var delegate: MeetingRoomCollectionViewDelegate?
     
     var meetingMembers = [RKRoomMember]()
+    
     // userid : (l,h, lossRate)
     var videoInfos = [String: VideoInfo]()
     
@@ -153,7 +156,12 @@ extension MeetingRoomCollectionView: UICollectionViewDataSource {
         } else {
             cell.voiceImageView.image = UIImage(named: "ic_call_room_member_mic_on", in:  Bundle(for: self.classForCoder), compatibleWith: nil)
         }
-        if roomMember.state?.isEmpty == false {
+        guard let channel = MeetingManager.shared.channel else { return cell}
+        // 不是自己在做屏幕共享
+        let showScreenFlag: Bool = channel.shareInfo?.shareType == .screen &&  roomMember.userId == RKUserManager.shared.userId
+        let showDoodleFlag: Bool = channel.shareInfo?.shareType == .doodle
+        let showFlag = showScreenFlag || showDoodleFlag
+        if roomMember.state?.isEmpty == false, showFlag {
             // 状态展示
             cell.videoView.isHidden = true
             cell.stateImageView.isHidden = true
@@ -162,6 +170,7 @@ extension MeetingRoomCollectionView: UICollectionViewDataSource {
             cell.stateLabel.text = roomMember.state
         } else if let participant = roomMember.participant,
                   participant.isVideoStart == true {
+            // 视频流赋值
             participant.startVideo(renderType: .RENDER_FULL_SCREEN, videoSize:.SIZE_LARGE) { canvas in
                 if let canvasView = canvas?.videoView {
                     cell.videoView.addSubview(canvasView)

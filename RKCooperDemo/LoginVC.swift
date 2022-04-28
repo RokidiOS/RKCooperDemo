@@ -21,6 +21,9 @@ struct RKLoginUDKeys {
 
 class LoginVC: UIViewController {
     
+    // 登录完成后 查询回调
+    var loginQueryBlock:(() ->Void)?
+    
     public override var shouldAutorotate: Bool {
         return false
     }
@@ -161,7 +164,7 @@ extension LoginVC {
             env = .product
         }
         
-        RKLogMgr.shared.logLevel = .info
+        RKLogMgr.shared.logLevel = .verbose
         RKCooperationCore.shared.initWith(params: param)
         RKCooperationCore.shared.addLogin(listener: self)
         guard let company = companyTextFiled.text, !company.isEmpty else {
@@ -183,13 +186,15 @@ extension LoginVC {
         UserDefaults.standard.synchronize()
         
         tipView.showLoading("登录中")
-        LoginHelper.loginAction(companyID: company, userName: userId, password: passwordId) { uid, token, errorMsg in
+        LoginHelper.loginAction(companyID: company, userName: userId, password: passwordId) { uid, token, refeshToken, expirTime, errorMsg  in
             self.tipView.hide(animated: true)
             self.tipView.removeFromSuperview()
             if let errorMsg = errorMsg {
                 QMUITips.showError(errorMsg)
             }
             guard let token = token else { return }
+            
+            ContactManager.shared.refreshToken = refeshToken
             
             LoginHelper.getUserInfo(token) { dict, isSucess in
                 guard isSucess == true,
@@ -207,7 +212,11 @@ extension LoginVC {
         let mainVC = ContactListVC()
         mainVC.loadData()
         self.navigationController?.pushViewController(mainVC, animated: true)
+        loginQueryBlock?()
+        loginQueryBlock = nil
     }
+    
+
 }
 
 extension LoginVC: RKLoginCallback {
@@ -247,7 +256,11 @@ extension LoginVC: RKLoginCallback {
                 RKChannelManager.shared.leave(channelId: iJoinedChannel.channelId)
             }
         }
-        self.present(alertVC, animated: true, completion: nil)
+        
+        loginQueryBlock = { [weak self] in
+            self?.present(alertVC, animated: true, completion: nil)
+        }
+      
     }
 }
 

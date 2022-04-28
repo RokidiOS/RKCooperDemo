@@ -34,7 +34,7 @@ class ContactListVC: UITableViewController {
         setupTimer()
         RKCooperationCore.shared.addIncomingCall(listener: self)
     }
-    
+    /// 获取联系人列表
     @objc public func loadData() {
         RKAPIManager.shared.contactsList(keyword: nil) { data in
             if let dataDict = data as? [String: Any], let data = dataDict["contactsList"] as? [Any], var dataArray = JSONDeserializer<ContactModel>.deserializeModelArrayFrom(array: data) as? [ContactModel] {
@@ -55,9 +55,8 @@ class ContactListVC: UITableViewController {
         } onFailed: { error in
             
         }
-        
     }
-    
+    // 当时是否在视图最前面，是是否进行自动刷新的标志
     private var hasShow = false
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -77,6 +76,7 @@ class ContactListVC: UITableViewController {
         hasShow = false
     }
     
+    ///20秒刷新一次
     var countdownTimer: Timer?
     private func setupTimer() {
         countdownTimer = Timer(timeInterval: 20, repeats: true) { [weak self] timer in
@@ -110,10 +110,12 @@ class ContactListVC: UITableViewController {
         }
     }
     
+    // 发起会议 前置页面
     @objc private func preCallMeeting() {
         MeetingManager.shared.startMeeting(infos: choosedList, self)
     }
     
+    // 主动加入会议
     @objc private func joinMeeting() {
         let placeholderAndTexts = [("频道ID(必须)", ""), ("密码(非必须)", "")]
         let alertVC = RKAlertController.alertInputViews(title: "请输入要加入的房间号和密码",
@@ -122,29 +124,27 @@ class ContactListVC: UITableViewController {
             guard let channelId = text.first, channelId.isEmpty == false,
                   let password = text.last else {
                 QMUITips.showSucceed("频道ID不能为空！")
-                      return
-                  }
-            RKChannelManager.shared.create(channelId: channelId, channelTitle: nil, channelParam: nil, userIdList: nil, onSuccess: { data in
-                guard let channel = data as? RKChannel  else {
+                return
+            }
+            
+            // 加入已知频道
+            RKChannelManager.shared.join(channelId: channelId, channelPassword: password) { data in
+                guard let channel = RKChannelManager.shared.getChannel(channelId: channelId) else {
                     return
                 }
                 
                 MeetingManager.shared.channel = channel
-                
                 // 主动加入监听 加入状态回调
                 RKCooperationCore.shared.getChannelManager().addChannel(listener: self)
                 
-                channel.channelParam.password = password
-                channel.join(param: nil) { data in
-                    
-                } onFailed: { error in
-                    
-                }
+                // 进入房间
+                let meetVC = MideaRoomVC()
+                MeetingManager.shared.lastBeforeMeetingVC = self
+                self.navigationController?.pushViewController(meetVC, animated: true)
 
-            }, onfailed: { error in
-                
-            })
- 
+            } onFailed: { error in
+                QMUITips.showSucceed(error?.localizedDescription)
+            }
         }
         self.present(alertVC, animated: true, completion: nil)
     }
@@ -211,21 +211,18 @@ extension ContactListVC {
     
 }
 
+// MARK: - 收到来电监听
 extension ContactListVC: RKIncomingCallListener {
     
     func onReceiveCall(channelId: String, fromUserId: String, createTime: Int64, channelTitle: String, channelParam: RKChannelParam?) {
         let alertVC = RKAlertController.alertAlert(title: "收到\(fromUserId)邀请", message: channelId, okTitle: "加入", cancelTitle: "拒接") {
-            
-            MeetingManager.shared.joinMeeting(meetingId: channelId, self)
-            
+            // 加入并接受
+            MeetingManager.shared.accept(meetingId: channelId, self)
             // 超过60秒后 自动默认不能进入频道 超时移除
             NSObject.cancelPreviousPerformRequests(withTarget: self)
         } cancelComplete: {
-            RKCooperationCore.shared.getCallManager().reject(channelId: channelId) { data in
-                
-            } onfailed: { error in
-                
-            }
+            // 拒接
+            RKCooperationCore.shared.getCallManager().reject(channelId: channelId, onSuccess: nil, onfailed: nil)
             // 超过60秒后 自动默认不能进入频道 超时移除
             NSObject.cancelPreviousPerformRequests(withTarget: self)
         }

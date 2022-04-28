@@ -1,5 +1,6 @@
 //
 //  RKContactManager.swift
+//  联系人管理manager
 
 import UIKit
 import RKILogger
@@ -11,6 +12,8 @@ let kNotiContactMgrDidRefresh: String = "kNotiContactMgrDidRefresh"
 class ContactManager: NSObject {
     
     static var shared = ContactManager()
+    
+    var refreshToken: String?
     
     var userInfo = ContactModel()
     
@@ -32,60 +35,13 @@ class ContactManager: NSObject {
     func contactFrom(userId: String) -> ContactModel? {
         return self.contactFromUserId[userId]
     }
-    
-    
-    func startLoop() {
-        if self.timer != nil {
-            self.timer!.cancel()
-        }
-        
-        let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.global())
-        timer.schedule(deadline: .now() + 5.0, repeating: .seconds(5), leeway: .milliseconds(10))
-        timer.setEventHandler(handler: {
-            self.setupcontactsListInfoData()
-        })
-        
-        self.timer = timer
-        self.timer?.resume()
-    }
-    
-    func setupcontactsListInfoData() {
-//        RKAPIManager.shared.contactsList(keyword: nil) { data in
-//            if let data = data as? NSDictionary,
-//               let obj = RKContactListModel.deserialize(from: data){
-//                self.contactsListInfo = obj
-//                NotificationCenter.default.post(name: NSNotification.Name(kNotiContactMgrDidRefresh), object: nil)
-//            }
-//        } onFailed: { error in
-//            if RKAuthInfo.authorization == "" {
-//                self.cancel()
-//            }
-//        }
-    }
-    
-    func cancel() {
-        self.timer?.cancel()
-    }
-    
+
 }
 
 extension ContactManager {
     
     // MARK: - 登出
     func logOut() {
-        
-//        guard RKAuthInfo.isLogin() else {
-//            return
-//        }
-//
-//        RKAuthInfo.authorization = ""
-//
-//        RKCooperationCore.shared.logout()
-//
-//        RKHeartBeatManager.shared.stop()
-//
-//        RKLog(String(describing: self))
-        
         gotoLoginVC()
     }
     
@@ -93,15 +49,6 @@ extension ContactManager {
     func gotoLoginVC() {
         // 移除SDK window
         MeetingManager.shared.leaveMeeting()
-        // 返回登录页面
-//        if let rootNav = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController {
-//            for viewController in rootNav.viewControllers {
-//                if viewController is RKLoginViewController {
-//                    rootNav.popToViewController(viewController, animated: true)
-//                    break
-//                }
-//            }
-//        }
     }
     
 }

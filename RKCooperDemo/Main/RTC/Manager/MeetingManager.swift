@@ -1,7 +1,7 @@
 //
 //  RKMeetingManager.swift
 //  iOSRokid
-//
+//  会议管理Manager
 //
 
 import UIKit
@@ -45,7 +45,7 @@ class MeetingManager: NSObject {
         // 根据业务是否需要重置之前的麦克风权限
         //        MeetingManager.shared.channel?.enableUploadLocalVideoStream(enable: false)
         MeetingManager.shared.audioSwitch = true
-        
+        MeetingManager.shared.channel?.shareInfo = nil
         channel = nil
         roomMemberIds.removeAllObjects()
         cameraSwitch = true
@@ -75,15 +75,15 @@ class MeetingManager: NSObject {
     
     private func joinMeeting(channelId: String, onSuccess: RKOnSuccess?, onfailed: RKOnFailed?) {
         // 创建并拿到 channel
-        RKCooperationCore.shared.getChannelManager().create(channelId: channelId, channelTitle: nil, channelParam: nil, userIdList: nil, onSuccess: { data in
-            if let channel = data as? RKChannel {
-                self.channel = channel
-                RKCooperationCore.shared.getCallManager().accept(channelId: channelId, onSuccess: onSuccess, onfailed: onfailed)
-            } else {
-                onfailed?(nil)
+        RKChannelManager.shared.join(channelId: channelId, channelPassword: nil,onSuccess: { data in
+            guard let channel = RKCooperationCore.shared.getChannelManager().getChannel(channelId: channelId ) else {
+                onfailed? (nil)
+                return
             }
-        }, onfailed: onfailed)
-        
+            self.channel = channel
+            // 接受邀请
+            RKCooperationCore.shared.getCallManager().accept(channelId: channelId, onSuccess: onSuccess, onfailed: onfailed)
+        }, onFailed: onfailed)
     }
     
 }
@@ -106,7 +106,7 @@ extension MeetingManager {
     public func inviteMeeting(_ userIdList: [String]) {
         guard let channel = channel else { return }
         RKCooperationCore.shared.getCallManager().invite(channelId: channel.channelId, userIdList: userIdList) { data in
-            guard let data = data as? [String] else {
+            guard let data = data as? [String], data.isEmpty == false else {
                 // 全部邀请成功
                 return
             }
@@ -137,10 +137,28 @@ extension MeetingManager {
         
     }
     
+    public func accept(meetingId: String, _ vc: UIViewController) {
+        guard let channel = RKCooperationCore.shared.getChannelManager().getChannel(channelId: meetingId ) else {
+            return
+        }
+        self.channel = channel
+        // 接受邀请
+        RKCooperationCore.shared.getCallManager().accept(channelId: meetingId, onSuccess: { data in
+            let meetVC = MideaRoomVC()
+            self.lastBeforeMeetingVC = vc
+            vc.navigationController?.pushViewController(meetVC, animated: true)
+
+        }, onfailed: { error in
+            QMUITips.showError("进入房间失败 \(String(describing: error))")
+        })
+    }
+
+    
     // MARK: - 结束会议
     public func leaveMeeting() {
-        
+        // 离开会议
         channel?.leave()
+        // 重置会议缓存信息
         clearMeeting()
         RKShareDoodleManager.shared.clear()
         guard let lastBeforeMeetingVC = lastBeforeMeetingVC else { return }
@@ -162,63 +180,6 @@ extension MeetingManager: RKIncomingCallListener {
         RKCooperationCore.shared.getCallManager().addIncomingCall(listener: self)
         
     }
-    
-    func onReceiveCall(channelId: String, fromUserId: String, createTime: Int64, channelTitle: String, channelParam: RKChannelParam?) {
-        guard Int64(Date().timeIntervalSince1970 * 1000) - createTime < 60 * 1000 else {
-            RKLog("收到\(fromUserId)的来电，已超时...")
-            return
-        }
-        
-    }
-    
-    func onCallCanceled(channelId: String, fromUserId: String, createTime: Int64) {
-        
-        MeetingManager.shared.clearMeeting()
-        
-    }
-    /// 当前是否允许进行下一步操作 ** 主动调用当前如果是close会清空shareinfo
-    func isAllowNextShareAction() -> Bool {
-        if let shareInfo = channel?.shareInfo {
-            if shareInfo.shareType == .close {
-                channel?.shareInfo = nil
-                return true
-            }
-            if shareInfo.shareType == .videoControl {
-                return true
-            }
-            return false
-        }
-        
-        return true
-    }
+
 }
 
-extension MeetingManager {
-    
-    func showError() {
-        guard let shareInfo = channel?.shareInfo,
-              let contactInfo = ContactManager.shared.contactFrom(userId: shareInfo.executorUserId) else {
-            return
-        }
-        
-        var errString = ""
-        if shareInfo.shareType == .screen {
-            errString = "\(contactInfo.realName)正在分享屏幕"
-        } else if shareInfo.shareType == .doodle {
-            errString = "\(contactInfo.realName)正在电子白板"
-        } else if shareInfo.shareType == .imageDoodle {
-            errString = "\(contactInfo.realName)正在冻屏标注"
-        } else if shareInfo.shareType == .slam {
-            errString = "\(contactInfo.realName)正在AR标注"
-        } else if shareInfo.shareType == .pointVideo {
-            errString = "正在视频点选"
-        } else if shareInfo.shareType == .videoControl {
-            errString = "\(contactInfo.realName)正在视频控制"
-        }
-        
-        if errString.isEmpty == false {
-            QMUITips.showError(errString)
-        }
-    }
-    
-}
