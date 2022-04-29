@@ -215,17 +215,34 @@ extension ContactListVC {
 extension ContactListVC: RKIncomingCallListener {
     
     func onReceiveCall(channelId: String, fromUserId: String, createTime: Int64, channelTitle: String, channelParam: RKChannelParam?) {
-        let alertVC = RKAlertController.alertAlert(title: "收到\(fromUserId)邀请", message: channelId, okTitle: "加入", cancelTitle: "拒接") {
+//        let alertVC = RKAlertController.alertAlert(title: "收到\(fromUserId)邀请", message: channelId, okTitle: "加入", cancelTitle: "拒接") {
+//            // 加入并接受
+//            MeetingManager.shared.accept(meetingId: channelId, self)
+//            // 超过60秒后 自动默认不能进入频道 超时移除
+//            NSObject.cancelPreviousPerformRequests(withTarget: self)
+//        } cancelComplete: {
+//            // 拒接
+//            RKCooperationCore.shared.getCallManager().reject(channelId: channelId, onSuccess: nil, onfailed: nil)
+//            // 超过60秒后 自动默认不能进入频道 超时移除
+//            NSObject.cancelPreviousPerformRequests(withTarget: self)
+//        }
+        let alertVC = RKAlertController.alertSheet(title: "收到\(fromUserId)邀请").add(title: "加入", style: .default) {
             // 加入并接受
             MeetingManager.shared.accept(meetingId: channelId, self)
             // 超过60秒后 自动默认不能进入频道 超时移除
             NSObject.cancelPreviousPerformRequests(withTarget: self)
-        } cancelComplete: {
+        }.add(title: "正忙", style: .destructive) {
+            // 当前正在会议中，处理约等于拒接
+            RKCooperationCore.shared.getCallManager().busy(channelId: channelId, onSuccess: nil, onfailed: nil)
+            // 超过60秒后 自动默认不能进入频道 超时移除
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+        }.add(title: "拒接", style: .destructive) {
             // 拒接
             RKCooperationCore.shared.getCallManager().reject(channelId: channelId, onSuccess: nil, onfailed: nil)
             // 超过60秒后 自动默认不能进入频道 超时移除
             NSObject.cancelPreviousPerformRequests(withTarget: self)
-        }
+        }.add(title: "取消", style: .cancel, complete: nil).finish()
+        
         self.present(alertVC, animated: true, completion: nil)
         self.perform(#selector(hidenJointAlert), with: alertVC, afterDelay: 60)
     }
