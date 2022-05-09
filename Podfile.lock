@@ -37,7 +37,7 @@ PODS:
     - GCDWebServer/Core
   - GCDWebServer/WebUploader (3.5.4):
     - GCDWebServer/Core
-  - IQKeyboardManagerSwift (6.5.9)
+  - IQKeyboardManagerSwift (6.5.10)
   - Kingfisher (6.3.1)
   - LookinServer (1.0.5)
   - Moya (15.0.0):
@@ -362,7 +362,7 @@ PODS:
     - RKIUtils
     - RKRTC
   - RKIHandyJSON (0.1.6)
-  - RKILogger (0.2.2):
+  - RKILogger (0.2.5):
     - CocoaLumberjack/Swift (~> 3.7.4)
   - RKIMCore (0.1.2):
     - Moya
@@ -447,13 +447,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   RKCooperationCore:
-    :commit: 18bf290399e2c26f2c09d5efe996abf2dee058ce
+    :commit: d609a1982914f7bc3ed9521c48129da13fd204a4
     :git: https://github.com/RokidiOS/RKCooperationCore
   RKIMCore:
     :commit: 26ddea703957446f4cdb9186b93e42f19cef83b1
     :git: https://github.com/RokidiOS/RKIMCore
   RKRTC:
-    :commit: cfb06462d1324a6bce592d7c2c24a9c905717f14
+    :commit: a1ea2d0298344b7f933a653e79cc4e7dca4ef0db
     :git: https://github.com/RokidiOS/RKRTC
   RKSassLog:
     :commit: 4f2f6e54daa5cd24f0933617df5717c279010ee7
@@ -470,14 +470,14 @@ SPEC CHECKSUMS:
   DoraemonKit: 0a040ae24386654e2a2d2c8d029f5ff5837de3c3
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
-  IQKeyboardManagerSwift: 6e839c575c4aa1078d58a596e41244e77abe918f
+  IQKeyboardManagerSwift: 52962c76ab33532f15ad9f3ff4e5715eda5335bb
   Kingfisher: 016c8b653a35add51dd34a3aba36b580041acc74
   LookinServer: 3d9a02529ed94a6a08154440c26f6d7f453bb1e7
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   QMUIKit: 67888be9aa0ee0b12b8a219fcea2eec900afd841
   RKCooperationCore: f886f98ecc3260a07e5fc87d97d320d949cf91ba
   RKIHandyJSON: b3928e42af5d7d3b4cefb686079093d130e9066e
-  RKILogger: db443e812383485f06d97a7742d6ff30f071b4d1
+  RKILogger: 23601a7125a5fa5c58e20dffb14b437d3c22414c
   RKIMCore: 38a9583a6f0abfdd58e54e53c3a8050886bf52e2
   RKIUtils: 0170015917b7208cef4491421afe6cce74f2cb7c
   RKRTC: d674f8da825d360a2105ce3f6fe9f1b855443062

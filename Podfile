@@ -9,7 +9,7 @@ target 'RKCooperDemo' do
   # pod 'RKRTC', :path => '../../../RKCore/RKRTCSDK'
   ## 维护最新的两个Swift版本，需要拉取对应版本的sdk，目前支持5.5.2、5.6.0
 #   pod 'RKRTC', :git => "https://github.com/RokidiOS/RKRTC", :branch => '1.2.0_swift5.6.0'
-  pod 'RKRTC', :git => "https://github.com/RokidiOS/RKRTC", :branch => '1.1.0_swiftx.x.x'
+  pod 'RKRTC', :git => "https://github.com/RokidiOS/RKRTC", :branch => '1.2.0_swiftx.x.x'
 
   ## 协作 sdk
   # pod 'RKCooperationCore', :path => '../../../RKCore/RKCooperationCore'
