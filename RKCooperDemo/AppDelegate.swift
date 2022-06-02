@@ -9,7 +9,7 @@
 import UIKit
 import QMUIKit
 import DoraemonKit
-//import Bugly
+import Bugly
 
 enum deviceOrient {
     case all
@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         configDoraemon()
         
-//        Bugly.start(withAppId: "75190bc727")
+        Bugly.start(withAppId: "75190bc727")
         
         return true
     }

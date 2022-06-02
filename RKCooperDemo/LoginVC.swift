@@ -165,7 +165,7 @@ extension LoginVC {
         }
         
         RKLogMgr.shared.logLevel = .verbose
-        RKCooperationCore.shared.initWith(params: param)
+        RKCooperationCore.shared.initWith(params: param, onSuccess: nil, onFailed: nil)
         RKCooperationCore.shared.addLogin(listener: self)
         guard let company = companyTextFiled.text, !company.isEmpty else {
             QMUITips.showError("公司名不能为空")
