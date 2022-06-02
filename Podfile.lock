@@ -355,14 +355,14 @@ PODS:
     - QMUIKit/QMUILog
   - QMUIKit/QMUIResources (4.3.0)
   - QMUIKit/QMUIWeakObjectContainer (4.3.0)
-  - RKCooperationCore (2.1.0):
+  - RKCooperationCore (2.2.0):
     - Moya
     - RKIHandyJSON
     - RKILogger
     - RKIUtils
     - RKRTC
   - RKIHandyJSON (0.1.6)
-  - RKILogger (0.2.5):
+  - RKILogger (0.2.7):
     - CocoaLumberjack/Swift (~> 3.7.4)
   - RKIMCore (0.1.2):
     - Moya
@@ -372,7 +372,7 @@ PODS:
     - RKSocket
     - WCDB.swift
   - RKIUtils (0.1.2)
-  - RKRTC (1.2.0):
+  - RKRTC (1.3.0):
     - Moya
     - RKIHandyJSON
     - RKILogger
@@ -398,11 +398,11 @@ DEPENDENCIES:
   - LookinServer
   - Moya
   - QMUIKit
-  - RKCooperationCore (from `https://github.com/RokidiOS/RKCooperationCore`, branch `2.1.0_swift5.6.0`)
+  - RKCooperationCore (from `../RKCooperationCore`)
   - RKIHandyJSON
   - RKILogger
   - RKIMCore (from `https://github.com/RokidiOS/RKIMCore`, branch `0.1.2_swift5.6.0`)
-  - RKRTC (from `https://github.com/RokidiOS/RKRTC`, branch `1.2.0_swift5.6.0`)
+  - RKRTC (from `../RKRTC`)
   - RKSassLog (from `https://github.com/RokidiOS/RKSassLog`)
   - RKSocket (from `https://github.com/RokidiOS/RKSocket`)
   - SnapKit
@@ -432,31 +432,23 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   RKCooperationCore:
-    :branch: 2.1.0_swift5.6.0
-    :git: https://github.com/RokidiOS/RKCooperationCore
+    :path: "../RKCooperationCore"
   RKIMCore:
     :branch: 0.1.2_swift5.6.0
     :git: https://github.com/RokidiOS/RKIMCore
   RKRTC:
-    :branch: 1.2.0_swift5.6.0
-    :git: https://github.com/RokidiOS/RKRTC
+    :path: "../RKRTC"
   RKSassLog:
     :git: https://github.com/RokidiOS/RKSassLog
   RKSocket:
     :git: https://github.com/RokidiOS/RKSocket
 
 CHECKOUT OPTIONS:
-  RKCooperationCore:
-    :commit: d609a1982914f7bc3ed9521c48129da13fd204a4
-    :git: https://github.com/RokidiOS/RKCooperationCore
   RKIMCore:
-    :commit: 26ddea703957446f4cdb9186b93e42f19cef83b1
+    :commit: 0c0d2ec9db3415905bc117ef9fac63e54bbcf0fd
     :git: https://github.com/RokidiOS/RKIMCore
-  RKRTC:
-    :commit: a1ea2d0298344b7f933a653e79cc4e7dca4ef0db
-    :git: https://github.com/RokidiOS/RKRTC
   RKSassLog:
-    :commit: 4f2f6e54daa5cd24f0933617df5717c279010ee7
+    :commit: 385da9b55dc72d38dc9950e12adae94b7c7c588d
     :git: https://github.com/RokidiOS/RKSassLog
   RKSocket:
     :commit: df8726a2b8275464516b8af342fb52934e144722
@@ -475,12 +467,12 @@ SPEC CHECKSUMS:
   LookinServer: 3d9a02529ed94a6a08154440c26f6d7f453bb1e7
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   QMUIKit: 67888be9aa0ee0b12b8a219fcea2eec900afd841
-  RKCooperationCore: f886f98ecc3260a07e5fc87d97d320d949cf91ba
+  RKCooperationCore: 97d9ce1c16cd26dcb16af29afd3efc2d4f2792a3
   RKIHandyJSON: b3928e42af5d7d3b4cefb686079093d130e9066e
-  RKILogger: 23601a7125a5fa5c58e20dffb14b437d3c22414c
+  RKILogger: fe3c5cd9b2179958478d4f007a85f4e33378f85a
   RKIMCore: 38a9583a6f0abfdd58e54e53c3a8050886bf52e2
   RKIUtils: 0170015917b7208cef4491421afe6cce74f2cb7c
-  RKRTC: d674f8da825d360a2105ce3f6fe9f1b855443062
+  RKRTC: 2dc692c5b7be9731ab36cd827f502c901e44b75f
   RKSassLog: be42c30c0227c12443c500b0e24ad7e3fb9ab479
   RKSocket: 325bffa5c1c87851fce39b656db0912975ff0909
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
@@ -489,6 +481,6 @@ SPEC CHECKSUMS:
   WCDB.swift: 05d509d7a0e60fb6e11c34eb7e4027c0fab5849f
   WCDBOptimizedSQLCipher: baf44493b0c7a3d49e97bc5b64a3856f6428ddd1
 
-PODFILE CHECKSUM: 8c702c192adf3d342e831c716a43a9d18667f4ce
+PODFILE CHECKSUM: a167ab8be07798ad50fd360841d72b909d8c474d
 
 COCOAPODS: 1.11.3

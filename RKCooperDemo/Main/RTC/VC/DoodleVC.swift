@@ -54,7 +54,14 @@ class DoodleVC: UIViewController {
     }
     
     @objc private func reduceAction() {
-        self.navigationController?.popViewController(animated: true)
+        guard let vcs = self.navigationController?.viewControllers else { return }
+        for vc in vcs.reversed() {
+            if !vc.isKind(of: DoodleVC.self) {
+                self.navigationController?.popToViewController(vc, animated: true)
+                break
+            }
+        }
+       
     }
     
     @objc private func backAction() {

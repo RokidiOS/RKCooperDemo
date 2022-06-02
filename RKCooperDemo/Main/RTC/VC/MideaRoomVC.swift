@@ -13,6 +13,7 @@ import ARKit
 import QMUIKit
 import ReplayKit
 import QMUIKit
+import RKRTC
 
 class MideaRoomVC: UIViewController {
     // 房间成员表视图
@@ -95,6 +96,9 @@ class MideaRoomVC: UIViewController {
         RKMessageCenter.addChannelMsg(listener: self, channelId: MeetingManager.shared.channel?.channelId ?? "")
         MeetingManager.shared.channel?.addDevice(listener: self)
         MeetingManager.shared.channel?.addRemoteDevice(listener: self)
+        
+        RKDevice.addCaptureInterceptor(self)
+        
         view.addSubview(fullVideoView)
         
         view.addSubview(recordBtn)
@@ -123,6 +127,8 @@ class MideaRoomVC: UIViewController {
         otherSettingBtn.setTitleColor(.white, for: .normal)
         otherSettingBtn.addTarget(self, action: #selector(otherFunctionMenu), for: .touchUpInside)
 
+        // MARK: - test
+        testQueryChannelInfo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -176,12 +182,6 @@ class MideaRoomVC: UIViewController {
             meetingRoomNavToolBar.roomNameLabel.text = channel.channelId
         }
         
-        // 查询频道内是否有人在屏幕共享
-        //        RKCooperationCore.shared.getShareScreenManager().shareScreenUserId(channelId: channel.channelId) { userIds in
-        //            if userIds?.contains(RKUserManager.shared.userId) == true {
-        //                self.isScreenShareing = true
-        //            }
-        //        }
     }
     
     // MARK: - 更新房间成员状态
@@ -262,12 +262,7 @@ class MideaRoomVC: UIViewController {
         }
     }
     
-    /// 检查霸屏功能
-    func refreshMeetingStatus(_ showToast: Bool = true, _ showDetail: Bool = true) {
-        
-    }
-    
-    
+
     func startTimer() {
         
         guard self.timer == nil else {
@@ -322,12 +317,16 @@ class MideaRoomVC: UIViewController {
         let bitAndDelayAction = QMUIAlertAction(title: "设置码率、延迟", style: .default) { _, _ in
             self.showBitAndDelayAlert()
         }
-        let refreshTokenAction = QMUIAlertAction(title: "刷新token", style: .default) { _, _ in
-            self.refreshToken()
+        let audioOutputAction = QMUIAlertAction(title: "切换输出设备", style: .default) { _, _ in
+            self.audioOutputAction()
         }
-        
+        let uploadLogAction = QMUIAlertAction(title: "上报log", style: .default) { _, _ in
+            self.uploadLogAction()
+        }
+
         alertVC.addAction(bitAndDelayAction)
-        alertVC.addAction(refreshTokenAction)
+        alertVC.addAction(audioOutputAction)
+        alertVC.addAction(uploadLogAction)
         alertVC.showWith(animated: true)
     }
 
@@ -395,23 +394,45 @@ class MideaRoomVC: UIViewController {
         alertVC.showWith(animated: true)
     }
     
-    #warning("验证刷新token，真实token刷新机制需要接入方实现！")
-    private func refreshToken() {
-        guard let refreshToken = ContactManager.shared.refreshToken else {
+    private func audioOutputAction() {
+        guard let audioDevices = RKDevice.getAllAudioDevice() as? [RKIAudioDevice] else {
             return
         }
+        let alertVC = QMUIAlertController(title: "输出设备", message: nil, preferredStyle: .actionSheet)
+        let speakerPhoneAction = QMUIAlertAction(title: "扬声器", style: .default) { _, _ in
+            RKDevice.selectAudio(device: .speakerPhone)
+        }
+        alertVC.addAction(speakerPhoneAction)
         
-        RKAPIManager.shared.refreshToken(refreshToken) { data in
-            guard let data = data as? Dictionary<String, Any>,
-                  let accessToken = data["accessToken"] as? String,
-                  let refreshToken = data["refreshToken"] as? String else {
-                QMUITips.showError("刷新token失败！")
-                return
+        let earpieceAction = QMUIAlertAction(title: "听筒", style: .default) { _, _ in
+            RKDevice.selectAudio(device: .earpiece)
+        }
+        alertVC.addAction(earpieceAction)
+        
+        if audioDevices.first(where: {$0 == .wiredHeadset}) != nil {
+            let wiredHeadsetAction = QMUIAlertAction(title: "有线耳机", style: .default) { _, _ in
+                RKDevice.selectAudio(device: .wiredHeadset)
             }
-            RKCooperationCore.shared.updateToken(accessToken)
-            ContactManager.shared.refreshToken = refreshToken
+            alertVC.addAction(wiredHeadsetAction)
+        }
+        if audioDevices.first(where: {$0 == .bluetooth}) != nil {
+            let bluetoothAction = QMUIAlertAction(title: "蓝牙耳机", style: .default) { _, _ in
+                RKDevice.selectAudio(device: .bluetooth)
+            }
+            alertVC.addAction(bluetoothAction)
+        }
+        
+        let cancelAction = QMUIAlertAction(title: "取消", style: .cancel)
+        alertVC.addAction(cancelAction)
+        
+        alertVC.showWith(animated: true)
+    }
+    
+    fileprivate func uploadLogAction() {
+        RKCooperationCore.shared.uploadLog { data in
+            QMUITips.show(withText: "日志上报成功", detailText: data as? String)
         } onFailed: { error in
-            QMUITips.showError("\(error?.localizedDescription ?? "")")
+            QMUITips.showError("日志上报失败", detailText: error?.localizedDescription)
         }
     }
 }
@@ -675,9 +696,14 @@ extension MideaRoomVC: RKRemoteDeviceListener {
 extension MideaRoomVC: RKShareListener {
     
     func onStartShareScreen(userId: String) {
-        
-        refreshMeetingStatus()
-        
+        guard let channel = MeetingManager.shared.channel else {
+            return
+        }
+        channel.shareInfo = RKShareInfo()
+        channel.shareInfo?.shareType = .screen
+        channel.shareInfo?.promoterUserId = userId
+
+        updateMeetingPartp()
     }
     
     func onStopShareScreen(userId: String) {
@@ -729,8 +755,6 @@ extension MideaRoomVC: RKShareListener {
     
     func onStartShareSlam(userId: String, executorUserId: String) {
         
-        refreshMeetingStatus()
-        
     }
     
     func onStopShareSlam(userId: String) {
@@ -752,7 +776,6 @@ extension MideaRoomVC: RKShareListener {
     
     func onStartSharePointVideo(userId: String, executorUserId: String) {
         
-        refreshMeetingStatus()
         
     }
     
@@ -868,29 +891,70 @@ extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
     private func startRecord() {
         guard let channel = MeetingManager.shared.channel else { return }
         
-        guard let shareInfo = channel.shareInfo else {
-            RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
-            QMUITips.showSucceed("开启屏幕共享成功")
-            updateMeetingPartp()
-            return
+        RKShareManager.shared.getReportChannelInfo(channelId: channel.channelId) { shareInfo in
+            if let shareInfo = shareInfo as? RKShareInfo {
+                
+                if shareInfo.shareType == .close || shareInfo.shareType == .none {
+                    RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
+                    QMUITips.showSucceed("开启屏幕共享成功")
+                    self.updateMeetingPartp()
+                } else if shareInfo.shareType == .screen, shareInfo.promoterUserId == RKUserManager.shared.userId {
+                    RKCooperationCore.shared.getShareScreenManager().stopShareScreen(channelId: channel.channelId)
+                    QMUITips.showSucceed("关闭屏幕共享成功")
+                } else {
+                    QMUITips.showError("频道内已经存在其他共享了")
+                }
+            }
+            
+        } onFailed: { error in
+            if error == nil {
+                RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
+                QMUITips.showSucceed("开启屏幕共享成功")
+                self.updateMeetingPartp()
+            }
         }
         
-        if shareInfo.shareType == .screen, shareInfo.promoterUserId == RKUserManager.shared.userId {
-            RKCooperationCore.shared.getShareScreenManager().stopShareScreen(channelId: channel.channelId)
-            QMUITips.showSucceed("关闭屏幕共享成功")
-        } else if shareInfo.shareType == .close {
-            RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
-            QMUITips.showSucceed("开启屏幕共享成功")
-        } else {
-            QMUITips.showError("频道内已经存在其他共享了")
-        }
+
+       
+        
+//        guard let shareInfo = channel.shareInfo else {
+//            RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
+//            QMUITips.showSucceed("开启屏幕共享成功")
+//            updateMeetingPartp()
+//            return
+//        }
+        
+//        if shareInfo.shareType == .screen, shareInfo.promoterUserId == RKUserManager.shared.userId {
+//            RKCooperationCore.shared.getShareScreenManager().stopShareScreen(channelId: channel.channelId)
+//            QMUITips.showSucceed("关闭屏幕共享成功")
+//            shareInfo.shareType = .close
+//        } else if shareInfo.shareType == .close {
+//            RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
+//            shareInfo.shareType = .screen
+//            QMUITips.showSucceed("开启屏幕共享成功")
+//        } else {
+//            QMUITips.showError("频道内已经存在其他共享了")
+//        }
         
         updateMeetingPartp()
     }
     
+    fileprivate func testQueryChannelInfo() {
+        guard let channel = MeetingManager.shared.channel else { return }
+        RKCooperationCore.shared.getChannelManager().queryChannelInfo(channelId: channel.channelId) { data in
+            
+        } onFailed: { error in
+        
+        }
+    }
+    
     private func pushToDoodleVC() {
         let doodleVC = DoodleVC()
-        navigationController?.pushViewController(doodleVC, animated: true)
+        let animtionPush = !navigationController!.viewControllers.last!.isKind(of: DoodleVC.self)
+        if !animtionPush {
+            QMUITips.show(withText: "哎呀网络断了，重连中")
+        }
+        navigationController?.pushViewController(doodleVC, animated: animtionPush)
     }
 }
 
@@ -1063,7 +1127,7 @@ extension MideaRoomVC : RKDeviceListener {
         
     }
     
-    func onAudioOutputTypeChange(audioType: RKAudioOutputType) {
+    func onAudioOutputTypeChange(audioType: RKIAudioDevice) {
         
     }
     
@@ -1084,4 +1148,17 @@ extension MideaRoomVC : RKDeviceListener {
     }
     
     
+}
+
+extension MideaRoomVC: RKCaptureInterceptor {
+    
+    public func onIntercept(_ buffer: RKVideoFrame) {
+        guard let yuvBuffer = buffer.i420Buffer,
+        let dataY = yuvBuffer.dataY,
+        let dataU = yuvBuffer.dataU,
+        let dataV = yuvBuffer.dataV else {
+            return
+        }
+        RKLogInfo("YUVBuffer: dataY:\(dataY.pointee) dataU:\(dataU.pointee) dataV:\(dataV.pointee)")
+    }
 }

@@ -10,6 +10,7 @@ import UIKit
 import RKCooperationCore
 import RKIHandyJSON
 import QMUIKit
+import RKSassLog
 
 var kcontactList = [ContactModel]()
 
@@ -31,29 +32,29 @@ class ContactListVC: UITableViewController {
         
         self.title = "联系人列表"
         loadData()
-        setupTimer()
+//        setupTimer()
         RKCooperationCore.shared.addIncomingCall(listener: self)
     }
     /// 获取联系人列表
     @objc public func loadData() {
-        RKAPIManager.shared.contactsList(keyword: nil) { data in
-            if let dataDict = data as? [String: Any], let data = dataDict["contactsList"] as? [Any], var dataArray = JSONDeserializer<ContactModel>.deserializeModelArrayFrom(array: data) as? [ContactModel] {
-                if let lastLoginUserName = UserDefaults.standard.value(forKey: RKLoginUDKeys.userNameKey) as? String {
-                    dataArray.removeAll { model in
-                        if model.username == lastLoginUserName {
-                            ContactManager.shared.userInfo = model
-                            return true
-                        } else{
-                            return false
-                        }
+        LoginHelper.getContactsList(nil, keyword: nil) { (data, res) in
+            guard res == true,
+                  let dataDict = data,
+                  let contactsList = dataDict["contactsList"] as? [Any],
+                  var dataArray = JSONDeserializer<ContactModel>.deserializeModelArrayFrom(array: contactsList) as? [ContactModel] else { return }
+    
+            if let lastLoginUserName = UserDefaults.standard.value(forKey: RKLoginUDKeys.userNameKey) as? String {
+                dataArray.removeAll { model in
+                    if model.username == lastLoginUserName {
+                        return true
+                    } else{
+                        return false
                     }
                 }
-                kcontactList = dataArray
-                ContactManager.shared.contactsListInfo = dataArray
-                self.tableView.reloadData()
             }
-        } onFailed: { error in
-            
+            kcontactList = dataArray
+            ContactManager.shared.contactsListInfo = dataArray
+            self.tableView.reloadData()
         }
     }
     // 当时是否在视图最前面，是是否进行自动刷新的标志
@@ -141,7 +142,7 @@ class ContactListVC: UITableViewController {
                 let meetVC = MideaRoomVC()
                 MeetingManager.shared.lastBeforeMeetingVC = self
                 self.navigationController?.pushViewController(meetVC, animated: true)
-
+                
             } onFailed: { error in
                 QMUITips.showSucceed(error?.localizedDescription)
             }
@@ -195,7 +196,7 @@ extension ContactListVC {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let model = kcontactList[indexPath.row]
-     
+        
         if choosedList.contains(where: { pModel in
             return pModel.userId == model.userId
         }) {
@@ -215,17 +216,6 @@ extension ContactListVC {
 extension ContactListVC: RKIncomingCallListener {
     
     func onReceiveCall(channelId: String, fromUserId: String, createTime: Int64, channelTitle: String, channelParam: RKChannelParam?) {
-//        let alertVC = RKAlertController.alertAlert(title: "收到\(fromUserId)邀请", message: channelId, okTitle: "加入", cancelTitle: "拒接") {
-//            // 加入并接受
-//            MeetingManager.shared.accept(meetingId: channelId, self)
-//            // 超过60秒后 自动默认不能进入频道 超时移除
-//            NSObject.cancelPreviousPerformRequests(withTarget: self)
-//        } cancelComplete: {
-//            // 拒接
-//            RKCooperationCore.shared.getCallManager().reject(channelId: channelId, onSuccess: nil, onfailed: nil)
-//            // 超过60秒后 自动默认不能进入频道 超时移除
-//            NSObject.cancelPreviousPerformRequests(withTarget: self)
-//        }
         let alertVC = RKAlertController.alertSheet(title: "收到\(fromUserId)邀请").add(title: "加入", style: .default) {
             // 加入并接受
             MeetingManager.shared.accept(meetingId: channelId, self)
@@ -241,7 +231,7 @@ extension ContactListVC: RKIncomingCallListener {
             RKCooperationCore.shared.getCallManager().reject(channelId: channelId, onSuccess: nil, onfailed: nil)
             // 超过60秒后 自动默认不能进入频道 超时移除
             NSObject.cancelPreviousPerformRequests(withTarget: self)
-        }.add(title: "取消", style: .cancel, complete: nil).finish()
+        }.finish()
         
         self.present(alertVC, animated: true, completion: nil)
         self.perform(#selector(hidenJointAlert), with: alertVC, afterDelay: 60)
@@ -251,7 +241,7 @@ extension ContactListVC: RKIncomingCallListener {
         alertVC.dismiss(animated: true) {
             QMUITips.showError("邀请已经超时")
         }
-  
+        
     }
 }
 
@@ -264,9 +254,9 @@ extension ContactListVC: RKChannelListener {
     
     func onJoinChannelResult(channelId: String, result: Bool, reason: RKCooperationCode) {
         if result == true {
-            MeetingManager.shared.joinMeeting(meetingId: channelId, self)
+            QMUITips.showError("加入频道成功！")
         } else {
-            QMUITips.showError("加入房间失败！")
+            QMUITips.showError("加入频道失败！")
         }
         // 移除监听回调
         RKCooperationCore.shared.getChannelManager().removeChannel(listener: self)

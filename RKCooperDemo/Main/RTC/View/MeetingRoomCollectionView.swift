@@ -139,7 +139,8 @@ extension MeetingRoomCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let ide = NSStringFromClass(MeetingRoomCollectionCell.self) + "\(indexPath.row)"
+        let ide = NSStringFromClass(MeetingRoomCollectionCell.self)
+//        + "\(indexPath.row)"
         collectionView.register(MeetingRoomCollectionCell.self, forCellWithReuseIdentifier: ide)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ide, for: indexPath) as! MeetingRoomCollectionCell
         let roomMember = meetingMembers[indexPath.row]
@@ -158,7 +159,7 @@ extension MeetingRoomCollectionView: UICollectionViewDataSource {
         }
         guard let channel = MeetingManager.shared.channel else { return cell}
         // 不是自己在做屏幕共享
-        let showScreenFlag: Bool = channel.shareInfo?.shareType == .screen &&  roomMember.userId == RKUserManager.shared.userId
+        let showScreenFlag: Bool = channel.shareInfo?.shareType == .screen &&  channel.shareInfo?.promoterUserId == RKUserManager.shared.userId
         let showDoodleFlag: Bool = channel.shareInfo?.shareType == .doodle
         let showFlag = showScreenFlag || showDoodleFlag
         if roomMember.state?.isEmpty == false, showFlag {

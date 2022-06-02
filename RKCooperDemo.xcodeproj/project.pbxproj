@@ -377,7 +377,9 @@
 				"${BUILT_PRODUCTS_DIR}/RKILogger/RKILogger.framework",
 				"${PODS_ROOT}/RKIMCore/IMCore/Frameworks/RKIMCore.framework",
 				"${BUILT_PRODUCTS_DIR}/RKIUtils/RKIUtils.framework",
-				"${PODS_ROOT}/RKRTC/Frameworks/WebRTC.framework",
+				"${PODS_ROOT}/../../RKRTC/Frameworks/AWSCore.framework",
+				"${PODS_ROOT}/../../RKRTC/Frameworks/AWSS3.framework",
+				"${PODS_ROOT}/../../RKRTC/Frameworks/WebRTC.framework",
 				"${BUILT_PRODUCTS_DIR}/RKSassLog/RKSassLog.framework",
 				"${BUILT_PRODUCTS_DIR}/RKSocket/RKSocket.framework",
 				"${BUILT_PRODUCTS_DIR}/SQLiteRepairKit/sqliterk.framework",
@@ -403,6 +405,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKILogger.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKIMCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKIUtils.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSS3.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKSassLog.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKSocket.framework",
@@ -616,7 +620,7 @@
 				INFOPLIST_FILE = RKCooperDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rokid.cooperation.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -643,7 +647,7 @@
 				INFOPLIST_FILE = RKCooperDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rokid.cooperation.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";

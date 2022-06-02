@@ -21,6 +21,11 @@ struct RKLoginUDKeys {
 
 class LoginVC: UIViewController {
     
+    // 测试appId
+    var appId: String = "135D8B743401461C95905C3B2822B81C"
+    
+    var apiServer: String = "https://rtc.rokid.com"
+    
     // 登录完成后 查询回调
     var loginQueryBlock:(() ->Void)?
     
@@ -37,7 +42,8 @@ class LoginVC: UIViewController {
         view.addSubViews([companyTextFiled,
                           userTextFiled,
                           passwordTextFiled,
-                          loginButton])
+                          loginButton,
+                          configButton])
         layoutViews()
         if let lastLoginCompanyId = UserDefaults.standard.value(forKey: RKLoginUDKeys.companyIdKey) as? String,
            let lastLoginUserName = UserDefaults.standard.value(forKey: RKLoginUDKeys.userNameKey) as? String,
@@ -96,6 +102,12 @@ class LoginVC: UIViewController {
             make.height.equalTo(42)
         }
         
+        configButton.snp.makeConstraints { (make) in
+            make.top.equalTo(loginButton.snp.bottom).offset(20)
+            make.left.equalTo(20)
+            make.right.equalTo(-20)
+            make.height.equalTo(42)
+        }
     }
     
     lazy var companyTextFiled: QMUITextField = {
@@ -123,6 +135,14 @@ class LoginVC: UIViewController {
         return btn
     }()
     
+    lazy var configButton: QMUIButton = {
+        let btn = QMUIButton()
+        btn.setTitle("配置", for: .normal)
+        btn.addTarget(self, action: #selector(baseConfigAction), for: .touchUpInside)
+        return btn
+    }()
+    
+    
     private func createTf(_ placeHoldel: String) -> QMUITextField{
         let tf = QMUITextField()
         tf.placeholder = placeHoldel
@@ -140,32 +160,10 @@ class LoginVC: UIViewController {
 extension LoginVC {
     
     @objc private func loginAction() {
-        let param = RKCooperationCoreParams()
-        let tempEnv = 2
-        if tempEnv == 0 {
-            param.saasUrl = "https://saas-ar-dev.rokid-inc.com"
-            param.rtcUrl = "https://rtc-hyh.rokid-inc.com"
-            param.wssUrl = "wss://rtc-hyh.rokid-inc.com:8886/socket"
-            env = .develop
-        } else if tempEnv == 1 {
-            param.saasUrl = "https://saas-ar-dev.rokid-inc.com"
-            param.rtcUrl = "https://rtc-dev.rokid.com"
-            param.wssUrl = "wss://rtc-wss-dev.rokid.com/socket"
-            env = .develop
-        } else if tempEnv == 2 {
-            param.saasUrl = "https://saas-ar-test.rokid.com"
-            param.rtcUrl = "https://rtc-test.rokid.com"
-            param.wssUrl = "wss://rtc-wss-test.rokid.com/socket"
-            env = .test
-        } else {
-            param.saasUrl = "https://saas-ar.rokid.com"
-            param.rtcUrl = "https://rtc.rokid.com"
-            param.wssUrl = "wss://wss-rtc.rokid.com/socket"
-            env = .product
-        }
         
+        env = .product
         RKLogMgr.shared.logLevel = .verbose
-        RKCooperationCore.shared.initWith(params: param, onSuccess: nil, onFailed: nil)
+        RKCooperationCore.shared.initWith(appId: appId, apiServer: apiServer, onSuccess: nil, onFailed: nil)
         RKCooperationCore.shared.addLogin(listener: self)
         guard let company = companyTextFiled.text, !company.isEmpty else {
             QMUITips.showError("公司名不能为空")
@@ -186,6 +184,7 @@ extension LoginVC {
         UserDefaults.standard.synchronize()
         
         tipView.showLoading("登录中")
+        // test account ： rokid/xiaodong.chen/Aa123456
         LoginHelper.loginAction(companyID: company, userName: userId, password: passwordId) { uid, token, refeshToken, expirTime, errorMsg  in
             self.tipView.hide(animated: true)
             self.tipView.removeFromSuperview()
@@ -202,10 +201,29 @@ extension LoginVC {
                     QMUITips.showSucceed("登录失败")
                     return
                 }
-                RKCooperationCore.shared.login(with: token, userInfo: uesrInfo)
+                ContactManager.shared.userInfo.userId = uesrInfo.userId
+                RKCooperationCore.shared.login(with: uesrInfo.userId)
                 QMUITips.showSucceed("登录成功")
             }
         }
+    }
+    
+    @objc func baseConfigAction() {
+        let placeholderAndTexts = [("appId", appId), ("apiServer", apiServer)]
+        let alertVC = RKAlertController.alertInputViews(title: "请输入配置信息",
+                                                        message: nil,
+                                                        placeholderAndTexts: placeholderAndTexts) { text in
+            guard let appId = text.first,
+                  let apiServer = text.last else {
+                QMUITips.showSucceed("频道ID不能为空！")
+                return
+            }
+            
+            self.appId = appId
+            self.apiServer = apiServer
+            RKCooperationCore.shared.initWith(appId: self.appId, apiServer: self.apiServer, onSuccess: nil, onFailed: nil)
+        }
+        self.present(alertVC, animated: true, completion: nil)
     }
     
     private func loginSucc() {
@@ -216,7 +234,7 @@ extension LoginVC {
         loginQueryBlock = nil
     }
     
-
+    
 }
 
 extension LoginVC: RKLoginCallback {
@@ -260,7 +278,7 @@ extension LoginVC: RKLoginCallback {
         loginQueryBlock = { [weak self] in
             self?.present(alertVC, animated: true, completion: nil)
         }
-      
+        
     }
 }
 
