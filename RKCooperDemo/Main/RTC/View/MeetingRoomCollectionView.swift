@@ -139,8 +139,7 @@ extension MeetingRoomCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let ide = NSStringFromClass(MeetingRoomCollectionCell.self)
-//        + "\(indexPath.row)"
+        let ide = NSStringFromClass(MeetingRoomCollectionCell.self) + "\(indexPath.row)"
         collectionView.register(MeetingRoomCollectionCell.self, forCellWithReuseIdentifier: ide)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ide, for: indexPath) as! MeetingRoomCollectionCell
         let roomMember = meetingMembers[indexPath.row]

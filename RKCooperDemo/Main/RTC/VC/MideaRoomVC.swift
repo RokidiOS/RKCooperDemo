@@ -126,7 +126,7 @@ class MideaRoomVC: UIViewController {
         }
         otherSettingBtn.setTitleColor(.white, for: .normal)
         otherSettingBtn.addTarget(self, action: #selector(otherFunctionMenu), for: .touchUpInside)
-
+        
         // MARK: - test
         testQueryChannelInfo()
     }
@@ -225,7 +225,7 @@ class MideaRoomVC: UIViewController {
             default: break
             }
         }
-       
+        
         updateRoomName()
         self.roomMemberCollectionView.collectionView.reloadData()
         
@@ -262,7 +262,7 @@ class MideaRoomVC: UIViewController {
         }
     }
     
-
+    
     func startTimer() {
         
         guard self.timer == nil else {
@@ -323,13 +323,13 @@ class MideaRoomVC: UIViewController {
         let uploadLogAction = QMUIAlertAction(title: "上报log", style: .default) { _, _ in
             self.uploadLogAction()
         }
-
+        
         alertVC.addAction(bitAndDelayAction)
         alertVC.addAction(audioOutputAction)
         alertVC.addAction(uploadLogAction)
         alertVC.showWith(animated: true)
     }
-
+    
     
     private func beginRecord(_ channelId: String) {
         let recordBlock = { (isHight: Bool) in
@@ -443,29 +443,39 @@ extension MideaRoomVC: RKCallListener {
     func onCallAccept(channelId: String, userId: String) {
         
         if let contact = ContactManager.shared.contactFrom(userId: userId) {
-            QMUITips.showInfo("\(contact.realName)已接听", in: self.view)
+            QMUITips.showInfo("\(contact.realName)已接听")
         }
         
         updateMeetingPartp()
         
     }
     
-    func onCallBusy(channelId: String, userId: String) {
+    func onCallBusy(channelId: String, userId: String, inviteUserId: String) {
+        
+        guard inviteUserId == RKUserManager.shared.userId else {
+            // 其他人的邀请的用户正忙 这里不展示，需要展示根据业务自行决定
+            return
+        }
         
         if let contact = ContactManager.shared.contactFrom(userId: userId) {
-            QMUITips.showInfo("\(contact.realName)正忙，请稍后重试", in: self.view)
+            QMUITips.showInfo("\(contact.realName)正忙，请稍后重试 | 邀请人 \(inviteUserId)")
         } else {
-            QMUITips.showInfo("对方正忙，请稍后重试", in: self.view)
+            QMUITips.showInfo("对方正忙，请稍后重试 | 邀请人 \(inviteUserId)")
         }
         
     }
     
-    func onCallRejected(channelId: String, userId: String) {
+    func onCallRejected(channelId: String, userId: String, inviteUserId: String) {
+        
+        guard inviteUserId == RKUserManager.shared.userId else {
+            // 其他人的邀请的用户拒接 这里不展示，需要展示根据业务自行决定
+            return
+        }
         
         if let contact = ContactManager.shared.contactFrom(userId: userId) {
-            QMUITips.showInfo("\(contact.realName)拒绝了你的协作请求", in: self.view)
+            QMUITips.showInfo("\(contact.realName)拒绝了你的协作请求")
         } else {
-            QMUITips.showInfo("对方拒绝了你的协作请求", in: self.view)
+            QMUITips.showInfo("对方拒绝了你的协作请求")
         }
         
     }
@@ -702,7 +712,7 @@ extension MideaRoomVC: RKShareListener {
         channel.shareInfo = RKShareInfo()
         channel.shareInfo?.shareType = .screen
         channel.shareInfo?.promoterUserId = userId
-
+        
         updateMeetingPartp()
     }
     
@@ -914,28 +924,6 @@ extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
             }
         }
         
-
-       
-        
-//        guard let shareInfo = channel.shareInfo else {
-//            RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
-//            QMUITips.showSucceed("开启屏幕共享成功")
-//            updateMeetingPartp()
-//            return
-//        }
-        
-//        if shareInfo.shareType == .screen, shareInfo.promoterUserId == RKUserManager.shared.userId {
-//            RKCooperationCore.shared.getShareScreenManager().stopShareScreen(channelId: channel.channelId)
-//            QMUITips.showSucceed("关闭屏幕共享成功")
-//            shareInfo.shareType = .close
-//        } else if shareInfo.shareType == .close {
-//            RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
-//            shareInfo.shareType = .screen
-//            QMUITips.showSucceed("开启屏幕共享成功")
-//        } else {
-//            QMUITips.showError("频道内已经存在其他共享了")
-//        }
-        
         updateMeetingPartp()
     }
     
@@ -944,7 +932,7 @@ extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
         RKCooperationCore.shared.getChannelManager().queryChannelInfo(channelId: channel.channelId) { data in
             
         } onFailed: { error in
-        
+            
         }
     }
     
@@ -1154,9 +1142,9 @@ extension MideaRoomVC: RKCaptureInterceptor {
     
     public func onIntercept(_ buffer: RKVideoFrame) {
         guard let yuvBuffer = buffer.i420Buffer,
-        let dataY = yuvBuffer.dataY,
-        let dataU = yuvBuffer.dataU,
-        let dataV = yuvBuffer.dataV else {
+              let dataY = yuvBuffer.dataY,
+              let dataU = yuvBuffer.dataU,
+              let dataV = yuvBuffer.dataV else {
             return
         }
         RKLogInfo("YUVBuffer: dataY:\(dataY.pointee) dataU:\(dataU.pointee) dataV:\(dataV.pointee)")

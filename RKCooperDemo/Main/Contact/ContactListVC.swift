@@ -27,12 +27,15 @@ class ContactListVC: UITableViewController {
     var choosedList = [ContactModel]()
     ///当前是否是邀请
     var invited = false
+    
+    fileprivate var alertVC: QMUIAlertController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "联系人列表"
         loadData()
-//        setupTimer()
+        //        setupTimer()
         RKCooperationCore.shared.addIncomingCall(listener: self)
     }
     /// 获取联系人列表
@@ -42,7 +45,7 @@ class ContactListVC: UITableViewController {
                   let dataDict = data,
                   let contactsList = dataDict["contactsList"] as? [Any],
                   var dataArray = JSONDeserializer<ContactModel>.deserializeModelArrayFrom(array: contactsList) as? [ContactModel] else { return }
-    
+            
             if let lastLoginUserName = UserDefaults.standard.value(forKey: RKLoginUDKeys.userNameKey) as? String {
                 dataArray.removeAll { model in
                     if model.username == lastLoginUserName {
@@ -216,25 +219,36 @@ extension ContactListVC {
 extension ContactListVC: RKIncomingCallListener {
     
     func onReceiveCall(channelId: String, fromUserId: String, createTime: Int64, channelTitle: String, channelParam: RKChannelParam?) {
-        let alertVC = RKAlertController.alertSheet(title: "收到\(fromUserId)邀请").add(title: "加入", style: .default) {
+        let alertVC = QMUIAlertController(title: "收到邀请", message: "channelId： \(channelId)\n userId: \(fromUserId)", preferredStyle: .alert)
+        self.alertVC = alertVC
+        let joinAction = QMUIAlertAction(title: "加入", style: .default) { _, _ in
             // 加入并接受
             MeetingManager.shared.accept(meetingId: channelId, self)
             // 超过60秒后 自动默认不能进入频道 超时移除
             NSObject.cancelPreviousPerformRequests(withTarget: self)
-        }.add(title: "正忙", style: .destructive) {
+        }
+        let busyAction = QMUIAlertAction(title: "正忙", style: .default) { _, _ in
             // 当前正在会议中，处理约等于拒接
             RKCooperationCore.shared.getCallManager().busy(channelId: channelId, onSuccess: nil, onfailed: nil)
             // 超过60秒后 自动默认不能进入频道 超时移除
             NSObject.cancelPreviousPerformRequests(withTarget: self)
-        }.add(title: "拒接", style: .destructive) {
+        }
+        let rejectAction = QMUIAlertAction(title: "拒接", style: .default) { _, _ in
             // 拒接
             RKCooperationCore.shared.getCallManager().reject(channelId: channelId, onSuccess: nil, onfailed: nil)
             // 超过60秒后 自动默认不能进入频道 超时移除
             NSObject.cancelPreviousPerformRequests(withTarget: self)
-        }.finish()
+        }
         
-        self.present(alertVC, animated: true, completion: nil)
-        self.perform(#selector(hidenJointAlert), with: alertVC, afterDelay: 60)
+        alertVC.addAction(joinAction)
+        alertVC.addAction(busyAction)
+        alertVC.addAction(rejectAction)
+        alertVC.showWith(animated: true)
+    }
+    
+    func onCallCanceled(channelId: String, userId: String) {
+        QMUITips.showInfo("\(userId) 已取消呼叫 | channelId: \(channelId)")
+        alertVC?.hideWith(animated: true)
     }
     
     @objc private func hidenJointAlert(_ alertVC: QMUIAlertController) {
@@ -254,9 +268,9 @@ extension ContactListVC: RKChannelListener {
     
     func onJoinChannelResult(channelId: String, result: Bool, reason: RKCooperationCode) {
         if result == true {
-            QMUITips.showError("加入频道成功！")
+            //            MeetingManager.shared.joinMeeting(meetingId: channelId, self)
         } else {
-            QMUITips.showError("加入频道失败！")
+            QMUITips.showError("加入房间失败！")
         }
         // 移除监听回调
         RKCooperationCore.shared.getChannelManager().removeChannel(listener: self)

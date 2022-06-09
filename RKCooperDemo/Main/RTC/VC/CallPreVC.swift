@@ -11,7 +11,7 @@ import RKIUtils
 import RKCooperationCore
 import QMUIKit
 
-class CallPreVC: UIViewController, RKCallListener {
+class CallPreVC: UIViewController {
     
     var cancelBtn: UIButton!
     
@@ -25,6 +25,8 @@ class CallPreVC: UIViewController, RKCallListener {
     var isMeetingPre: Bool = true
     var backCameraPre: Bool = false
     var meetingNamePre: String = ""
+    
+    var alertVC: QMUIAlertController?
     
     var channelParam = RKChannelParam()
     public override var shouldAutorotate: Bool {
@@ -44,8 +46,13 @@ class CallPreVC: UIViewController, RKCallListener {
         }
     }
     
+    deinit {
+        RKDevice.closeCamera()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
         TempTool.forceOrientationLandscape()
         UIDevice.deviceNewOrientation(.landscape)
         // 背景视频return  UIInterfaceOrientationMaskPortrait;
@@ -119,6 +126,9 @@ class CallPreVC: UIViewController, RKCallListener {
         MeetingManager.shared.trumpetSwitch = true
         
         RKCooperationCore.shared.getChannelManager().addChannel(listener: self)
+        
+        RKCooperationCore.shared.getCallManager().addCallState(listener: self)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -265,8 +275,31 @@ extension CallPreVC: RKChannelListener {
     
     func onJoinChannelResult(channelId: String, result: Bool, reason: RKCooperationCode) {
         if result == true {
+            let userIdList = userIds.filter { $0 != RKUserManager.shared.userId }
+            /// 一对一呼叫等待接听
+            guard userIdList.count == 1 else {
+                enterRoomViewController()
+                return
+            }
+            
             // 加入成功
-            self.enterRoomViewController()
+            let alertVC = QMUIAlertController(title: "等待接听...", message: nil, preferredStyle: .alert)
+            self.alertVC = alertVC
+            let cancelAction = QMUIAlertAction(title: "取消呼叫", style: .default) { _, _ in
+                RKCooperationCore.shared.getCallManager().cancel(channelId: channelId, userIdList: self.userIds) { data in
+                    QMUITips.showInfo("取消成功")
+                    self.popCallViewController()
+                } onfailed: { error in
+                    QMUITips.showInfo("取消失败 \(error?.localizedDescription)")
+                }
+            }
+//            let joinAction = QMUIAlertAction(title: "进入房间", style: .default) { _, _ in
+//                self.enterRoomViewController()
+//            }
+
+//            alertVC.addAction(joinAction)
+            alertVC.addAction(cancelAction)
+            alertVC.showWith(animated: true)
         }
     }
     
@@ -310,4 +343,40 @@ extension CallPreVC: RKChannelListener {
         
     }
     
+}
+
+extension CallPreVC: RKCallListener {
+    public func onCallAccept(channelId: String, userId: String) {
+        let userIdList = userIds.filter { $0 != RKUserManager.shared.userId }
+        /// 一对一呼叫等待接听
+        guard userIdList.count == 1 else {
+            return
+        }
+        alertVC?.hideWith(animated: true)
+        QMUITips.showInfo("\(userId)已接听")
+        enterRoomViewController()
+    }
+    
+    public func onCallRejected(channelId: String, userId: String, inviteUserId: String) {
+        let userIdList = userIds.filter { $0 != RKUserManager.shared.userId }
+        /// 一对一呼叫等待接听
+        guard userIdList.count == 1 else {
+            return
+        }
+        alertVC?.hideWith(animated: true)
+        QMUITips.showInfo("\(userId)已拒接")
+        popCallViewController()
+    }
+
+    public func onCallBusy(channelId: String, userId: String, inviteUserId: String) {
+        let userIdList = userIds.filter { $0 != RKUserManager.shared.userId }
+        /// 一对一呼叫等待接听
+        guard userIdList.count == 1 else {
+            return
+        }
+        alertVC?.hideWith(animated: true)
+        QMUITips.showInfo("\(userId)正忙")
+        popCallViewController()
+    }
+
 }
