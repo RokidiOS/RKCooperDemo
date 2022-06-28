@@ -26,7 +26,6 @@
 		8A47C4DB27DF3789005BF0CE /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4D927DF3789005BF0CE /* CallView.swift */; };
 		8A47C4DE27DF37F3005BF0CE /* MeetingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4DD27DF37F3005BF0CE /* MeetingManager.swift */; };
 		8A47C4E327DF3834005BF0CE /* RKMeetingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E027DF3834005BF0CE /* RKMeetingInfo.swift */; };
-		8A47C4E427DF3834005BF0CE /* RKPhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E127DF3834005BF0CE /* RKPhotoModel.swift */; };
 		8A47C4E527DF3834005BF0CE /* RKRoomMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E227DF3834005BF0CE /* RKRoomMember.swift */; };
 		8A47C4EA27DF3944005BF0CE /* ContactManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E927DF3944005BF0CE /* ContactManager.swift */; };
 		8A47C4EC27DF3ADD005BF0CE /* CallPreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4EB27DF3ADD005BF0CE /* CallPreVC.swift */; };
@@ -39,6 +38,8 @@
 		8A47C4FA27E03D80005BF0CE /* CallAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4F927E03D80005BF0CE /* CallAlertView.swift */; };
 		8A944DA027E6D3ED00FA6060 /* FullVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A944D9F27E6D3ED00FA6060 /* FullVideoView.swift */; };
 		8A944E7B27E84F0F00FA6060 /* DoodleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A944E7A27E84F0F00FA6060 /* DoodleVC.swift */; };
+		8ADD0FA32809672800B0F7E0 /* ChannelConfigVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADD0FA22809672800B0F7E0 /* ChannelConfigVC.swift */; };
+		8AFEC2462862FE7800A529BE /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFEC2452862FE7800A529BE /* TestHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -76,7 +77,6 @@
 		8A47C4D927DF3789005BF0CE /* CallView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
 		8A47C4DD27DF37F3005BF0CE /* MeetingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingManager.swift; sourceTree = "<group>"; };
 		8A47C4E027DF3834005BF0CE /* RKMeetingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKMeetingInfo.swift; sourceTree = "<group>"; };
-		8A47C4E127DF3834005BF0CE /* RKPhotoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKPhotoModel.swift; sourceTree = "<group>"; };
 		8A47C4E227DF3834005BF0CE /* RKRoomMember.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKRoomMember.swift; sourceTree = "<group>"; };
 		8A47C4E927DF3944005BF0CE /* ContactManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactManager.swift; sourceTree = "<group>"; };
 		8A47C4EB27DF3ADD005BF0CE /* CallPreVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallPreVC.swift; sourceTree = "<group>"; };
@@ -91,6 +91,8 @@
 		8A944DA627E6FABD00FA6060 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		8A944DA827E6FABD00FA6060 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8A944E7A27E84F0F00FA6060 /* DoodleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoodleVC.swift; sourceTree = "<group>"; };
+		8ADD0FA22809672800B0F7E0 /* ChannelConfigVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelConfigVC.swift; sourceTree = "<group>"; };
+		8AFEC2452862FE7800A529BE /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
 		9D8BB637F5831069F47A90A4 /* Pods_RKCooperDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RKCooperDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3BF7C1C27D78E178C4E8A81 /* Pods-RKCooperDemo_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RKCooperDemo_Example.debug.xcconfig"; path = "Target Support Files/Pods-RKCooperDemo_Example/Pods-RKCooperDemo_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B0623B3227EC4050004E43A1 /* RKCooperDemoRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RKCooperDemoRelease.entitlements; path = RKCooperDemo/RKCooperDemoRelease.entitlements; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				8A47C4F727E03C09005BF0CE /* RKExt.swift */,
 				8A47C4C127DEF211005BF0CE /* RKLanguageManager.swift */,
 				8A47C4D427DF36C5005BF0CE /* ThemeDefine.swift */,
+				8AFEC2452862FE7800A529BE /* TestHelper.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 				8A47C4EB27DF3ADD005BF0CE /* CallPreVC.swift */,
 				8A47C4ED27E03A16005BF0CE /* MideaRoomVC.swift */,
 				8A944E7A27E84F0F00FA6060 /* DoodleVC.swift */,
+				8ADD0FA22809672800B0F7E0 /* ChannelConfigVC.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
@@ -256,7 +260,6 @@
 			isa = PBXGroup;
 			children = (
 				8A47C4E027DF3834005BF0CE /* RKMeetingInfo.swift */,
-				8A47C4E127DF3834005BF0CE /* RKPhotoModel.swift */,
 				8A47C4E227DF3834005BF0CE /* RKRoomMember.swift */,
 			);
 			path = Model;
@@ -364,6 +367,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-RKCooperDemo/Pods-RKCooperDemo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/DoraemonKit/DoraemonKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/GCDWebServer/GCDWebServer.framework",
@@ -372,18 +376,23 @@
 				"${BUILT_PRODUCTS_DIR}/LookinServer/LookinServer.framework",
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
 				"${BUILT_PRODUCTS_DIR}/QMUIKit/QMUIKit.framework",
+				"${BUILT_PRODUCTS_DIR}/RKCooperationCore/RKCooperationCore.framework",
 				"${BUILT_PRODUCTS_DIR}/RKIHandyJSON/RKIHandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/RKILogger/RKILogger.framework",
 				"${BUILT_PRODUCTS_DIR}/RKIUtils/RKIUtils.framework",
+				"${PODS_ROOT}/../../../RKRTC/RKRTC/Frameworks/AWSCore.framework",
+				"${PODS_ROOT}/../../../RKRTC/RKRTC/Frameworks/AWSS3.framework",
+				"${PODS_ROOT}/../../../RKRTC/RKRTC/Frameworks/WebRTC.framework",
+				"${BUILT_PRODUCTS_DIR}/RKRTC/RKRTC.framework",
 				"${BUILT_PRODUCTS_DIR}/RKSassLog/RKSassLog.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/WebRTC-lib/WebRTC.framework/WebRTC",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoraemonKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GCDWebServer.framework",
@@ -392,13 +401,17 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LookinServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QMUIKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKCooperationCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKIHandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKILogger.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKIUtils.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSS3.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKRTC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKSassLog.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -435,6 +448,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A47C4E327DF3834005BF0CE /* RKMeetingInfo.swift in Sources */,
+				8ADD0FA32809672800B0F7E0 /* ChannelConfigVC.swift in Sources */,
+				8AFEC2462862FE7800A529BE /* TestHelper.swift in Sources */,
 				607FACD81AFB9204008FA782 /* LoginVC.swift in Sources */,
 				8A47C4DB27DF3789005BF0CE /* CallView.swift in Sources */,
 				8A47C4CC27DF1B79005BF0CE /* ContactModel.swift in Sources */,
@@ -451,7 +466,6 @@
 				8A161B8027E042EE009C0B58 /* RKMaskView.swift in Sources */,
 				8A47C4F827E03C09005BF0CE /* RKExt.swift in Sources */,
 				8A47C4F427E03AF2005BF0CE /* MeetingRoomCollectionCell.swift in Sources */,
-				8A47C4E427DF3834005BF0CE /* RKPhotoModel.swift in Sources */,
 				8A47C4C927DF16DC005BF0CE /* ContactCell.swift in Sources */,
 				8A47C4D527DF36C5005BF0CE /* ThemeDefine.swift in Sources */,
 				8A47C4F027E03AA2005BF0CE /* MeetingRoomCollectionView.swift in Sources */,
@@ -593,17 +607,18 @@
 			baseConfigurationReference = F971A9210B63411DCB0AE78B /* Pods-RKCooperDemo.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 04011701;
+				CURRENT_PROJECT_VERSION = 22062719;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RKCooperDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.2.4;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rokid.cooperation.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -619,17 +634,18 @@
 			baseConfigurationReference = CBA2127BFA85D124B4E0EEF5 /* Pods-RKCooperDemo.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 04011701;
+				CURRENT_PROJECT_VERSION = 22062719;
 				DEVELOPMENT_TEAM = 3YUD9UBP45;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RKCooperDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.2.4;
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rokid.cooperation.example;
 				PRODUCT_NAME = "$(TARGET_NAME)";

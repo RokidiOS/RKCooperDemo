@@ -28,8 +28,8 @@ class RKMeetingInfo: NSObject, HandyJSON {
         }
     }
     public var name: String = ""            // 房间名字
-    public var startTime: Int64 = 0
-    public var resolutionRatio: String = ""
+    public var startTime: Int64 = 0         // 会议开始时间
+    public var resolutionRatio: String = "" // 会议分辨率
     
     public var fromUserId: String = ""    // 发起人Id
     

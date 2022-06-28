@@ -2,7 +2,7 @@
 
 # 计算buildNumber
 def updateProjectBuildNumber
-    currentTime = Time.new.strftime("%m%d%H%M")
+    currentTime = Time.new.strftime("%y%m%d%H")
     build = "#{currentTime}"
     puts("*************| 更新build #{build} |*************")
     # => 更改项目 build 号
@@ -15,7 +15,7 @@ platform :ios do
 
   before_all do
   	# pod install
-    	sh 'pod install'
+    	#sh 'pod install'
     
 	# 更新项目build号
         updateProjectBuildNumber

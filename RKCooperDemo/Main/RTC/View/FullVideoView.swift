@@ -4,7 +4,7 @@
 //
 //  Created by chzy on 2022/3/20.
 //  Copyright © 2022 CocoaPods. All rights reserved.
-//
+//  全屏视频流 view
 
 import UIKit
 import SnapKit
@@ -20,7 +20,7 @@ class FullVideoView: UIView {
     var lastVideoSuperView: UIView?
     var lastVieoView: UIView?
     var userId: String = ""
-    
+
     weak var delegate: FullVideoViewDelegate?
     
     init() {
@@ -35,10 +35,23 @@ class FullVideoView: UIView {
             make.right.equalTo(-30)
             make.centerY.equalToSuperview()
         }
+        
+        addSubview(infoLabel)
+        infoLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().offset(-100)
+            make.bottom.equalToSuperview().offset(-40)
+        }
+        
+    }
+    
+    public func showInfo(_ string: String) {
+        infoLabel.text = string
     }
     
     override func addSubview(_ view: UIView) {
         super.addSubview(view)
+        bringSubview(toFront: infoLabel)
         bringSubview(toFront: snapBtn)
     }
     
@@ -53,6 +66,17 @@ class FullVideoView: UIView {
         return btn
     }()
     
+    private lazy var infoLabel: UILabel = {
+        infoLabel = UILabel()
+        infoLabel.font = .systemFont(ofSize: 13)
+        infoLabel.numberOfLines = 0
+        infoLabel.setContentHuggingPriority(.required
+                                            , for: .vertical)
+        infoLabel.textColor = .white
+        return infoLabel
+    }()
+    
+    // 缩小 隐藏操作
     @objc private func hidenAction() {
         guard let lastVideoSuperView = lastVideoSuperView else { return }
         guard let lastVieoView = lastVieoView else { return }
@@ -74,6 +98,7 @@ class FullVideoView: UIView {
 
     }
     
+    // 截屏操作
     @objc private func snapAction() {
         self.delegate?.screenSnapshot(self.userId)
     }

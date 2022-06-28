@@ -13,7 +13,6 @@ import QMUIKit
 import RKIUtils
 
 class DoodleVC: UIViewController {
-    var channelId: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +22,7 @@ class DoodleVC: UIViewController {
         drawView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        view.addSubViews([backBtn, revokebtn, clearbtn, snapshotBtn])
+        view.addSubViews([backBtn, revokebtn, clearbtn, snapshotBtn, reduceBtn])
         
         backBtn.snp.makeConstraints { make in
             make.topMargin.equalTo(50)
@@ -32,25 +31,41 @@ class DoodleVC: UIViewController {
         }
         
         revokebtn.snp.makeConstraints { make in
-            make.top.equalTo(backBtn.snp_bottom).offset(30)
+            make.top.equalTo(backBtn.snp.bottom).offset(30)
             make.topMargin.equalTo(30)
             make.left.width.height.equalTo(backBtn)
         }
         
         clearbtn.snp.makeConstraints { make in
-            make.top.equalTo(revokebtn.snp_bottom).offset(30)
+            make.top.equalTo(revokebtn.snp.bottom).offset(30)
             make.left.width.height.equalTo(backBtn)
         }
         
         snapshotBtn.snp.makeConstraints { make in
-            make.top.equalTo(clearbtn.snp_bottom).offset(30)
+            make.top.equalTo(clearbtn.snp.bottom).offset(30)
             make.left.width.height.equalTo(backBtn)
         }
         
+        reduceBtn.snp.makeConstraints { make in
+            make.topMargin.equalTo(50)
+            make.right.equalTo(-50)
+            make.width.height.equalTo(50)
+        }
+    }
+    
+    @objc private func reduceAction() {
+        guard let vcs = self.navigationController?.viewControllers else { return }
+        for vc in vcs.reversed() {
+            if !vc.isKind(of: DoodleVC.self) {
+                self.navigationController?.popToViewController(vc, animated: true)
+                break
+            }
+        }
+       
     }
     
     @objc private func backAction() {
-        if let channel = RKChannelManager.shared.getChannel(channelId: channelId),
+        if let channel = MeetingManager.shared.channel,
            let shareInfo = channel.shareInfo,
            shareInfo.shareType == .doodle || shareInfo.shareType == .imageDoodle {
             if shareInfo.promoterUserId != RKUserManager.shared.userId {
@@ -61,9 +76,10 @@ class DoodleVC: UIViewController {
       
         
         let alertController = QMUIAlertController(title: "确定要退出绘制模式", message: nil, preferredStyle: .alert)
-        
+      
         let doneAction = QMUIAlertAction(title: "确定", style: .default) { _, _ in
-            self.doodelManager.stopShareDoodle(channelId: self.channelId)
+            guard let channel = MeetingManager.shared.channel else { return }
+            self.doodelManager.stopShareDoodle(channelId: channel.channelId)
             self.navigationController?.popViewController(animated: true)
         }
         
@@ -76,11 +92,13 @@ class DoodleVC: UIViewController {
     }
     
     @objc private func revokeAction() {
-        doodelManager.revoke(channelId: channelId, doodle: nil)
+        guard let channel = MeetingManager.shared.channel else { return }
+        doodelManager.revoke(channelId: channel.channelId, doodle: nil)
     }
     
     @objc private func cleanAction() {
-        doodelManager.clear(channelId: channelId)
+        guard let channel = MeetingManager.shared.channel else { return }
+        doodelManager.clear(channelId: channel.channelId)
     }
     
     @objc fileprivate func snapshotAction() {
@@ -105,6 +123,10 @@ class DoodleVC: UIViewController {
     
     lazy var backBtn: UIButton = {
         return createBtn("rk_alert_close", #selector(backAction))
+    }()
+  
+    lazy var reduceBtn: UIButton = {
+        return createBtn("ic_call_room_member_detail_back", #selector(reduceAction))
     }()
     
     lazy var revokebtn: UIButton = {

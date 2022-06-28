@@ -21,6 +21,13 @@ struct RKLoginUDKeys {
 
 class LoginVC: UIViewController {
     
+    var appId: String = "135D8B743401461C95905C3B2822B81C"
+    
+    var apiServer: String = ""
+    
+    // 登录完成后 查询回调
+    var loginQueryBlock:(() ->Void)?
+    
     public override var shouldAutorotate: Bool {
         return false
     }
@@ -34,7 +41,8 @@ class LoginVC: UIViewController {
         view.addSubViews([companyTextFiled,
                           userTextFiled,
                           passwordTextFiled,
-                          loginButton])
+                          loginButton,
+                          configButton])
         layoutViews()
         if let lastLoginCompanyId = UserDefaults.standard.value(forKey: RKLoginUDKeys.companyIdKey) as? String,
            let lastLoginUserName = UserDefaults.standard.value(forKey: RKLoginUDKeys.userNameKey) as? String,
@@ -93,6 +101,12 @@ class LoginVC: UIViewController {
             make.height.equalTo(42)
         }
         
+        configButton.snp.makeConstraints { (make) in
+            make.top.equalTo(loginButton.snp.bottom).offset(20)
+            make.left.equalTo(20)
+            make.right.equalTo(-20)
+            make.height.equalTo(42)
+        }
     }
     
     lazy var companyTextFiled: QMUITextField = {
@@ -120,6 +134,14 @@ class LoginVC: UIViewController {
         return btn
     }()
     
+    lazy var configButton: QMUIButton = {
+        let btn = QMUIButton()
+        btn.setTitle("配置", for: .normal)
+        btn.addTarget(self, action: #selector(baseConfigAction), for: .touchUpInside)
+        return btn
+    }()
+    
+    
     private func createTf(_ placeHoldel: String) -> QMUITextField{
         let tf = QMUITextField()
         tf.placeholder = placeHoldel
@@ -137,32 +159,23 @@ class LoginVC: UIViewController {
 extension LoginVC {
     
     @objc private func loginAction() {
-        let param = RKCooperationCoreParams()
-        let tempEnv = 3
+        let tempEnv = 2
         if tempEnv == 0 {
-            param.saasUrl = "https://saas-ar-dev.rokid-inc.com"
-            param.rtcUrl = "https://rtc-hyh.rokid-inc.com"
-            param.wssUrl = "wss://rtc-hyh.rokid-inc.com:8886/socket"
+            apiServer = "http://10.91.1.23:8080"
             env = .develop
         } else if tempEnv == 1 {
-            param.saasUrl = "https://saas-ar-test.rokid.com"
-            param.rtcUrl = "https://rtc-dev.rokid.com"
-            param.wssUrl = "wss://rtc-wss-dev.rokid.com/socket"
-            env = .test
+            apiServer = "https://rtc-dev.rokid.com"
+            env = .develop
         } else if tempEnv == 2 {
-            param.saasUrl = "https://saas-ar-test.rokid.com"
-            param.rtcUrl = "https://rtc-test.rokid.com"
-            param.wssUrl = "wss://rtc-wss-test.rokid.com/socket"
+            apiServer = "https://rtc-test.rokid.com"
             env = .test
         } else {
-            param.saasUrl = "https://saas-ar.rokid.com"
-            param.rtcUrl = "https://rtc.rokid.com"
-            param.wssUrl = "wss://wss-rtc.rokid.com/socket"
-            env = .product
+            apiServer = "https://rtc.rokid.com"
+            env = .test
         }
         
-        RKLogMgr.shared.logLevel = .info
-        RKCooperationCore.shared.initWith(params: param)
+        RKLogMgr.shared.logLevel = .verbose
+        RKCooperationCore.shared.initWith(appId: appId, apiServer: apiServer, onSuccess: nil, onFailed: nil)
         RKCooperationCore.shared.addLogin(listener: self)
         guard let company = companyTextFiled.text, !company.isEmpty else {
             QMUITips.showError("公司名不能为空")
@@ -183,7 +196,7 @@ extension LoginVC {
         UserDefaults.standard.synchronize()
         
         tipView.showLoading("登录中")
-        LoginHelper.loginAction(companyID: company, userName: userId, password: passwordId) { uid, token, errorMsg in
+        LoginHelper.loginAction(companyID: company, userName: userId, password: passwordId) { uid, token, refeshToken, expirTime, errorMsg  in
             self.tipView.hide(animated: true)
             self.tipView.removeFromSuperview()
             if let errorMsg = errorMsg {
@@ -191,22 +204,48 @@ extension LoginVC {
             }
             guard let token = token else { return }
             
+            ContactManager.shared.refreshToken = refeshToken
+            
             LoginHelper.getUserInfo(token) { dict, isSucess in
                 guard isSucess == true,
                       let uesrInfo = RKUser.deserialize(from: dict) else {
                     QMUITips.showSucceed("登录失败")
                     return
                 }
-                RKCooperationCore.shared.login(with: token, userInfo: uesrInfo)
+                ContactManager.shared.userInfo.userId = uesrInfo.userId
+                RKCooperationCore.shared.login(with: uesrInfo.userId)
                 QMUITips.showSucceed("登录成功")
             }
         }
     }
     
+    @objc func baseConfigAction() {
+        let placeholderAndTexts = [("appId", appId), ("apiServer", apiServer)]
+        let alertVC = RKAlertController.alertInputViews(title: "请输入配置信息",
+                                                        message: nil,
+                                                        placeholderAndTexts: placeholderAndTexts) { text in
+            guard let appId = text.first,
+                  let apiServer = text.last else {
+                QMUITips.showSucceed("频道ID不能为空！")
+                return
+            }
+            
+            self.appId = appId
+            self.apiServer = apiServer
+            RKCooperationCore.shared.initWith(appId: self.appId, apiServer: self.apiServer, onSuccess: nil, onFailed: nil)
+        }
+        self.present(alertVC, animated: true, completion: nil)
+    }
+    
     private func loginSucc() {
         let mainVC = ContactListVC()
+        mainVC.loadData()
         self.navigationController?.pushViewController(mainVC, animated: true)
+        loginQueryBlock?()
+        loginQueryBlock = nil
     }
+    
+    
 }
 
 extension LoginVC: RKLoginCallback {
@@ -246,7 +285,11 @@ extension LoginVC: RKLoginCallback {
                 RKChannelManager.shared.leave(channelId: iJoinedChannel.channelId)
             }
         }
-        self.present(alertVC, animated: true, completion: nil)
+        
+        loginQueryBlock = { [weak self] in
+            self?.present(alertVC, animated: true, completion: nil)
+        }
+        
     }
 }
 

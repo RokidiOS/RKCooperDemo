@@ -10,6 +10,7 @@ import UIKit
 import RKCooperationCore
 import RKIHandyJSON
 import QMUIKit
+import RKSassLog
 
 var kcontactList = [ContactModel]()
 
@@ -26,38 +27,40 @@ class ContactListVC: UITableViewController {
     var choosedList = [ContactModel]()
     ///当前是否是邀请
     var invited = false
+    
+    fileprivate var alertVC: UIAlertController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "联系人列表"
         loadData()
-        setupTimer()
+        //        setupTimer()
         RKCooperationCore.shared.addIncomingCall(listener: self)
     }
-    
-    @objc private func loadData() {
-        RKAPIManager.shared.contactsList(keyword: nil) { data in
-            if let dataDict = data as? [String: Any], let data = dataDict["contactsList"] as? [Any], var dataArray = JSONDeserializer<ContactModel>.deserializeModelArrayFrom(array: data) as? [ContactModel] {
-                if let lastLoginUserName = UserDefaults.standard.value(forKey: RKLoginUDKeys.userNameKey) as? String {
-                    dataArray.removeAll { model in
-                        if model.username == lastLoginUserName {
-                            ContactManager.shared.userInfo = model
-                            return true
-                        } else{
-                            return false
-                        }
+    /// 获取联系人列表
+    @objc public func loadData() {
+        LoginHelper.getContactsList(nil, keyword: nil) { (data, res) in
+            guard res == true,
+                  let dataDict = data,
+                  let contactsList = dataDict["contactsList"] as? [Any],
+                  var dataArray = JSONDeserializer<ContactModel>.deserializeModelArrayFrom(array: contactsList) as? [ContactModel] else { return }
+            
+            if let lastLoginUserName = UserDefaults.standard.value(forKey: RKLoginUDKeys.userNameKey) as? String {
+                dataArray.removeAll { model in
+                    if model.username == lastLoginUserName {
+                        return true
+                    } else{
+                        return false
                     }
                 }
-                kcontactList = dataArray
-                ContactManager.shared.contactsListInfo = dataArray
-                self.tableView.reloadData()
             }
-        } onFailed: { error in
-            
+            kcontactList = dataArray
+            ContactManager.shared.contactsListInfo = dataArray
+            self.tableView.reloadData()
         }
-        
     }
-    
+    // 当时是否在视图最前面，是是否进行自动刷新的标志
     private var hasShow = false
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -77,6 +80,7 @@ class ContactListVC: UITableViewController {
         hasShow = false
     }
     
+    ///20秒刷新一次
     var countdownTimer: Timer?
     private func setupTimer() {
         countdownTimer = Timer(timeInterval: 20, repeats: true) { [weak self] timer in
@@ -110,10 +114,12 @@ class ContactListVC: UITableViewController {
         }
     }
     
+    // 发起会议 前置页面
     @objc private func preCallMeeting() {
         MeetingManager.shared.startMeeting(infos: choosedList, self)
     }
     
+    // 主动加入会议
     @objc private func joinMeeting() {
         let placeholderAndTexts = [("频道ID(必须)", ""), ("密码(非必须)", "")]
         let alertVC = RKAlertController.alertInputViews(title: "请输入要加入的房间号和密码",
@@ -122,25 +128,39 @@ class ContactListVC: UITableViewController {
             guard let channelId = text.first, channelId.isEmpty == false,
                   let password = text.last else {
                 QMUITips.showSucceed("频道ID不能为空！")
-                      return
-                  }
-            guard let channel = RKChannelManager.shared.create(channelId: channelId, channelTitle: nil, channelParam: nil) else {
                 return
             }
             
-            MeetingManager.shared.channel = channel
-            
-            // 主动加入监听 加入状态回调
-            RKCooperationCore.shared.getChannelManager().addChannel(listener: self)
-            
-            channel.channelParam.password = password
-            channel.join(param: nil)
+            // 加入已知频道
+            RKChannelManager.shared.join(channelId: channelId, channelPassword: password) { data in
+                guard let channel = RKChannelManager.shared.getChannel(channelId: channelId) else {
+                    return
+                }
+                
+                MeetingManager.shared.channel = channel
+                // 主动加入监听 加入状态回调
+                RKCooperationCore.shared.getChannelManager().addChannel(listener: self)
+                
+                // 进入房间
+                let meetVC = MideaRoomVC()
+                MeetingManager.shared.lastBeforeMeetingVC = self
+                self.navigationController?.pushViewController(meetVC, animated: true)
+                
+            } onFailed: { error in
+                QMUITips.showSucceed(error?.localizedDescription)
+            }
         }
         self.present(alertVC, animated: true, completion: nil)
     }
     
     @objc private func invitedAction() {
-        MeetingManager.shared.inviteMeeting(choosedList)
+        
+        var userIds: [String] = []
+        choosedList.forEach { model in
+            userIds.append(model.userId)
+        }
+        
+        MeetingManager.shared.inviteMeeting(userIds)
         QMUITips.showSucceed("已邀请选中用户")
         self.navigationController?.popViewController(animated: true)
     }
@@ -179,10 +199,6 @@ extension ContactListVC {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let model = kcontactList[indexPath.row]
-        //        if model.status  == false {
-        //            QMUITips.showError("暂不支持离线用户")
-        //            return
-        //        }
         
         if choosedList.contains(where: { pModel in
             return pModel.userId == model.userId
@@ -199,17 +215,49 @@ extension ContactListVC {
     
 }
 
+// MARK: - 收到来电监听
 extension ContactListVC: RKIncomingCallListener {
-    func onReceiveCall(channelId: String, fromUserId: String, createTime: Int64) {
-        let alertVC = RKAlertController.alertAlert(title: "收到\(fromUserId)邀请", message: channelId, okTitle: "加入", cancelTitle: "拒接") {
-            
-            //            if let naVC = self.viewControllers?[0] as? UINavigationController {
-            MeetingManager.shared.joinMeeting(meetingId: channelId, self)
-            //            }
-        } cancelComplete: {
-            RKCooperationCore.shared.getCallManager().reject(channelId: channelId)
+    
+    func onReceiveCall(channelId: String, fromUserId: String, createTime: Int64, channelTitle: String, channelParam: RKChannelParam?) {
+        let alertVC = UIAlertController(title: "收到邀请", message: "channelId： \(channelId)\n userId: \(fromUserId)", preferredStyle: .alert)
+        self.alertVC = alertVC
+        let joinAction = UIAlertAction(title: "加入", style: .default) { _ in
+            // 加入并接受
+            MeetingManager.shared.accept(meetingId: channelId, self)
+            // 超过60秒后 自动默认不能进入频道 超时移除
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
         }
-        self.present(alertVC, animated: true, completion: nil)
+        let busyAction = UIAlertAction(title: "正忙", style: .default) { _ in
+            // 当前正在会议中，处理约等于拒接
+            RKCooperationCore.shared.getCallManager().busy(channelId: channelId, onSuccess: nil, onfailed: nil)
+            // 超过60秒后 自动默认不能进入频道 超时移除
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+        }
+        let rejectAction = UIAlertAction(title: "拒接", style: .default) { _ in
+            // 拒接
+            RKCooperationCore.shared.getCallManager().reject(channelId: channelId, onSuccess: nil, onfailed: nil)
+            // 超过60秒后 自动默认不能进入频道 超时移除
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+        }
+        
+        alertVC.addAction(joinAction)
+        alertVC.addAction(busyAction)
+        alertVC.addAction(rejectAction)
+//        alertVC.showWith(animated: true)
+        present(alertVC, animated: true)
+    }
+    
+    func onCallCanceled(channelId: String, userId: String) {
+        QMUITips.showInfo("\(userId) 已取消呼叫 | channelId: \(channelId)")
+//        alertVC?.hideWith(animated: true)
+        alertVC?.dismiss(animated: true)
+    }
+    
+    @objc private func hidenJointAlert(_ alertVC: QMUIAlertController) {
+        alertVC.dismiss(animated: true) {
+            QMUITips.showError("邀请已经超时")
+        }
+        
     }
 }
 
@@ -222,7 +270,7 @@ extension ContactListVC: RKChannelListener {
     
     func onJoinChannelResult(channelId: String, result: Bool, reason: RKCooperationCode) {
         if result == true {
-            MeetingManager.shared.joinMeeting(meetingId: channelId, self)
+            //            MeetingManager.shared.joinMeeting(meetingId: channelId, self)
         } else {
             QMUITips.showError("加入房间失败！")
         }

@@ -11,7 +11,7 @@ import RKIUtils
 import RKCooperationCore
 import QMUIKit
 
-class CallPreVC: UIViewController, RKCallListener {
+class CallPreVC: UIViewController {
     
     var cancelBtn: UIButton!
     
@@ -26,6 +26,9 @@ class CallPreVC: UIViewController, RKCallListener {
     var backCameraPre: Bool = false
     var meetingNamePre: String = ""
     
+    var alertVC: QMUIAlertController?
+    
+    var channelParam = RKChannelParam()
     public override var shouldAutorotate: Bool {
         return true
     }
@@ -43,8 +46,13 @@ class CallPreVC: UIViewController, RKCallListener {
         }
     }
     
+    deinit {
+        RKDevice.closeCamera()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
         TempTool.forceOrientationLandscape()
         UIDevice.deviceNewOrientation(.landscape)
         // 背景视频return  UIInterfaceOrientationMaskPortrait;
@@ -57,6 +65,7 @@ class CallPreVC: UIViewController, RKCallListener {
         // 呼叫设置视图
         callView.delegate = self
         self.view.addSubview(callView)
+
         callView.snp.makeConstraints { (make) in
             make.top.left.bottom.right.equalToSuperview()
         }
@@ -74,6 +83,20 @@ class CallPreVC: UIViewController, RKCallListener {
             make.width.equalTo(60)
             make.height.equalTo(40)
         }
+        
+        let configParambtn = UIButton(type:.custom)
+        configParambtn.setTitle("参数配置", for: .normal)
+        configParambtn.titleLabel!.font = RKFont.font_mainText
+        configParambtn.setTitleColor(.white, for: .normal)
+        configParambtn.addTarget(self, action:#selector(changeParam), for: .touchUpInside)
+        self.view.addSubview(configParambtn)
+        configParambtn.snp.makeConstraints { (make) in
+            make.top.equalTo(cancelBtn.snp.bottom).offset(30)
+            make.left.equalTo(UI.SafeTopHeight)
+            make.width.equalTo(120)
+            make.height.equalTo(40)
+        }
+        
         // 切换摄像头
         let switchCameraBtn = UIButton(type:.custom)
         let normalImage = UIImage(named: "media_setting_camera_switch")
@@ -86,7 +109,7 @@ class CallPreVC: UIViewController, RKCallListener {
             make.width.equalTo(40)
             make.height.equalTo(40)
         }
-             
+        
         let maxResolution = String(MeetingManager.shared.maxResolution.rawValue) + "P"
         callView.cloudRecordType = RKCloudRecordType(rawValue: maxResolution) ?? .middle
         
@@ -97,7 +120,15 @@ class CallPreVC: UIViewController, RKCallListener {
         RKDevice.startCameraVideo(type: .RENDER_FULL_SCREEN, view: self.callVideoView)
         
         RKCooperationCore.shared.addCall(listener: self)
+        channelParam.maxResolution = .RESOLUTION_720
+        MeetingManager.shared.audioSwitch = true
+        MeetingManager.shared.cameraSwitch = true
+        MeetingManager.shared.trumpetSwitch = true
         
+        RKCooperationCore.shared.getChannelManager().addChannel(listener: self)
+        
+        RKCooperationCore.shared.getCallManager().addCallState(listener: self)
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -105,6 +136,7 @@ class CallPreVC: UIViewController, RKCallListener {
         navigationController?.navigationBar.isHidden = false
         NSObject.cancelPreviousPerformRequests(withTarget: self)
         RKCooperationCore.shared.removeCall(listener: self)
+        RKCooperationCore.shared.getChannelManager().removeChannel(listener: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -134,6 +166,16 @@ class CallPreVC: UIViewController, RKCallListener {
         
         MeetingManager.shared.currentBackCamera = !MeetingManager.shared.currentBackCamera
         
+    }
+
+    @objc func changeParam() {
+        let configVC = ChannelConfigVC()
+        configVC.param = channelParam
+        configVC.okClick = {[weak self] param in
+            self?.channelParam = param
+        }
+        self.navigationController?.pushViewController(configVC, animated: true)
+
     }
     
 }
@@ -176,51 +218,22 @@ extension CallPreVC: CallViewDelegate {
         } else if cloudRecordType == .high {
             MeetingManager.shared.maxResolution = .RESOLUTION_1080
         }
+        channelParam.maxResolution = MeetingManager.shared.maxResolution
     }
     
     // MARK: - 点击呼叫按钮
     func startBtnAction(_ sender: UIButton) {
         
-        let comp:(String?, String?) ->Void = { name, pws in
-            var meetingName = ContactManager.shared.userInfo.realName
-            if let name = name, !name.isEmpty{
-                meetingName = name
-            }
-            MeetingManager.shared.createMeeting(meetingName: meetingName, password: nil, userIds: self.userIds, maxResolution: MeetingManager.shared.maxResolution, onSuccess: { data in
-                self.startWaitingMeeting()
-            }) { error in
-                guard let error = error else { return }
-                QMUITips.showError("\(error)")
-            }
-        }
-        
-        isMeetingPre = false
-     
-        let alertController = QMUIAlertController(title: "设置房间名和密码", message: nil, preferredStyle: .alert)
-        alertController.addTextField { tf in
-            tf.placeholder = "请输入房间名可为空"
-        }
-        alertController.addTextField { tf in
-            tf.placeholder = "请输入密码可为空"
-            tf.keyboardType = .asciiCapable
-        }
-        
-        let doneAction = QMUIAlertAction(title: "确定", style: .default) { controll, action in
-            let channalName = controll.textFields?[0].text
-            let psw = controll.textFields?[1].text
-            comp(channalName, psw)
+        QMUITips.showLoading(in: self.view)
+        MeetingManager.shared.createMeeting(meetingName: "", userIdLiset: userIds, channelParam: channelParam) { data in
+       
+            self.joinMeeting()
+        } onFailed: { error in
+            QMUITips.hideAllTips()
+            guard let error = error else { return }
+            QMUITips.showError("\(error)")
         }
 
-        alertController.addAction(doneAction)
-        alertController.showWith(animated: true)
-
-    }
-    
-    // MARK: - 呼叫等待页面
-    fileprivate func startWaitingMeeting() {
-        callView.isHidden = true
-        joinMeeting()
-        enterRoomViewController()
     }
     
     // MARK: - 加入会议配置
@@ -238,16 +251,132 @@ extension CallPreVC: CallViewDelegate {
             userIds.append(ContactManager.shared.userInfo.userId)
         }
         // 加入频道 设置分辨率
-        channel.channelParam.maxResolution = MeetingManager.shared.maxResolution
         
         var customProperty: [String: String] = [:]
         customProperty["meetingId"] = channel.channelId
         if let customPropertyJson = customProperty.jsonString() {
             channel.channelParam.extraParam = customPropertyJson
         }
-        channel.channelParam.isVideo = MeetingManager.shared.cameraSwitch
-        channel.channelParam.isAudio = MeetingManager.shared.audioSwitch
-        MeetingManager.shared.channel?.join(param: nil)
+        
+        channelParam.isVideo = MeetingManager.shared.cameraSwitch
+        channelParam.isAudio = MeetingManager.shared.audioSwitch
+        
+        MeetingManager.shared.channel?.join(param: channelParam, onSuccess: { data in
+            QMUITips.hideAllTips()
+        }, onFailed: { error in
+            QMUITips.hideAllTips()
+            QMUITips.showError("\(String(describing: error))")
+        })
     }
     
+}
+
+extension CallPreVC: RKChannelListener {
+    
+    func onJoinChannelResult(channelId: String, result: Bool, reason: RKCooperationCode) {
+        if result == true {
+            let userIdList = userIds.filter { $0 != RKUserManager.shared.userId }
+            /// 一对一呼叫等待接听
+            guard userIdList.count == 1 else {
+                enterRoomViewController()
+                return
+            }
+            
+            // 加入成功
+            let alertVC = QMUIAlertController(title: "等待接听...", message: nil, preferredStyle: .alert)
+            self.alertVC = alertVC
+            let cancelAction = QMUIAlertAction(title: "取消呼叫", style: .default) { _, _ in
+                RKCooperationCore.shared.getCallManager().cancel(channelId: channelId, userIdList: self.userIds) { data in
+                    QMUITips.showInfo("取消成功")
+                    self.popCallViewController()
+                } onfailed: { error in
+                    QMUITips.showInfo("取消失败 \(error?.localizedDescription)")
+                }
+            }
+//            let joinAction = QMUIAlertAction(title: "进入房间", style: .default) { _, _ in
+//                self.enterRoomViewController()
+//            }
+
+//            alertVC.addAction(joinAction)
+            alertVC.addAction(cancelAction)
+            alertVC.showWith(animated: true)
+        }
+    }
+    
+    func onUserScreenShareStateChanged(screenUserId: String?) {
+        
+    }
+    
+    func onLeave(channelId: String?, reason: RKCooperationCode) {
+        
+    }
+    
+    func onKicked(channelId: String?, byUserId: String) {
+        
+    }
+    
+    func onDispose() {
+        
+    }
+    
+    func onChannelStateChanged(newState: RKChannelState, oldState: RKChannelState) {
+        
+    }
+    
+    func onCustomPropertyChanged(customProperty: String?) {
+        
+    }
+    
+    func onRecordStateChanged(recordState: RKRecordState) {
+        
+    }
+    
+    func onUserJoinChannel(channelId: String, userId: String) {
+        
+    }
+    
+    func onUserLeaveChannel(channelId: String?, userId: String?) {
+        
+    }
+    
+    func onChannelShare(channelId: String?, shareType: RKShareType) {
+        
+    }
+    
+}
+
+extension CallPreVC: RKCallListener {
+    public func onCallAccept(channelId: String, userId: String) {
+        let userIdList = userIds.filter { $0 != RKUserManager.shared.userId }
+        /// 一对一呼叫等待接听
+        guard userIdList.count == 1 else {
+            return
+        }
+        alertVC?.hideWith(animated: true)
+        QMUITips.showInfo("\(userId)已接听")
+        enterRoomViewController()
+    }
+    
+    public func onCallRejected(channelId: String, userId: String, inviteUserId: String) {
+        let userIdList = userIds.filter { $0 != RKUserManager.shared.userId }
+        /// 一对一呼叫等待接听
+        guard userIdList.count == 1 else {
+            return
+        }
+        alertVC?.hideWith(animated: true)
+        QMUITips.showInfo("\(userId)已拒接")
+        popCallViewController()
+    }
+
+    public func onCallBusy(channelId: String, userId: String, inviteUserId: String) {
+        let userIdList = userIds.filter { $0 != RKUserManager.shared.userId }
+        /// 一对一呼叫等待接听
+        guard userIdList.count == 1 else {
+            return
+        }
+        alertVC?.hideWith(animated: true)
+        QMUITips.showInfo("\(userId)正忙")
+        popCallViewController()
+    }
+
 }

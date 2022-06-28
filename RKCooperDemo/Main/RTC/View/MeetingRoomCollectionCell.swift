@@ -20,6 +20,10 @@ class MeetingRoomCollectionCell: UICollectionViewCell {
     var userNameLabel: UILabel!
     // 语音图标
     var voiceImageView: UIImageView!
+    // 视频参数
+    var rtcInfoLabel: UILabel!
+    
+    var info: RKRoomMember?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,6 +53,13 @@ class MeetingRoomCollectionCell: UICollectionViewCell {
         userNameLabel.textColor = .white
         self.contentView.addSubview(userNameLabel)
         
+        rtcInfoLabel = UILabel.init()
+        rtcInfoLabel.font = userNameLabel.font
+        rtcInfoLabel.textColor = .white
+        rtcInfoLabel.numberOfLines = 0
+        rtcInfoLabel.setContentHuggingPriority(.required, for: .vertical)
+        self.contentView.addSubview(rtcInfoLabel)
+        
         voiceImageView = UIImageView.init()
         voiceImageView.image = UIImage(named: "ic_call_room_member_mic_on",
                                        in: Bundle(for: self.classForCoder),
@@ -60,6 +71,11 @@ class MeetingRoomCollectionCell: UICollectionViewCell {
             make.left.equalTo(10)
             make.height.equalTo(22)
             make.right.equalTo(voiceImageView)
+        }
+        
+        rtcInfoLabel.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(userNameLabel.snp.top)
         }
         
         voiceImageView.snp.makeConstraints { (make) in
