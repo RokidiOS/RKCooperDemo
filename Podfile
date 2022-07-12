@@ -4,8 +4,8 @@ platform :ios, '10.0'
 
 target 'RKCooperDemo' do
   
-  pod 'RKRTC', :git => "https://github.com/RokidiOS/RKRTC", :branch => '1.4.3_swift5.6.0'
-  pod 'RKCooperationCore', :git => "https://github.com/RokidiOS/RKCooperationCore", :branch => '2.2.4_swift5.6.0'
+  pod 'RKRTC', :git => "https://github.com/RokidiOS/RKRTC", :branch => '1.5.2_swift5.6.0'
+  pod 'RKCooperationCore', :git => "https://github.com/RokidiOS/RKCooperationCore", :branch => '2.3.2_swift5.6.0'
   
   pod 'RKSassLog', :git => "https://github.com/RokidiOS/RKSassLog"
 

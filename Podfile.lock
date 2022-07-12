@@ -355,7 +355,7 @@ PODS:
     - QMUIKit/QMUILog
   - QMUIKit/QMUIResources (4.3.0)
   - QMUIKit/QMUIWeakObjectContainer (4.3.0)
-  - RKCooperationCore (1.0.4):
+  - RKCooperationCore (2.3.2):
     - Moya
     - RKIHandyJSON
     - RKILogger
@@ -365,10 +365,10 @@ PODS:
   - RKILogger (0.2.7):
     - CocoaLumberjack/Swift (~> 3.7.4)
   - RKIUtils (0.1.2)
-  - RKRTC (1.1.0):
+  - RKRTC (1.5.2):
     - Moya
     - RKIHandyJSON
-    - RKILogger (= 0.2.7)
+    - RKILogger
     - RKIUtils
     - Starscream
   - RKSassLog (0.1.0):
@@ -384,10 +384,10 @@ DEPENDENCIES:
   - LookinServer
   - Moya (~> 15.0.0)
   - QMUIKit
-  - RKCooperationCore (from `../../RKCooperationCore`)
+  - RKCooperationCore (from `https://github.com/RokidiOS/RKCooperationCore`, branch `2.3.2_swift5.6.0`)
   - RKIHandyJSON
   - RKILogger
-  - RKRTC (from `../../RKRTC`)
+  - RKRTC (from `https://github.com/RokidiOS/RKRTC`, branch `1.5.2_swift5.6.0`)
   - RKSassLog (from `https://github.com/RokidiOS/RKSassLog`)
   - SnapKit
 
@@ -413,13 +413,21 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   RKCooperationCore:
-    :path: "../../RKCooperationCore"
+    :branch: 2.3.2_swift5.6.0
+    :git: https://github.com/RokidiOS/RKCooperationCore
   RKRTC:
-    :path: "../../RKRTC"
+    :branch: 1.5.2_swift5.6.0
+    :git: https://github.com/RokidiOS/RKRTC
   RKSassLog:
     :git: https://github.com/RokidiOS/RKSassLog
 
 CHECKOUT OPTIONS:
+  RKCooperationCore:
+    :commit: edd06f0ac6afebd52eafbd0ee2016697920a8ee6
+    :git: https://github.com/RokidiOS/RKCooperationCore
+  RKRTC:
+    :commit: dbd39b9cba2daf907bd914550b52d9a1a1f7208d
+    :git: https://github.com/RokidiOS/RKRTC
   RKSassLog:
     :commit: 385da9b55dc72d38dc9950e12adae94b7c7c588d
     :git: https://github.com/RokidiOS/RKSassLog
@@ -437,15 +445,15 @@ SPEC CHECKSUMS:
   LookinServer: 3d9a02529ed94a6a08154440c26f6d7f453bb1e7
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   QMUIKit: 67888be9aa0ee0b12b8a219fcea2eec900afd841
-  RKCooperationCore: 6c7b9b3bd176ce0cf282a0589fe31bce0670bdec
+  RKCooperationCore: 14e63b5110ea295635ce49a598a51ee0fb0bc793
   RKIHandyJSON: b3928e42af5d7d3b4cefb686079093d130e9066e
   RKILogger: fe3c5cd9b2179958478d4f007a85f4e33378f85a
   RKIUtils: 0170015917b7208cef4491421afe6cce74f2cb7c
-  RKRTC: 035ec339e4933828602cca7efedcbc2cff816480
+  RKRTC: 02dc54839acffe5848b2098c683db0f03579679e
   RKSassLog: be42c30c0227c12443c500b0e24ad7e3fb9ab479
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
 
-PODFILE CHECKSUM: ace021e2c52bf41af77d2abed3a51c4e6171b4d7
+PODFILE CHECKSUM: 6929928181be5cd16a4439f006cd5ae826aafbaa
 
 COCOAPODS: 1.11.3

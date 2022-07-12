@@ -42,15 +42,19 @@ class LoginVC: UIViewController {
                           userTextFiled,
                           passwordTextFiled,
                           loginButton,
-                          configButton])
+                          configButton,
+                          foreLoginLabel,
+                          slider,
+                          envSegmentedControl])
         layoutViews()
+        envSegmentedControl.selectedSegmentIndex = 0
         if let lastLoginCompanyId = UserDefaults.standard.value(forKey: RKLoginUDKeys.companyIdKey) as? String,
            let lastLoginUserName = UserDefaults.standard.value(forKey: RKLoginUDKeys.userNameKey) as? String,
            let lastpassword = UserDefaults.standard.value(forKey: RKLoginUDKeys.passwordKey) as? String{
             self.companyTextFiled.text = lastLoginCompanyId
             self.userTextFiled.text = lastLoginUserName
             self.passwordTextFiled.text = lastpassword
-            loginAction()
+//            loginAction()
         }
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -59,7 +63,7 @@ class LoginVC: UIViewController {
         TempTool.forceOrientationPortrait()
     }
     
-    private func layoutViews() {
+   private func layoutViews() {
         let titleLable = UILabel()
         titleLable.textAlignment = .center
         titleLable.font = UIFont.boldSystemFont(ofSize: 20)
@@ -67,7 +71,7 @@ class LoginVC: UIViewController {
         titleLable.text = "RKCoreExample"
         self.view.addSubview(titleLable)
         
-        
+
         titleLable.snp.makeConstraints { (make) in
             make.topMargin.equalTo(80)
             make.left.right.equalToSuperview()
@@ -107,6 +111,24 @@ class LoginVC: UIViewController {
             make.right.equalTo(-20)
             make.height.equalTo(42)
         }
+        
+        foreLoginLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(titleLable.snp.top)
+            make.height.equalTo(30)
+        }
+        
+        slider.snp.makeConstraints { make in
+            make.left.equalTo(foreLoginLabel.snp.right)
+            make.height.bottom.equalTo(foreLoginLabel)
+            make.width.equalTo(80)
+        }
+       
+       envSegmentedControl.snp.makeConstraints { make in
+           make.centerX.equalToSuperview()
+           make.height.equalTo(40)
+           make.width.equalTo(120)
+           make.bottom.equalTo(slider.snp.top).offset(-10)
+       }
     }
     
     lazy var companyTextFiled: QMUITextField = {
@@ -154,12 +176,27 @@ class LoginVC: UIViewController {
         return tipView
     }()
     
+    
+    lazy var foreLoginLabel: UILabel = {
+        let label = UILabel()
+        label.text = "强制刷新token"
+        label.setContentHuggingPriority(.required, for: .horizontal)
+        return label
+    }()
+    
+    lazy var slider: UISwitch = {
+        let slider = UISwitch()
+        return slider
+    }()
+    
+    private let envSegmentedControl = QMUISegmentedControl(items: ["开发", "测试", "线上"])
 }
 
 extension LoginVC {
     
     @objc private func loginAction() {
-        let tempEnv = 2
+        var tempEnv = 3
+        tempEnv = envSegmentedControl.selectedSegmentIndex + 1
         if tempEnv == 0 {
             apiServer = "http://10.91.1.23:8080"
             env = .develop
@@ -171,7 +208,7 @@ extension LoginVC {
             env = .test
         } else {
             apiServer = "https://rtc.rokid.com"
-            env = .test
+            env = .product
         }
         
         RKLogMgr.shared.logLevel = .verbose
@@ -213,7 +250,7 @@ extension LoginVC {
                     return
                 }
                 ContactManager.shared.userInfo.userId = uesrInfo.userId
-                RKCooperationCore.shared.login(with: uesrInfo.userId)
+                RKCooperationCore.shared.login(with: uesrInfo.userId, foreceRefreshToken: self.slider.isOn)
                 QMUITips.showSucceed("登录成功")
             }
         }
