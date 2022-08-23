@@ -149,10 +149,11 @@ extension MeetingManager {
         self.channel = channel
         // 接受邀请
         RKCooperationCore.shared.getCallManager().accept(channelId: meetingId, defaultSubscribeMediaType: defaultSubscribeMediaType, defaultStreamType: defaultStreamType, onSuccess: { data in
-            let meetVC = MideaRoomVC()
-            self.lastBeforeMeetingVC = vc
-            vc.navigationController?.pushViewController(meetVC, animated: true)
-
+            DispatchQueue.main.async {
+                let meetVC = MideaRoomVC()
+                self.lastBeforeMeetingVC = vc
+                vc.navigationController?.pushViewController(meetVC, animated: true)
+            }
         }, onfailed: { error in
             QMUITips.showError("进入房间失败 \(String(describing: error))")
         })

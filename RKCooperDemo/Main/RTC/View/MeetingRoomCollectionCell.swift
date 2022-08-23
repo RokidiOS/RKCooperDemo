@@ -22,6 +22,8 @@ class MeetingRoomCollectionCell: UICollectionViewCell {
     var voiceImageView: UIImageView!
     // 视频参数
     var rtcInfoLabel: UILabel!
+    // 音频参数
+    var audioInfoLabel: UILabel!
     
     var info: RKRoomMember?
     
@@ -65,6 +67,18 @@ class MeetingRoomCollectionCell: UICollectionViewCell {
                                        in: Bundle(for: self.classForCoder),
                                        compatibleWith: nil)
         self.contentView.addSubview(voiceImageView)
+        
+        
+        audioInfoLabel = UILabel.init()
+        audioInfoLabel.font = userNameLabel.font
+        audioInfoLabel.textColor = .red
+        audioInfoLabel.setContentHuggingPriority(.required, for: .vertical)
+        self.contentView.addSubview(audioInfoLabel)
+        
+        audioInfoLabel.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.bottom.equalTo(rtcInfoLabel.snp.top)
+        }
         
         userNameLabel.snp.makeConstraints { (make) in
             make.bottom.equalToSuperview()

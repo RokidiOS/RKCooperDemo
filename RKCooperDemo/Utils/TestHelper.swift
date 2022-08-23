@@ -36,7 +36,6 @@ class TestHelper {
     
 }
 
-
 class DefaultSetVC: UIViewController {
         
     override func viewDidLoad() {
@@ -82,6 +81,20 @@ class DefaultSetVC: UIViewController {
             MeetingManager.shared.defaultSubscribeMediaType = SubscribeMediaType(rawValue: control.selectedSegmentIndex) ?? .both
         }
     }
+    
+    
+//    lazy var foreLoginLabel: UILabel = {
+//        let label = UILabel()
+//        label.text = "开启simulcast"
+//        label.setContentHuggingPriority(.required, for: .horizontal)
+//        return label
+//    }()
+//    
+//    lazy var slider: UISwitch = {
+//        let slider = UISwitch()
+//        return slider
+//    }()
+//    
     
 }
 

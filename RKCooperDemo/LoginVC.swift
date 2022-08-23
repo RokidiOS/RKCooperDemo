@@ -47,7 +47,7 @@ class LoginVC: UIViewController {
                           slider,
                           envSegmentedControl])
         layoutViews()
-        envSegmentedControl.selectedSegmentIndex = 0
+        envSegmentedControl.selectedSegmentIndex = 1
         if let lastLoginCompanyId = UserDefaults.standard.value(forKey: RKLoginUDKeys.companyIdKey) as? String,
            let lastLoginUserName = UserDefaults.standard.value(forKey: RKLoginUDKeys.userNameKey) as? String,
            let lastpassword = UserDefaults.standard.value(forKey: RKLoginUDKeys.passwordKey) as? String{
@@ -115,10 +115,11 @@ class LoginVC: UIViewController {
         foreLoginLabel.snp.makeConstraints { make in
             make.bottom.equalTo(titleLable.snp.top)
             make.height.equalTo(30)
+            make.left.equalTo(20)
         }
         
         slider.snp.makeConstraints { make in
-            make.left.equalTo(foreLoginLabel.snp.right)
+            make.left.equalTo(foreLoginLabel.snp.right).offset(10)
             make.height.bottom.equalTo(foreLoginLabel)
             make.width.equalTo(80)
         }
@@ -126,7 +127,7 @@ class LoginVC: UIViewController {
        envSegmentedControl.snp.makeConstraints { make in
            make.centerX.equalToSuperview()
            make.height.equalTo(40)
-           make.width.equalTo(120)
+           make.width.equalTo(200)
            make.bottom.equalTo(slider.snp.top).offset(-10)
        }
     }
@@ -180,6 +181,7 @@ class LoginVC: UIViewController {
     lazy var foreLoginLabel: UILabel = {
         let label = UILabel()
         label.text = "强制刷新token"
+        label.font = .systemFont(ofSize: 14)
         label.setContentHuggingPriority(.required, for: .horizontal)
         return label
     }()
@@ -189,13 +191,13 @@ class LoginVC: UIViewController {
         return slider
     }()
     
-    private let envSegmentedControl = QMUISegmentedControl(items: ["开发", "测试", "线上"])
+    private let envSegmentedControl = QMUISegmentedControl(items: ["开发", "测试", "预发", "线上"])
 }
 
 extension LoginVC {
     
     @objc private func loginAction() {
-        var tempEnv = 3
+        var tempEnv = 2
         tempEnv = envSegmentedControl.selectedSegmentIndex + 1
         if tempEnv == 0 {
             apiServer = "http://10.91.1.23:8080"
@@ -206,6 +208,10 @@ extension LoginVC {
         } else if tempEnv == 2 {
             apiServer = "https://rtc-test.rokid.com"
             env = .test
+        } else if tempEnv == 3 {
+            apiServer = "https://rtc-pre.rokid.com"
+            env = .product
+            appId = "790293A4648B4AE99144A2A6D2A8BA1D"
         } else {
             apiServer = "https://rtc.rokid.com"
             env = .product
@@ -231,7 +237,7 @@ extension LoginVC {
         UserDefaults.standard.setValue(userId, forKey: RKLoginUDKeys.userNameKey)
         UserDefaults.standard.setValue(passwordId, forKey: RKLoginUDKeys.passwordKey)
         UserDefaults.standard.synchronize()
-        
+//        RKChannelManager.shared.enableSimulcast(false)
         tipView.showLoading("登录中")
         LoginHelper.loginAction(companyID: company, userName: userId, password: passwordId) { uid, token, refeshToken, expirTime, errorMsg  in
             self.tipView.hide(animated: true)

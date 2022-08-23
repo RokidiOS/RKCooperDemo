@@ -243,13 +243,11 @@ extension ContactListVC: RKIncomingCallListener {
         alertVC.addAction(joinAction)
         alertVC.addAction(busyAction)
         alertVC.addAction(rejectAction)
-//        alertVC.showWith(animated: true)
         present(alertVC, animated: true)
     }
     
     func onCallCanceled(channelId: String, userId: String) {
         QMUITips.showInfo("\(userId) 已取消呼叫 | channelId: \(channelId)")
-//        alertVC?.hideWith(animated: true)
         alertVC?.dismiss(animated: true)
     }
     

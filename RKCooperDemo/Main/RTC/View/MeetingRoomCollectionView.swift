@@ -8,6 +8,7 @@
 import UIKit
 import RKIUtils
 import RKCooperationCore
+import RKRTC
 
 protocol MeetingRoomCollectionViewDelegate: NSObjectProtocol {
     // MARK: - 点击单个视频回调
@@ -78,6 +79,16 @@ class MeetingRoomCollectionView: UIView {
         }
     }
     
+    func updateAudioCell(_ userId: String, bitrate: Int32)  {
+        _ = collectionView.visibleCells.first { cell in
+            guard let cell = cell as? MeetingRoomCollectionCell else { return false }
+            if cell.info?.userId == userId {
+                cell.audioInfoLabel.text = "audio \(bitrate) Kpbs"
+                return true
+            }
+            return false
+        }
+    }
     
     func updateCell(userId: String, width: Int32, height: Int32, fps: Int32, rid: String, bitrate: Int32, qualityLimitationReason: String?, packetsLost: Int32? = nil) -> String{
         
@@ -187,6 +198,20 @@ extension MeetingRoomCollectionView: UICollectionViewDataSource {
             cell.stateImageView.isHidden = true
             cell.stateLabel.isHidden = true
             cell.stateLabel.text = nil
+            #warning("TODO iOS 12 会存在一个上下旋转问题")
+//            guard let osSubstring = UIDevice.current.systemVersion.split(separator: ".").first else {
+//                return cell
+//            }
+//
+//            let versionString = String(osSubstring)
+//            if versionString == "13" {
+//                if MeetingManager.shared.currentBackCamera == false {
+//                    cell.videoView.transform = CGAffineTransform(scaleX: -1.0, y: -1.0)
+//                } else {
+//                    cell.videoView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+//                }
+//            }
+            
         }
         else {
             cell.videoView.isHidden = true

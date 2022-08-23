@@ -79,8 +79,13 @@ class DoodleVC: UIViewController {
       
         let doneAction = QMUIAlertAction(title: "确定", style: .default) { _, _ in
             guard let channel = MeetingManager.shared.channel else { return }
-            self.doodelManager.stopShareDoodle(channelId: channel.channelId)
-            self.navigationController?.popViewController(animated: true)
+            self.doodelManager.stopShareDoodle(timeoutSec:0, channelId: channel.channelId) { data in
+                self.navigationController?.popViewController(animated: true)
+            } onFailed: { error in
+                
+            }
+
+           
         }
         
         let cancelAction = QMUIAlertAction(title: "取消", style: .cancel) { _, _ in

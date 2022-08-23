@@ -699,9 +699,21 @@ extension MideaRoomVC: RKRemoteDeviceListener {
         }
     }
     
+    func onRemoteAudioStatus(_ userId: String, audioLevel: Double, totalAudioEnergy: Double, totalSamplesDuration: Double, packetsLost: Int32) {
+    
+        print("userId\(userId) audioLevel\(audioLevel) totalAudioEnergy\(totalAudioEnergy) totalSamplesDuration\(totalSamplesDuration) packetsLost\(packetsLost)")
+    }
+    
     func onVideoStreamUnstable(userId: String, lossRate: Float) {
         DispatchQueue.main.async {
             self.roomMemberCollectionView.updateCell(userId: userId, lossRate: lossRate)
+        }
+    }
+    
+    func onAudiobBitrate(_ userId: String, bitrate: Int32) {
+        print("onAudiobBitrate | userid \(userId) bitrate \(bitrate)")
+        DispatchQueue.main.async {
+            self.roomMemberCollectionView.updateAudioCell(userId, bitrate: bitrate)
         }
     }
     
@@ -733,17 +745,20 @@ extension MideaRoomVC: RKShareListener {
             return
         }
         // 进入白板view
-        RKCooperationCore.shared.getShareDoodleManager().joinShareDoodle(channelId: channel.channelId)
-        pushToDoodleVC()
+        RKCooperationCore.shared.getShareDoodleManager().joinShareDoodle(channelId: channel.channelId) { data in
+            self.pushToDoodleVC()
+        } onFailed: { error in
+            
+        }
+
     }
     
     func onStopShareDoodle(userId: String) {
         
         if let channel = MeetingManager.shared.channel {
             RKShareDoodleManager.shared.clear(channelId: channel.channelId)
+            onShareStop()
         }
-        
-        onShareStop()
         
     }
     
@@ -754,17 +769,20 @@ extension MideaRoomVC: RKShareListener {
         }
         
         // 进入截图
-        RKCooperationCore.shared.getShareDoodleManager().joinShareDoodle(channelId: channel.channelId, doodleImageUrl: imgUrl)
-        pushToDoodleVC()
+        RKCooperationCore.shared.getShareDoodleManager().joinShareDoodle(channelId: channel.channelId, doodleImageUrl: imgUrl) { data in
+            self.pushToDoodleVC()
+        } onFailed: { error in
+                
+        }
+        
     }
     
     func onStopShareImageDoodle(userId: String) {
         
         if let channel = MeetingManager.shared.channel {
             RKShareDoodleManager.shared.clear(channelId: channel.channelId)
+            onShareStop()
         }
-        
-        onShareStop()
         
     }
     
@@ -818,8 +836,13 @@ extension MideaRoomVC: RKShareListener {
             return
         }
         if message.actionType == .req {
-            RKSharePointManager.shared.establishRespond(channelId: channel.channelId,
-                                                        userId: message.userId)
+            RKSharePointManager.shared.establishRespond(timeoutSec:0, channelId: channel.channelId,
+                                                        userId: message.userId) { data in
+                
+            } onFailed: { error in
+                
+            }
+
         }
     }
     
@@ -925,14 +948,21 @@ extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
             if let shareInfo = shareInfo as? RKShareInfo {
                 
                 if shareInfo.shareType == .close || shareInfo.shareType == .none {
-                    RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
-                    RKCooperationCore.shared.getShareScreenManager().switchScreenRecorderCapture(true)
-                    QMUITips.showSucceed("开启屏幕共享成功")
-                    self.updateMeetingPartp()
+                    RKCooperationCore.shared.getShareScreenManager().startShareScreen(timeoutSec:5, channelId: channel.channelId) { data in
+                        QMUITips.showSucceed("开启屏幕共享成功")
+                        self.updateMeetingPartp()
+
+                    } onFailed: { error in
+                        QMUITips.showSucceed("开启屏幕共享失败")
+                        print("(error)")
+                    }
+
                 } else if shareInfo.shareType == .screen, shareInfo.promoterUserId == RKUserManager.shared.userId {
-                    RKCooperationCore.shared.getShareScreenManager().stopShareScreen(channelId: channel.channelId)
-                    RKCooperationCore.shared.getShareScreenManager().switchScreenRecorderCapture(false)
-                    QMUITips.showSucceed("关闭屏幕共享成功")
+                    RKCooperationCore.shared.getShareScreenManager().stopShareScreen(timeoutSec:0, channelId: channel.channelId) { data in
+                        QMUITips.showSucceed("关闭屏幕共享成功")
+                    } onFailed: { error in
+                        QMUITips.showSucceed("关闭屏幕共享失败")
+                    }
                 } else {
                     QMUITips.showError("频道内已经存在其他共享了")
                 }
@@ -940,10 +970,12 @@ extension MideaRoomVC: MeetingRoomCollectionViewDelegate {
             
         } onFailed: { error in
             if error == nil {
-                RKCooperationCore.shared.getShareScreenManager().startShareScreen(channelId: channel.channelId)
-                RKCooperationCore.shared.getShareScreenManager().switchScreenRecorderCapture(true)
-                QMUITips.showSucceed("开启屏幕共享成功")
-                self.updateMeetingPartp()
+                RKCooperationCore.shared.getShareScreenManager().startShareScreen(timeoutSec:0, channelId: channel.channelId) { data in
+                    QMUITips.showSucceed("开启屏幕共享成功")
+                    self.updateMeetingPartp()
+                } onFailed: { error in
+                    QMUITips.showSucceed("开启屏幕共享失败")
+                }
             }
         }
         
@@ -1107,11 +1139,13 @@ extension MideaRoomVC: AlertViewDelegate {
         case .tool_share:
             startRecord()
         case .tool_doodle:
-            RKCooperationCore.shared.getShareDoodleManager().startShareDoodle(channelId: channel.channelId)
+            RKCooperationCore.shared.getShareDoodleManager().startShareDoodle(timeoutSec:0, channelId: channel.channelId, onSuccess: nil, onFailed: nil)
         default:
             break
         }
+        self.roomMemberCollectionView.collectionView.reloadData()
     }
+   
 }
 
 // MARK: - 霸屏功能
@@ -1126,6 +1160,10 @@ extension MideaRoomVC {
 extension MideaRoomVC: RKChannelMsgListener {
     
     func onChannelMsgReceive(fromUserId: String, content: String) {
+        
+    }
+    
+    func onChannelThirdMsgReceive(fromUserId: String, content: String) {
         
     }
 }
@@ -1154,6 +1192,11 @@ extension MideaRoomVC : RKDeviceListener {
         }
     }
     
+    func onAudioStatus(audioLevel: Double,
+                             totalAudioEnergy: Double,
+                       totalSamplesDuration: Double) {
+        print("audioLevel\(audioLevel) totalAudioEnergy\(totalAudioEnergy) totalSamplesDuration\(totalSamplesDuration)")
+    }
     
     
     func onCameraUpdate() {
