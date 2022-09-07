@@ -221,7 +221,32 @@ extension ContactListVC: RKIncomingCallListener {
     func onReceiveCall(channelId: String, fromUserId: String, createTime: Int64, channelTitle: String, channelParam: RKChannelParam?) {
         let alertVC = UIAlertController(title: "收到邀请", message: "channelId： \(channelId)\n userId: \(fromUserId)", preferredStyle: .alert)
         self.alertVC = alertVC
-        let joinAction = UIAlertAction(title: "加入", style: .default) { _ in
+        let silenceJoinAction = UIAlertAction(title: "静默接听", style: .default) { _ in
+            MeetingManager.shared.audioSwitch = false
+            MeetingManager.shared.cameraSwitch = false
+            // 加入并接受
+            MeetingManager.shared.accept(meetingId: channelId, self)
+            // 超过60秒后 自动默认不能进入频道 超时移除
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+        }
+        
+        let audioJoinAction = UIAlertAction(title: "语音接听", style: .default) { _ in
+            MeetingManager.shared.cameraSwitch = false
+            // 加入并接受
+            MeetingManager.shared.accept(meetingId: channelId, self)
+            // 超过60秒后 自动默认不能进入频道 超时移除
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+        }
+        
+        let videoJoinAction = UIAlertAction(title: "视频接听", style: .default) { _ in
+            MeetingManager.shared.audioSwitch = false
+            // 加入并接受
+            MeetingManager.shared.accept(meetingId: channelId, self)
+            // 超过60秒后 自动默认不能进入频道 超时移除
+            NSObject.cancelPreviousPerformRequests(withTarget: self)
+        }
+
+        let joinAction = UIAlertAction(title: "音视频接听", style: .default) { _ in
             // 加入并接受
             MeetingManager.shared.accept(meetingId: channelId, self)
             // 超过60秒后 自动默认不能进入频道 超时移除
@@ -240,6 +265,9 @@ extension ContactListVC: RKIncomingCallListener {
             NSObject.cancelPreviousPerformRequests(withTarget: self)
         }
         
+        alertVC.addAction(silenceJoinAction)
+        alertVC.addAction(audioJoinAction)
+        alertVC.addAction(videoJoinAction)
         alertVC.addAction(joinAction)
         alertVC.addAction(busyAction)
         alertVC.addAction(rejectAction)
