@@ -7,6 +7,7 @@
 
 import UIKit
 import RKIUtils
+import QMUIKit
 
 protocol MeetingRoomNavToolBarDelegate: NSObjectProtocol {
     // MARK: - 缩放
@@ -60,6 +61,17 @@ class MeetingRoomNavToolBar: UIView {
         //        delegate?.scaleRoomButtonAction(sender)
     }
     
+    @objc func copyRoomId() {
+        if let roomId = roomNameLabel.text {
+            let pasteboard = UIPasteboard.general
+//            pasteboard.setValue(roomId  , forPasteboardType: )
+            pasteboard.string = roomId
+            QMUITips.showSucceed("copy roomId success")
+        }
+      
+        
+    }
+    
     // 缩放按钮
     lazy var scaleRoomButton: UIButton = {
         let button = UIButton(type:.custom)
@@ -76,6 +88,10 @@ class MeetingRoomNavToolBar: UIView {
         label.textAlignment = .right
         label.font = RKFont.font_tipText
         label.textColor = .white
+        let pressGesture = UILongPressGestureRecognizer(target: self, action: #selector(copyRoomId))
+        pressGesture.minimumPressDuration = 2.0
+        label.addGestureRecognizer(pressGesture)
+        label.isUserInteractionEnabled = true
         return label
     }()
     

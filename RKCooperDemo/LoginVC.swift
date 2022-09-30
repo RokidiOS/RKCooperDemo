@@ -10,7 +10,6 @@ import UIKit
 import RKCooperationCore
 import QMUIKit
 import SnapKit
-import RKSassLog
 import RKILogger
 
 struct RKLoginUDKeys {
@@ -20,6 +19,13 @@ struct RKLoginUDKeys {
 }
 
 class LoginVC: UIViewController {
+    
+    var appId: String = "135D8B743401461C95905C3B2822B81C"
+    
+    var apiServer: String = ""
+    
+    // 登录完成后 查询回调
+    var loginQueryBlock:(() ->Void)?
     
     public override var shouldAutorotate: Bool {
         return false
@@ -33,16 +39,21 @@ class LoginVC: UIViewController {
         super.viewDidLoad()
         view.addSubViews([companyTextFiled,
                           userTextFiled,
-                          passwordTextFiled,
-                          loginButton])
+//                          passwordTextFiled,
+                          loginButton,
+                          configButton,
+                          foreLoginLabel,
+                          slider,
+                          envSegmentedControl])
         layoutViews()
+        envSegmentedControl.selectedSegmentIndex = 1
         if let lastLoginCompanyId = UserDefaults.standard.value(forKey: RKLoginUDKeys.companyIdKey) as? String,
            let lastLoginUserName = UserDefaults.standard.value(forKey: RKLoginUDKeys.userNameKey) as? String,
            let lastpassword = UserDefaults.standard.value(forKey: RKLoginUDKeys.passwordKey) as? String{
             self.companyTextFiled.text = lastLoginCompanyId
             self.userTextFiled.text = lastLoginUserName
-            self.passwordTextFiled.text = lastpassword
-            loginAction()
+//            self.passwordTextFiled.text = lastpassword
+
         }
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -51,7 +62,7 @@ class LoginVC: UIViewController {
         TempTool.forceOrientationPortrait()
     }
     
-    private func layoutViews() {
+   private func layoutViews() {
         let titleLable = UILabel()
         titleLable.textAlignment = .center
         titleLable.font = UIFont.boldSystemFont(ofSize: 20)
@@ -59,7 +70,7 @@ class LoginVC: UIViewController {
         titleLable.text = "RKCoreExample"
         self.view.addSubview(titleLable)
         
-        
+
         titleLable.snp.makeConstraints { (make) in
             make.topMargin.equalTo(80)
             make.left.right.equalToSuperview()
@@ -79,20 +90,45 @@ class LoginVC: UIViewController {
             make.height.equalTo(44)
         }
         
-        passwordTextFiled.snp.makeConstraints { (make) in
-            make.top.equalTo(userTextFiled.snp.bottom).offset(18)
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
-            make.height.equalTo(44)
-        }
-        
+//        passwordTextFiled.snp.makeConstraints { (make) in
+//            make.top.equalTo(userTextFiled.snp.bottom).offset(18)
+//            make.left.equalTo(20)
+//            make.right.equalTo(-20)
+//            make.height.equalTo(44)
+//        }
+//
         loginButton.snp.makeConstraints { (make) in
-            make.top.equalTo(passwordTextFiled.snp.bottom).offset(28)
+            make.top.equalTo(userTextFiled.snp.bottom).offset(28)
             make.left.equalTo(20)
             make.right.equalTo(-20)
             make.height.equalTo(42)
         }
         
+        configButton.snp.makeConstraints { (make) in
+            make.top.equalTo(loginButton.snp.bottom).offset(20)
+            make.left.equalTo(20)
+            make.right.equalTo(-20)
+            make.height.equalTo(42)
+        }
+        
+        foreLoginLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(titleLable.snp.top)
+            make.height.equalTo(30)
+            make.left.equalTo(20)
+        }
+        
+        slider.snp.makeConstraints { make in
+            make.left.equalTo(foreLoginLabel.snp.right).offset(10)
+            make.height.bottom.equalTo(foreLoginLabel)
+            make.width.equalTo(80)
+        }
+       
+       envSegmentedControl.snp.makeConstraints { make in
+           make.centerX.equalToSuperview()
+           make.height.equalTo(40)
+           make.width.equalTo(200)
+           make.bottom.equalTo(slider.snp.top).offset(-10)
+       }
     }
     
     lazy var companyTextFiled: QMUITextField = {
@@ -107,11 +143,11 @@ class LoginVC: UIViewController {
         return tf
     }()
     
-    lazy var passwordTextFiled: QMUITextField = {
-        let tf = createTf("请输入密码")
-        tf.isSecureTextEntry = true
-        return tf
-    }()
+//    lazy var passwordTextFiled: QMUITextField = {
+//        let tf = createTf("请输入密码")
+//        tf.isSecureTextEntry = true
+//        return tf
+//    }()
     
     lazy var loginButton: QMUIButton = {
         let btn = QMUIButton()
@@ -119,6 +155,14 @@ class LoginVC: UIViewController {
         btn.addTarget(self, action: #selector(loginAction), for: .touchUpInside)
         return btn
     }()
+    
+    lazy var configButton: QMUIButton = {
+        let btn = QMUIButton()
+        btn.setTitle("配置", for: .normal)
+        btn.addTarget(self, action: #selector(baseConfigAction), for: .touchUpInside)
+        return btn
+    }()
+    
     
     private func createTf(_ placeHoldel: String) -> QMUITextField{
         let tf = QMUITextField()
@@ -132,37 +176,46 @@ class LoginVC: UIViewController {
         return tipView
     }()
     
+    
+    lazy var foreLoginLabel: UILabel = {
+        let label = UILabel()
+        label.text = "强制刷新token"
+        label.font = .systemFont(ofSize: 14)
+        label.setContentHuggingPriority(.required, for: .horizontal)
+        return label
+    }()
+    
+    lazy var slider: UISwitch = {
+        let slider = UISwitch()
+        return slider
+    }()
+    
+    private let envSegmentedControl = QMUISegmentedControl(items: ["开发", "测试", "预发", "线上"])
 }
 
 extension LoginVC {
     
     @objc private func loginAction() {
-        let param = RKCooperationCoreParams()
-        let tempEnv = 3
+        var tempEnv = 2
+        tempEnv = envSegmentedControl.selectedSegmentIndex + 1
         if tempEnv == 0 {
-            param.saasUrl = "https://saas-ar-dev.rokid-inc.com"
-            param.rtcUrl = "https://rtc-hyh.rokid-inc.com"
-            param.wssUrl = "wss://rtc-hyh.rokid-inc.com:8886/socket"
-            env = .develop
+            apiServer = "http://10.91.1.23:8080"
         } else if tempEnv == 1 {
-            param.saasUrl = "https://saas-ar-test.rokid.com"
-            param.rtcUrl = "https://rtc-dev.rokid.com"
-            param.wssUrl = "wss://rtc-wss-dev.rokid.com/socket"
-            env = .test
+            //http://10.11.1.62:30876/rtc/cooperate/login?companyIndex=rokid&userName=suchenglong2 http/1.1
+//            apiServer = "http://10.11.1.62:30876/rtc"
+            apiServer = "https://api-dev.rokid.com/rtc"
         } else if tempEnv == 2 {
-            param.saasUrl = "https://saas-ar-test.rokid.com"
-            param.rtcUrl = "https://rtc-test.rokid.com"
-            param.wssUrl = "wss://rtc-wss-test.rokid.com/socket"
-            env = .test
+            apiServer = "https://rtc-test.rokid.com"
+        } else if tempEnv == 3 {
+            apiServer = "https://rtc-pre.rokid.com"
+            appId = "790293A4648B4AE99144A2A6D2A8BA1D"
         } else {
-            param.saasUrl = "https://saas-ar.rokid.com"
-            param.rtcUrl = "https://rtc.rokid.com"
-            param.wssUrl = "wss://wss-rtc.rokid.com/socket"
-            env = .product
+            apiServer = "https://rtc.rokid.com"
         }
-        
-        RKLogMgr.shared.logLevel = .info
-        RKCooperationCore.shared.initWith(params: param)
+
+        DemoApiHelper.apiHost = apiServer
+        RKLogMgr.shared.logLevel = .verbose
+        RKCooperationCore.shared.initWith(appId: appId, apiServer: apiServer, onSuccess: nil, onFailed: nil)
         RKCooperationCore.shared.addLogin(listener: self)
         guard let company = companyTextFiled.text, !company.isEmpty else {
             QMUITips.showError("公司名不能为空")
@@ -172,41 +225,57 @@ extension LoginVC {
             QMUITips.showError("用户名不能为空")
             return
         }
-        guard let passwordId = passwordTextFiled.text, !passwordId.isEmpty else {
-            QMUITips.showError("密码名不能为空")
-            return
-        }
-        
+//        guard let passwordId = passwordTextFiled.text, !passwordId.isEmpty else {
+//            QMUITips.showError("密码名不能为空")
+//            return
+//        }
         UserDefaults.standard.setValue(company, forKey: RKLoginUDKeys.companyIdKey)
         UserDefaults.standard.setValue(userId, forKey: RKLoginUDKeys.userNameKey)
-        UserDefaults.standard.setValue(passwordId, forKey: RKLoginUDKeys.passwordKey)
+//        UserDefaults.standard.setValue(passwordId, forKey: RKLoginUDKeys.passwordKey)
         UserDefaults.standard.synchronize()
-        
         tipView.showLoading("登录中")
-        LoginHelper.loginAction(companyID: company, userName: userId, password: passwordId) { uid, token, errorMsg in
+        DemoApiHelper.companyIndex = company
+        ContactManager.shared.selfUserId = userId
+        DemoApiHelper.canLogin(companyIndex: company, userName: userId) { responsed in
             self.tipView.hide(animated: true)
             self.tipView.removeFromSuperview()
-            if let errorMsg = errorMsg {
-                QMUITips.showError(errorMsg)
-            }
-            guard let token = token else { return }
-            
-            LoginHelper.getUserInfo(token) { dict, isSucess in
-                guard isSucess == true,
-                      let uesrInfo = RKUser.deserialize(from: dict) else {
-                    QMUITips.showSucceed("登录失败")
-                    return
-                }
-                RKCooperationCore.shared.login(with: token, userInfo: uesrInfo)
+            if responsed.code == 1 {
+                RKCooperationCore.shared.login(with: userId, foreceRefreshToken: self.slider.isOn)
                 QMUITips.showSucceed("登录成功")
+            } else {
+                QMUITips.showError(responsed.message)
             }
         }
+
+    }
+    
+    @objc func baseConfigAction() {
+        let placeholderAndTexts = [("appId", appId), ("apiServer", apiServer)]
+        let alertVC = RKAlertController.alertInputViews(title: "请输入配置信息",
+                                                        message: nil,
+                                                        placeholderAndTexts: placeholderAndTexts) { text in
+            guard let appId = text.first,
+                  let apiServer = text.last else {
+                QMUITips.showSucceed("频道ID不能为空！")
+                return
+            }
+            
+            self.appId = appId
+            self.apiServer = apiServer
+            RKCooperationCore.shared.initWith(appId: self.appId, apiServer: self.apiServer, onSuccess: nil, onFailed: nil)
+        }
+        self.present(alertVC, animated: true, completion: nil)
     }
     
     private func loginSucc() {
         let mainVC = ContactListVC()
+        mainVC.loadData()
         self.navigationController?.pushViewController(mainVC, animated: true)
+//        loginQueryBlock?()
+//        loginQueryBlock = nil
     }
+    
+    
 }
 
 extension LoginVC: RKLoginCallback {
@@ -246,7 +315,20 @@ extension LoginVC: RKLoginCallback {
                 RKChannelManager.shared.leave(channelId: iJoinedChannel.channelId)
             }
         }
-        self.present(alertVC, animated: true, completion: nil)
+        
+        if let channleId = channelList.first?.channelId {
+            let copyAction = UIAlertAction(title: "拷贝ChannelId", style: .default) { _ in
+                let pasteboard = UIPasteboard.general
+                pasteboard.string = channleId
+                QMUITips.showSucceed("copy roomId success")
+            }
+            alertVC.addAction(copyAction)
+        } 
+       
+        loginQueryBlock = { [weak self] in
+            self?.present(alertVC, animated: true, completion: nil)
+        }
+        loginQueryBlock?()
     }
 }
 

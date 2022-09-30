@@ -157,6 +157,9 @@ class TempTool : NSObject {
     static func forceOrientationLandscape() {
         let appdelegate:AppDelegate = UIApplication.shared.delegate as! AppDelegate
         appdelegate.rotation = .landscape
+        if UIDevice.current.orientation == .landscapeLeft || UIDevice.current.orientation == .landscapeRight {
+            return
+        }
         let oriention = UIInterfaceOrientation.landscapeRight // 设置屏幕为横屏
         UIDevice.current.setValue(oriention.rawValue, forKey: "orientation")
         UIViewController.attemptRotationToDeviceOrientation()

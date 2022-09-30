@@ -13,32 +13,35 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		8A161B7C27E041E4009C0B58 /* MeetingSwitchToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161B7B27E041E4009C0B58 /* MeetingSwitchToast.swift */; };
-		8A161B7E27E042BD009C0B58 /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161B7D27E042BD009C0B58 /* CustomAlertView.swift */; };
-		8A161B8027E042EE009C0B58 /* RKMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161B7F27E042EE009C0B58 /* RKMaskView.swift */; };
-		8A161B8627E1EFF8009C0B58 /* QMUIConfigurationTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A161B8527E1EFF8009C0B58 /* QMUIConfigurationTemplate.m */; };
-		8A161B8827E32C7D009C0B58 /* RKAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A161B8727E32C7D009C0B58 /* RKAlertController.swift */; };
-		8A47C4BA27DEDE66005BF0CE /* ContactListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4B927DEDE66005BF0CE /* ContactListVC.swift */; };
-		8A47C4C227DEF211005BF0CE /* RKLanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4C127DEF211005BF0CE /* RKLanguageManager.swift */; };
-		8A47C4C927DF16DC005BF0CE /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4C827DF16DC005BF0CE /* ContactCell.swift */; };
-		8A47C4CC27DF1B79005BF0CE /* ContactModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4CB27DF1B79005BF0CE /* ContactModel.swift */; };
-		8A47C4D527DF36C5005BF0CE /* ThemeDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4D427DF36C5005BF0CE /* ThemeDefine.swift */; };
-		8A47C4DB27DF3789005BF0CE /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4D927DF3789005BF0CE /* CallView.swift */; };
-		8A47C4DE27DF37F3005BF0CE /* MeetingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4DD27DF37F3005BF0CE /* MeetingManager.swift */; };
-		8A47C4E327DF3834005BF0CE /* RKMeetingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E027DF3834005BF0CE /* RKMeetingInfo.swift */; };
-		8A47C4E427DF3834005BF0CE /* RKPhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E127DF3834005BF0CE /* RKPhotoModel.swift */; };
-		8A47C4E527DF3834005BF0CE /* RKRoomMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E227DF3834005BF0CE /* RKRoomMember.swift */; };
-		8A47C4EA27DF3944005BF0CE /* ContactManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4E927DF3944005BF0CE /* ContactManager.swift */; };
-		8A47C4EC27DF3ADD005BF0CE /* CallPreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4EB27DF3ADD005BF0CE /* CallPreVC.swift */; };
-		8A47C4EE27E03A16005BF0CE /* MideaRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4ED27E03A16005BF0CE /* MideaRoomVC.swift */; };
-		8A47C4F027E03AA2005BF0CE /* MeetingRoomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4EF27E03AA2005BF0CE /* MeetingRoomCollectionView.swift */; };
-		8A47C4F227E03ABB005BF0CE /* MediaSettingToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4F127E03ABB005BF0CE /* MediaSettingToolBar.swift */; };
-		8A47C4F427E03AF2005BF0CE /* MeetingRoomCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4F327E03AF2005BF0CE /* MeetingRoomCollectionCell.swift */; };
-		8A47C4F627E03B23005BF0CE /* MeetingRoomNavToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4F527E03B23005BF0CE /* MeetingRoomNavToolBar.swift */; };
-		8A47C4F827E03C09005BF0CE /* RKExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4F727E03C09005BF0CE /* RKExt.swift */; };
-		8A47C4FA27E03D80005BF0CE /* CallAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47C4F927E03D80005BF0CE /* CallAlertView.swift */; };
-		8A944DA027E6D3ED00FA6060 /* FullVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A944D9F27E6D3ED00FA6060 /* FullVideoView.swift */; };
-		8A944E7B27E84F0F00FA6060 /* DoodleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A944E7A27E84F0F00FA6060 /* DoodleVC.swift */; };
+		8AE3D8BF28E6939A002AFE3D /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D89A28E6939A002AFE3D /* ContactCell.swift */; };
+		8AE3D8C028E6939A002AFE3D /* ContactListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D89B28E6939A002AFE3D /* ContactListVC.swift */; };
+		8AE3D8C128E6939A002AFE3D /* ContactManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D89D28E6939A002AFE3D /* ContactManager.swift */; };
+		8AE3D8C228E6939A002AFE3D /* ContactModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D89E28E6939A002AFE3D /* ContactModel.swift */; };
+		8AE3D8C328E6939A002AFE3D /* MeetingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8A128E6939A002AFE3D /* MeetingManager.swift */; };
+		8AE3D8C428E6939A002AFE3D /* ImageDoodleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8A328E6939A002AFE3D /* ImageDoodleVC.swift */; };
+		8AE3D8C528E6939A002AFE3D /* DoodleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8A428E6939A002AFE3D /* DoodleVC.swift */; };
+		8AE3D8C628E6939A002AFE3D /* ChannelConfigVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8A528E6939A002AFE3D /* ChannelConfigVC.swift */; };
+		8AE3D8C728E6939A002AFE3D /* SlamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8A628E6939A002AFE3D /* SlamViewController.swift */; };
+		8AE3D8C828E6939A002AFE3D /* MideaRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8A728E6939A002AFE3D /* MideaRoomVC.swift */; };
+		8AE3D8C928E6939A002AFE3D /* CallPreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8A828E6939A002AFE3D /* CallPreVC.swift */; };
+		8AE3D8CA28E6939A002AFE3D /* RKRoomMember.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8AA28E6939A002AFE3D /* RKRoomMember.swift */; };
+		8AE3D8CB28E6939A002AFE3D /* RKMeetingInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8AB28E6939A002AFE3D /* RKMeetingInfo.swift */; };
+		8AE3D8CC28E6939A002AFE3D /* MeetingRoomCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8AD28E6939A002AFE3D /* MeetingRoomCollectionCell.swift */; };
+		8AE3D8CD28E6939A002AFE3D /* RKMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8AE28E6939A002AFE3D /* RKMaskView.swift */; };
+		8AE3D8CE28E6939A002AFE3D /* MeetingRoomCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8AF28E6939A002AFE3D /* MeetingRoomCollectionView.swift */; };
+		8AE3D8CF28E6939A002AFE3D /* CallAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8B028E6939A002AFE3D /* CallAlertView.swift */; };
+		8AE3D8D028E6939A002AFE3D /* FullVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8B128E6939A002AFE3D /* FullVideoView.swift */; };
+		8AE3D8D128E6939A002AFE3D /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8B228E6939A002AFE3D /* CustomAlertView.swift */; };
+		8AE3D8D228E6939A002AFE3D /* CallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8B328E6939A002AFE3D /* CallView.swift */; };
+		8AE3D8D328E6939A002AFE3D /* MeetingRoomNavToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8B428E6939A002AFE3D /* MeetingRoomNavToolBar.swift */; };
+		8AE3D8D428E6939A002AFE3D /* MeetingSwitchToast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8B528E6939A002AFE3D /* MeetingSwitchToast.swift */; };
+		8AE3D8D528E6939A002AFE3D /* MediaSettingToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8B628E6939A002AFE3D /* MediaSettingToolBar.swift */; };
+		8AE3D8D728E6939A002AFE3D /* RKExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8B928E6939A002AFE3D /* RKExt.swift */; };
+		8AE3D8D828E6939A002AFE3D /* DemoLoginHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8BA28E6939A002AFE3D /* DemoLoginHelper.swift */; };
+		8AE3D8D928E6939A002AFE3D /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8BB28E6939A002AFE3D /* TestHelper.swift */; };
+		8AE3D8DA28E6939A002AFE3D /* RKAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8BC28E6939A002AFE3D /* RKAlertController.swift */; };
+		8AE3D8DB28E6939A002AFE3D /* RKLanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8BD28E6939A002AFE3D /* RKLanguageManager.swift */; };
+		8AE3D8DC28E6939A002AFE3D /* ThemeDefine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE3D8BE28E6939A002AFE3D /* ThemeDefine.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,35 +65,37 @@
 		607FACDA1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		8A161B7B27E041E4009C0B58 /* MeetingSwitchToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingSwitchToast.swift; sourceTree = "<group>"; };
-		8A161B7D27E042BD009C0B58 /* CustomAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
-		8A161B7F27E042EE009C0B58 /* RKMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKMaskView.swift; sourceTree = "<group>"; };
-		8A161B8427E1EFF8009C0B58 /* QMUIConfigurationTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMUIConfigurationTemplate.h; sourceTree = "<group>"; };
-		8A161B8527E1EFF8009C0B58 /* QMUIConfigurationTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMUIConfigurationTemplate.m; sourceTree = "<group>"; };
-		8A161B8727E32C7D009C0B58 /* RKAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKAlertController.swift; sourceTree = "<group>"; };
-		8A47C4B927DEDE66005BF0CE /* ContactListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListVC.swift; sourceTree = "<group>"; };
-		8A47C4C127DEF211005BF0CE /* RKLanguageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKLanguageManager.swift; sourceTree = "<group>"; };
-		8A47C4C827DF16DC005BF0CE /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
-		8A47C4CB27DF1B79005BF0CE /* ContactModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactModel.swift; sourceTree = "<group>"; };
-		8A47C4D427DF36C5005BF0CE /* ThemeDefine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDefine.swift; sourceTree = "<group>"; };
-		8A47C4D927DF3789005BF0CE /* CallView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
-		8A47C4DD27DF37F3005BF0CE /* MeetingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingManager.swift; sourceTree = "<group>"; };
-		8A47C4E027DF3834005BF0CE /* RKMeetingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKMeetingInfo.swift; sourceTree = "<group>"; };
-		8A47C4E127DF3834005BF0CE /* RKPhotoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKPhotoModel.swift; sourceTree = "<group>"; };
-		8A47C4E227DF3834005BF0CE /* RKRoomMember.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKRoomMember.swift; sourceTree = "<group>"; };
-		8A47C4E927DF3944005BF0CE /* ContactManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactManager.swift; sourceTree = "<group>"; };
-		8A47C4EB27DF3ADD005BF0CE /* CallPreVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallPreVC.swift; sourceTree = "<group>"; };
-		8A47C4ED27E03A16005BF0CE /* MideaRoomVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MideaRoomVC.swift; sourceTree = "<group>"; };
-		8A47C4EF27E03AA2005BF0CE /* MeetingRoomCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingRoomCollectionView.swift; sourceTree = "<group>"; };
-		8A47C4F127E03ABB005BF0CE /* MediaSettingToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaSettingToolBar.swift; sourceTree = "<group>"; };
-		8A47C4F327E03AF2005BF0CE /* MeetingRoomCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingRoomCollectionCell.swift; sourceTree = "<group>"; };
-		8A47C4F527E03B23005BF0CE /* MeetingRoomNavToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingRoomNavToolBar.swift; sourceTree = "<group>"; };
-		8A47C4F727E03C09005BF0CE /* RKExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKExt.swift; sourceTree = "<group>"; };
-		8A47C4F927E03D80005BF0CE /* CallAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallAlertView.swift; sourceTree = "<group>"; };
-		8A944D9F27E6D3ED00FA6060 /* FullVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullVideoView.swift; sourceTree = "<group>"; };
 		8A944DA627E6FABD00FA6060 /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		8A944DA827E6FABD00FA6060 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		8A944E7A27E84F0F00FA6060 /* DoodleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoodleVC.swift; sourceTree = "<group>"; };
+		8AE3D89A28E6939A002AFE3D /* ContactCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
+		8AE3D89B28E6939A002AFE3D /* ContactListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactListVC.swift; sourceTree = "<group>"; };
+		8AE3D89D28E6939A002AFE3D /* ContactManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactManager.swift; sourceTree = "<group>"; };
+		8AE3D89E28E6939A002AFE3D /* ContactModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactModel.swift; sourceTree = "<group>"; };
+		8AE3D8A128E6939A002AFE3D /* MeetingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingManager.swift; sourceTree = "<group>"; };
+		8AE3D8A328E6939A002AFE3D /* ImageDoodleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageDoodleVC.swift; sourceTree = "<group>"; };
+		8AE3D8A428E6939A002AFE3D /* DoodleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoodleVC.swift; sourceTree = "<group>"; };
+		8AE3D8A528E6939A002AFE3D /* ChannelConfigVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelConfigVC.swift; sourceTree = "<group>"; };
+		8AE3D8A628E6939A002AFE3D /* SlamViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlamViewController.swift; sourceTree = "<group>"; };
+		8AE3D8A728E6939A002AFE3D /* MideaRoomVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MideaRoomVC.swift; sourceTree = "<group>"; };
+		8AE3D8A828E6939A002AFE3D /* CallPreVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallPreVC.swift; sourceTree = "<group>"; };
+		8AE3D8AA28E6939A002AFE3D /* RKRoomMember.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKRoomMember.swift; sourceTree = "<group>"; };
+		8AE3D8AB28E6939A002AFE3D /* RKMeetingInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKMeetingInfo.swift; sourceTree = "<group>"; };
+		8AE3D8AD28E6939A002AFE3D /* MeetingRoomCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingRoomCollectionCell.swift; sourceTree = "<group>"; };
+		8AE3D8AE28E6939A002AFE3D /* RKMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKMaskView.swift; sourceTree = "<group>"; };
+		8AE3D8AF28E6939A002AFE3D /* MeetingRoomCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingRoomCollectionView.swift; sourceTree = "<group>"; };
+		8AE3D8B028E6939A002AFE3D /* CallAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallAlertView.swift; sourceTree = "<group>"; };
+		8AE3D8B128E6939A002AFE3D /* FullVideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullVideoView.swift; sourceTree = "<group>"; };
+		8AE3D8B228E6939A002AFE3D /* CustomAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
+		8AE3D8B328E6939A002AFE3D /* CallView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallView.swift; sourceTree = "<group>"; };
+		8AE3D8B428E6939A002AFE3D /* MeetingRoomNavToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingRoomNavToolBar.swift; sourceTree = "<group>"; };
+		8AE3D8B528E6939A002AFE3D /* MeetingSwitchToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeetingSwitchToast.swift; sourceTree = "<group>"; };
+		8AE3D8B628E6939A002AFE3D /* MediaSettingToolBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaSettingToolBar.swift; sourceTree = "<group>"; };
+		8AE3D8B928E6939A002AFE3D /* RKExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKExt.swift; sourceTree = "<group>"; };
+		8AE3D8BA28E6939A002AFE3D /* DemoLoginHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoLoginHelper.swift; sourceTree = "<group>"; };
+		8AE3D8BB28E6939A002AFE3D /* TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
+		8AE3D8BC28E6939A002AFE3D /* RKAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKAlertController.swift; sourceTree = "<group>"; };
+		8AE3D8BD28E6939A002AFE3D /* RKLanguageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RKLanguageManager.swift; sourceTree = "<group>"; };
+		8AE3D8BE28E6939A002AFE3D /* ThemeDefine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeDefine.swift; sourceTree = "<group>"; };
 		9D8BB637F5831069F47A90A4 /* Pods_RKCooperDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RKCooperDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3BF7C1C27D78E178C4E8A81 /* Pods-RKCooperDemo_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RKCooperDemo_Example.debug.xcconfig"; path = "Target Support Files/Pods-RKCooperDemo_Example/Pods-RKCooperDemo_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B0623B3227EC4050004E43A1 /* RKCooperDemoRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RKCooperDemoRelease.entitlements; path = RKCooperDemo/RKCooperDemoRelease.entitlements; sourceTree = "<group>"; };
@@ -143,8 +148,8 @@
 		607FACD21AFB9204008FA782 /* Example for RKCooperDemo */ = {
 			isa = PBXGroup;
 			children = (
-				8A47C4C327DF1372005BF0CE /* Main */,
-				8A47C4C027DEF1E5005BF0CE /* Utils */,
+				8AE3D89828E6939A002AFE3D /* Main */,
+				8AE3D8B828E6939A002AFE3D /* Utils */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* LoginVC.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -164,110 +169,103 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		8A161B8327E1EFF8009C0B58 /* QMUIConfigurationTemplate */ = {
+		8AE3D89828E6939A002AFE3D /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				8A161B8427E1EFF8009C0B58 /* QMUIConfigurationTemplate.h */,
-				8A161B8527E1EFF8009C0B58 /* QMUIConfigurationTemplate.m */,
-			);
-			name = QMUIConfigurationTemplate;
-			path = Pods/QMUIKit/QMUIConfigurationTemplate;
-			sourceTree = SOURCE_ROOT;
-		};
-		8A47C4C027DEF1E5005BF0CE /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				8A161B8727E32C7D009C0B58 /* RKAlertController.swift */,
-				8A47C4F727E03C09005BF0CE /* RKExt.swift */,
-				8A47C4C127DEF211005BF0CE /* RKLanguageManager.swift */,
-				8A47C4D427DF36C5005BF0CE /* ThemeDefine.swift */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		8A47C4C327DF1372005BF0CE /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				8A161B8327E1EFF8009C0B58 /* QMUIConfigurationTemplate */,
-				8A47C4CD27DF33AE005BF0CE /* RTC */,
-				8A47C4CA27DF1826005BF0CE /* Contact */,
+				8AE3D89928E6939A002AFE3D /* Contact */,
+				8AE3D89F28E6939A002AFE3D /* RTC */,
 			);
 			path = Main;
 			sourceTree = "<group>";
 		};
-		8A47C4CA27DF1826005BF0CE /* Contact */ = {
+		8AE3D89928E6939A002AFE3D /* Contact */ = {
 			isa = PBXGroup;
 			children = (
-				8A47C4E827DF3936005BF0CE /* Manager */,
-				8A47C4C827DF16DC005BF0CE /* ContactCell.swift */,
-				8A47C4B927DEDE66005BF0CE /* ContactListVC.swift */,
-				8A47C4CB27DF1B79005BF0CE /* ContactModel.swift */,
+				8AE3D89A28E6939A002AFE3D /* ContactCell.swift */,
+				8AE3D89B28E6939A002AFE3D /* ContactListVC.swift */,
+				8AE3D89C28E6939A002AFE3D /* Manager */,
+				8AE3D89E28E6939A002AFE3D /* ContactModel.swift */,
 			);
 			path = Contact;
 			sourceTree = "<group>";
 		};
-		8A47C4CD27DF33AE005BF0CE /* RTC */ = {
+		8AE3D89C28E6939A002AFE3D /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				8A47C4DF27DF3826005BF0CE /* Model */,
-				8A47C4DC27DF37E5005BF0CE /* Manager */,
-				8A47C4D727DF3774005BF0CE /* View */,
-				8A47C4D627DF3747005BF0CE /* VC */,
+				8AE3D89D28E6939A002AFE3D /* ContactManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		8AE3D89F28E6939A002AFE3D /* RTC */ = {
+			isa = PBXGroup;
+			children = (
+				8AE3D8A028E6939A002AFE3D /* Manager */,
+				8AE3D8A228E6939A002AFE3D /* VC */,
+				8AE3D8A928E6939A002AFE3D /* Model */,
+				8AE3D8AC28E6939A002AFE3D /* View */,
 			);
 			path = RTC;
 			sourceTree = "<group>";
 		};
-		8A47C4D627DF3747005BF0CE /* VC */ = {
+		8AE3D8A028E6939A002AFE3D /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				8A47C4EB27DF3ADD005BF0CE /* CallPreVC.swift */,
-				8A47C4ED27E03A16005BF0CE /* MideaRoomVC.swift */,
-				8A944E7A27E84F0F00FA6060 /* DoodleVC.swift */,
+				8AE3D8A128E6939A002AFE3D /* MeetingManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		8AE3D8A228E6939A002AFE3D /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				8AE3D8A328E6939A002AFE3D /* ImageDoodleVC.swift */,
+				8AE3D8A428E6939A002AFE3D /* DoodleVC.swift */,
+				8AE3D8A528E6939A002AFE3D /* ChannelConfigVC.swift */,
+				8AE3D8A628E6939A002AFE3D /* SlamViewController.swift */,
+				8AE3D8A728E6939A002AFE3D /* MideaRoomVC.swift */,
+				8AE3D8A828E6939A002AFE3D /* CallPreVC.swift */,
 			);
 			path = VC;
 			sourceTree = "<group>";
 		};
-		8A47C4D727DF3774005BF0CE /* View */ = {
+		8AE3D8A928E6939A002AFE3D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				8A161B7F27E042EE009C0B58 /* RKMaskView.swift */,
-				8A161B7D27E042BD009C0B58 /* CustomAlertView.swift */,
-				8A161B7B27E041E4009C0B58 /* MeetingSwitchToast.swift */,
-				8A47C4F927E03D80005BF0CE /* CallAlertView.swift */,
-				8A47C4F527E03B23005BF0CE /* MeetingRoomNavToolBar.swift */,
-				8A47C4F327E03AF2005BF0CE /* MeetingRoomCollectionCell.swift */,
-				8A47C4F127E03ABB005BF0CE /* MediaSettingToolBar.swift */,
-				8A47C4EF27E03AA2005BF0CE /* MeetingRoomCollectionView.swift */,
-				8A47C4D927DF3789005BF0CE /* CallView.swift */,
-				8A944D9F27E6D3ED00FA6060 /* FullVideoView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		8A47C4DC27DF37E5005BF0CE /* Manager */ = {
-			isa = PBXGroup;
-			children = (
-				8A47C4DD27DF37F3005BF0CE /* MeetingManager.swift */,
-			);
-			path = Manager;
-			sourceTree = "<group>";
-		};
-		8A47C4DF27DF3826005BF0CE /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				8A47C4E027DF3834005BF0CE /* RKMeetingInfo.swift */,
-				8A47C4E127DF3834005BF0CE /* RKPhotoModel.swift */,
-				8A47C4E227DF3834005BF0CE /* RKRoomMember.swift */,
+				8AE3D8AA28E6939A002AFE3D /* RKRoomMember.swift */,
+				8AE3D8AB28E6939A002AFE3D /* RKMeetingInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
 		};
-		8A47C4E827DF3936005BF0CE /* Manager */ = {
+		8AE3D8AC28E6939A002AFE3D /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8A47C4E927DF3944005BF0CE /* ContactManager.swift */,
+				8AE3D8AD28E6939A002AFE3D /* MeetingRoomCollectionCell.swift */,
+				8AE3D8AE28E6939A002AFE3D /* RKMaskView.swift */,
+				8AE3D8AF28E6939A002AFE3D /* MeetingRoomCollectionView.swift */,
+				8AE3D8B028E6939A002AFE3D /* CallAlertView.swift */,
+				8AE3D8B128E6939A002AFE3D /* FullVideoView.swift */,
+				8AE3D8B228E6939A002AFE3D /* CustomAlertView.swift */,
+				8AE3D8B328E6939A002AFE3D /* CallView.swift */,
+				8AE3D8B428E6939A002AFE3D /* MeetingRoomNavToolBar.swift */,
+				8AE3D8B528E6939A002AFE3D /* MeetingSwitchToast.swift */,
+				8AE3D8B628E6939A002AFE3D /* MediaSettingToolBar.swift */,
 			);
-			path = Manager;
+			path = View;
+			sourceTree = "<group>";
+		};
+		8AE3D8B828E6939A002AFE3D /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				8AE3D8B928E6939A002AFE3D /* RKExt.swift */,
+				8AE3D8BA28E6939A002AFE3D /* DemoLoginHelper.swift */,
+				8AE3D8BB28E6939A002AFE3D /* TestHelper.swift */,
+				8AE3D8BC28E6939A002AFE3D /* RKAlertController.swift */,
+				8AE3D8BD28E6939A002AFE3D /* RKLanguageManager.swift */,
+				8AE3D8BE28E6939A002AFE3D /* ThemeDefine.swift */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 		BA59C2957BC54687A078BA5A /* Pods */ = {
@@ -362,8 +360,8 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-RKCooperDemo/Pods-RKCooperDemo-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/DoraemonKit/DoraemonKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/GCDWebServer/GCDWebServer.framework",
@@ -372,18 +370,21 @@
 				"${BUILT_PRODUCTS_DIR}/LookinServer/LookinServer.framework",
 				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
 				"${BUILT_PRODUCTS_DIR}/QMUIKit/QMUIKit.framework",
+				"${PODS_ROOT}/RKCooperationCore/Frameworks/RKCooperationCore.framework",
 				"${BUILT_PRODUCTS_DIR}/RKIHandyJSON/RKIHandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/RKILogger/RKILogger.framework",
 				"${BUILT_PRODUCTS_DIR}/RKIUtils/RKIUtils.framework",
-				"${BUILT_PRODUCTS_DIR}/RKSassLog/RKSassLog.framework",
+				"${PODS_ROOT}/RKRTC/Frameworks/AWSCore.framework",
+				"${PODS_ROOT}/RKRTC/Frameworks/AWSS3.framework",
+				"${PODS_ROOT}/RKRTC/Frameworks/RKRTC.framework",
+				"${PODS_ROOT}/RKRTC/Frameworks/WebRTC.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/WebRTC-lib/WebRTC.framework/WebRTC",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DoraemonKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GCDWebServer.framework",
@@ -392,13 +393,16 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LookinServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/QMUIKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKCooperationCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKIHandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKILogger.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKIUtils.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKSassLog.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSS3.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RKRTC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WebRTC.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -434,34 +438,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A47C4E327DF3834005BF0CE /* RKMeetingInfo.swift in Sources */,
+				8AE3D8C128E6939A002AFE3D /* ContactManager.swift in Sources */,
+				8AE3D8D428E6939A002AFE3D /* MeetingSwitchToast.swift in Sources */,
+				8AE3D8D928E6939A002AFE3D /* TestHelper.swift in Sources */,
+				8AE3D8C428E6939A002AFE3D /* ImageDoodleVC.swift in Sources */,
+				8AE3D8CF28E6939A002AFE3D /* CallAlertView.swift in Sources */,
+				8AE3D8C828E6939A002AFE3D /* MideaRoomVC.swift in Sources */,
+				8AE3D8CA28E6939A002AFE3D /* RKRoomMember.swift in Sources */,
+				8AE3D8DB28E6939A002AFE3D /* RKLanguageManager.swift in Sources */,
+				8AE3D8CD28E6939A002AFE3D /* RKMaskView.swift in Sources */,
+				8AE3D8C628E6939A002AFE3D /* ChannelConfigVC.swift in Sources */,
+				8AE3D8DC28E6939A002AFE3D /* ThemeDefine.swift in Sources */,
+				8AE3D8C328E6939A002AFE3D /* MeetingManager.swift in Sources */,
+				8AE3D8BF28E6939A002AFE3D /* ContactCell.swift in Sources */,
+				8AE3D8D828E6939A002AFE3D /* DemoLoginHelper.swift in Sources */,
+				8AE3D8C728E6939A002AFE3D /* SlamViewController.swift in Sources */,
+				8AE3D8C228E6939A002AFE3D /* ContactModel.swift in Sources */,
+				8AE3D8D528E6939A002AFE3D /* MediaSettingToolBar.swift in Sources */,
+				8AE3D8D328E6939A002AFE3D /* MeetingRoomNavToolBar.swift in Sources */,
+				8AE3D8CB28E6939A002AFE3D /* RKMeetingInfo.swift in Sources */,
+				8AE3D8D728E6939A002AFE3D /* RKExt.swift in Sources */,
+				8AE3D8CE28E6939A002AFE3D /* MeetingRoomCollectionView.swift in Sources */,
+				8AE3D8C528E6939A002AFE3D /* DoodleVC.swift in Sources */,
+				8AE3D8DA28E6939A002AFE3D /* RKAlertController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* LoginVC.swift in Sources */,
-				8A47C4DB27DF3789005BF0CE /* CallView.swift in Sources */,
-				8A47C4CC27DF1B79005BF0CE /* ContactModel.swift in Sources */,
-				8A47C4EE27E03A16005BF0CE /* MideaRoomVC.swift in Sources */,
-				8A47C4EC27DF3ADD005BF0CE /* CallPreVC.swift in Sources */,
-				8A47C4F627E03B23005BF0CE /* MeetingRoomNavToolBar.swift in Sources */,
+				8AE3D8D128E6939A002AFE3D /* CustomAlertView.swift in Sources */,
+				8AE3D8D028E6939A002AFE3D /* FullVideoView.swift in Sources */,
+				8AE3D8CC28E6939A002AFE3D /* MeetingRoomCollectionCell.swift in Sources */,
+				8AE3D8D228E6939A002AFE3D /* CallView.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
-				8A47C4E527DF3834005BF0CE /* RKRoomMember.swift in Sources */,
-				8A161B8627E1EFF8009C0B58 /* QMUIConfigurationTemplate.m in Sources */,
-				8A47C4F227E03ABB005BF0CE /* MediaSettingToolBar.swift in Sources */,
-				8A161B8827E32C7D009C0B58 /* RKAlertController.swift in Sources */,
-				8A47C4C227DEF211005BF0CE /* RKLanguageManager.swift in Sources */,
-				8A47C4FA27E03D80005BF0CE /* CallAlertView.swift in Sources */,
-				8A161B8027E042EE009C0B58 /* RKMaskView.swift in Sources */,
-				8A47C4F827E03C09005BF0CE /* RKExt.swift in Sources */,
-				8A47C4F427E03AF2005BF0CE /* MeetingRoomCollectionCell.swift in Sources */,
-				8A47C4E427DF3834005BF0CE /* RKPhotoModel.swift in Sources */,
-				8A47C4C927DF16DC005BF0CE /* ContactCell.swift in Sources */,
-				8A47C4D527DF36C5005BF0CE /* ThemeDefine.swift in Sources */,
-				8A47C4F027E03AA2005BF0CE /* MeetingRoomCollectionView.swift in Sources */,
-				8A944E7B27E84F0F00FA6060 /* DoodleVC.swift in Sources */,
-				8A47C4EA27DF3944005BF0CE /* ContactManager.swift in Sources */,
-				8A161B7C27E041E4009C0B58 /* MeetingSwitchToast.swift in Sources */,
-				8A161B7E27E042BD009C0B58 /* CustomAlertView.swift in Sources */,
-				8A944DA027E6D3ED00FA6060 /* FullVideoView.swift in Sources */,
-				8A47C4DE27DF37F3005BF0CE /* MeetingManager.swift in Sources */,
-				8A47C4BA27DEDE66005BF0CE /* ContactListVC.swift in Sources */,
+				8AE3D8C928E6939A002AFE3D /* CallPreVC.swift in Sources */,
+				8AE3D8C028E6939A002AFE3D /* ContactListVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

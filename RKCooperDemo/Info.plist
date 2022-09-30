@@ -19,9 +19,15 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>22092912</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>Looking for local tcp and Bonjour service</key>
+	<array>
+		<string>aliveNotifySocket.udp</string>
+		<string>udpSocket.udp</string>
+		<string>asyncTCPSocket.tcp</string>
+	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>需要使用摄像头</string>
 	<key>NSMicrophoneUsageDescription</key>
